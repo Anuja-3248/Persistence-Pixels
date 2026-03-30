@@ -19,6 +19,7 @@ function App() {
   const location = useLocation();
 
   const isAuthPage = location.pathname === '/auth';
+  const isHomePage = location.pathname === '/';
 
   return (
     <>
@@ -47,12 +48,12 @@ function App() {
             transition={{ duration: 0.8 }}
             className="min-h-screen bg-[#0f172a] text-slate-100 flex overflow-hidden font-sans"
           >
-            <Sidebar isOpen={sidebarOpen} />
+            {!isHomePage && <Sidebar isOpen={sidebarOpen} />}
             
-            <div className={`flex-1 flex flex-col transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
-              <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+            <div className={`flex-1 flex flex-col transition-all duration-300 ${isHomePage ? 'ml-0' : (sidebarOpen ? 'ml-64' : 'ml-20')}`}>
+              {!isHomePage && <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />}
               
-              <main className="flex-1 overflow-y-auto mt-16 scroll-smooth">
+              <main className={`flex-1 overflow-y-auto ${isHomePage ? 'mt-0' : 'mt-16'} scroll-smooth`}>
                 <AnimatePresence mode="wait">
                   <Routes location={location} key={location.pathname}>
                     <Route path="/" element={<Home />} />

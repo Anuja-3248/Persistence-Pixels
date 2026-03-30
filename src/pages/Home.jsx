@@ -1,77 +1,359 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Shield, AlertTriangle, ChevronRight, Activity, Map, Users } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { Shield, ChevronRight, Activity, Map, ArrowRight } from 'lucide-react';
+import heroBg from '../assets/hero-bg.png';
 
 const Home = () => {
+  const quotes = [
+    "Preparation through education is less costly than learning through tragedy.",
+    "The best time to prepare for a disaster was yesterday. The second best time is now.",
+    "Disaster management is about making order out of chaos.",
+    "Safety is not a gadget but a state of mind.",
+    "Resilience is not just about surviving, but thriving after the storm.",
+    "Nature's power is unpredictable; our preparedness must be absolute.",
+    "Unity and information are our strongest shields against devastation."
+  ];
+  
+  const [showContactInfo, setShowContactInfo] = React.useState(false);
+  const [isUpdatesOpen, setIsUpdatesOpen] = React.useState(false);
+  const dailyQuote = quotes[new Date().getDate() % quotes.length];
+  
+  // Real-time Simulation State
+  const [liveData, setLiveData] = React.useState({
+    monitoring: 'Scanning Sector 7-G...',
+    heatmap: 'Calculating localized risk...',
+    lastUpdate: new Date().toLocaleTimeString(),
+    alerts: [
+      { id: 1, type: 'Flood', location: 'Mumbai NCR', severity: 'High', time: '2m ago' },
+      { id: 2, type: 'Quake', location: 'Delhi Basin', severity: 'Low', time: '15m ago' },
+      { id: 3, type: 'Wind', location: 'Coastal Zone', severity: 'Moderate', time: '45m ago' }
+    ]
+  });
+
+  React.useEffect(() => {
+    const sectors = ['Sector 7-G', 'Sector 2-A', 'Coastal Zone 1', 'Northern District', 'Basin Alpha'];
+    const risks = ['Low', 'Moderate', 'Calculating...', 'Stable', 'Evaluating...'];
+    
+    const interval = setInterval(() => {
+      setLiveData(prev => ({
+        ...prev,
+        monitoring: `Scanning ${sectors[Math.floor(Math.random() * sectors.length)]}...`,
+        heatmap: `Risk Level: ${risks[Math.floor(Math.random() * risks.length)]}`,
+        lastUpdate: new Date().toLocaleTimeString()
+      }));
+    }, 4000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden"
+      className="relative min-h-screen w-full flex flex-col font-sans overflow-hidden"
     >
-      {/* Background Animation */}
-      <div className="absolute inset-0 z-0 bg-dark-900 bg-cover bg-center bg-no-repeat bg-hero-flood animate-pulse-slow">
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/40 opacity-90" />
-        <div className="absolute inset-x-0 bottom-0 h-96 bg-gradient-to-t from-[#0f172a]" />
+      {/* Live Updates Side Panel */}
+      <AnimatePresence>
+        {isUpdatesOpen && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsUpdatesOpen(false)}
+              className="fixed inset-0 bg-dark-900/60 backdrop-blur-sm z-[100] cursor-pointer"
+            />
+            <motion.div 
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 h-full w-full max-w-md glass-dark border-l border-white/10 z-[101] p-10 overflow-y-auto shadow-[-50px_0_100px_rgba(0,0,0,0.5)]"
+            >
+              <div className="flex items-center justify-between mb-12">
+                <div className="flex items-center gap-3">
+                   <Activity className="w-8 h-8 text-neon-red animate-pulse" />
+                   <h2 className="text-3xl font-black text-white tracking-tighter uppercase italic">Live Feed</h2>
+                </div>
+                <button onClick={() => setIsUpdatesOpen(false)} className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 text-white font-bold transition-all">✕</button>
+              </div>
+
+              <div className="space-y-8">
+                {liveData.alerts.map(alert => (
+                  <div key={alert.id} className="p-6 rounded-[32px] bg-white/5 border border-white/5 hover:border-neon-red/30 transition-all group relative overflow-hidden">
+                    {alert.severity === 'High' && <div className="absolute top-0 left-0 w-1 h-full bg-neon-red group-hover:w-2 transition-all shadow-[0_0_15px_rgba(255,61,104,1)]" />}
+                    <div className="flex justify-between items-start mb-4">
+                      <span className={`text-[9px] font-black uppercase px-2 py-1 rounded bg-${alert.severity === 'High' ? 'neon-red' : 'neon-yellow'}/20 text-${alert.severity === 'High' ? 'neon-red' : 'neon-yellow'} tracking-widest`}>{alert.type} Alert</span>
+                      <span className="text-[9px] font-bold text-slate-500 uppercase">{alert.time}</span>
+                    </div>
+                    <h4 className="text-xl font-bold text-white mb-2">{alert.location}</h4>
+                    <p className="text-xs text-slate-400 font-medium leading-relaxed">Automated sensor data indicates potential {alert.type.toLowerCase()} escalation. Rescue units on standby.</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-12 pt-8 border-t border-white/10">
+                <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest leading-loose mb-6">Connecting to global satellites... 🟢 Ready</p>
+                <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+                   <motion.div animate={{ x: ['-100%', '100%'] }} transition={{ duration: 3, repeat: Infinity, ease: 'linear' }} className="w-1/3 h-full bg-neon-blue" />
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+      {/* Immersive Persistent Background */}
+      <div 
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat transition-transform duration-[20s] ease-out animate-ken-burns"
+        style={{ backgroundImage: `url(${heroBg})` }}
+      >
+        {/* Cinematic Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/90 via-[#0f172a]/20 to-[#0f172a]/95" />
+        <div className="absolute inset-0 bg-blue-900/5 mix-blend-overlay" />
       </div>
 
-      {/* Hero Content */}
-      <div className="relative z-10 h-full flex flex-col items-center justify-center py-20 px-6 max-w-7xl mx-auto text-center">
-        <motion.div
-           initial={{ opacity: 0, y: 30 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.8 }}
-        >
-          <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-neon-blue/10 border border-neon-blue/30 text-neon-blue font-bold text-xs uppercase tracking-widest mb-10">
-            <span className="w-2 h-2 bg-neon-blue rounded-full mr-2 animate-ping" />
-            Shield AI Online: 99.8% Prediction Accuracy
-          </span>
-          
-          <h1 className="text-5xl md:text-8xl font-black mb-10 leading-none tracking-tighter">
-            PREDICT. <span className="text-neon-blue">PROTECT.</span><br />
-            PREVENT.
-          </h1>
-          
-          <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-14 font-medium leading-relaxed">
-            Harnessing the power of Artificial Intelligence to anticipate catastrophes 
-            before they strike, ensuring proactive safety and rapid response.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
-             <Link to="/map" className="btn-primary flex items-center justify-center gap-3 group text-lg px-10 py-4">
-               Enter Live Map <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-             </Link>
-             <Link to="/sos" className="px-10 py-4 rounded-xl border-2 border-neon-red text-neon-red font-black text-xl hover:bg-neon-red/10 transition-all flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(255,61,104,0.3)]">
-               SEND S.O.S <AlertTriangle className="w-7 h-7 animate-pulse" />
-             </Link>
+      {/* Top Navigation Overlay */}
+      <nav className="relative z-20 flex items-center justify-between px-12 py-8 w-full max-w-[1600px] mx-auto">
+        <div className="flex items-center gap-3">
+          <div className="bg-neon-blue/20 p-2 rounded-lg border border-neon-blue/40 backdrop-blur-md transition-all hover:scale-110">
+            <Activity className="w-8 h-8 text-neon-blue" />
           </div>
-        </motion.div>
+          <span className="text-3xl font-black tracking-tighter text-white drop-shadow-lg uppercase">
+            Disaster <span className="text-neon-blue">X</span>
+          </span>
+        </div>
 
-        {/* Features Floating */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mt-32 max-w-5xl">
-          {[
-            { title: 'Global AI Monitoring', desc: 'Satellite data analyzed by neural networks for early hazard detection.', icon: Activity, color: 'text-neon-blue' },
-            { title: 'Predictive Heatmaps', desc: 'Proprietary risk assessment models with zone-specific threat levels.', icon: Map, color: 'text-neon-yellow' },
-            { title: 'Authority Link', desc: 'Direct encrypted integration with local emergency response units.', icon: Users, color: 'text-neon-green' }
-          ].map((item, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 + idx * 0.2 }}
-              className="glass-dark p-10 rounded-[40px] border border-white/5 hover:border-neon-blue/20 transition-all group hover:-translate-y-2 text-left"
+        <div className="hidden md:flex items-center gap-12 font-black text-xs uppercase tracking-[0.2em] text-white/70">
+          <Link to="/" className="text-white hover:text-white transition-colors border-b-2 border-neon-blue pb-1">HOME</Link>
+          <Link to="/dashboard" className="hover:text-white transition-colors">DASHBOARD</Link>
+          
+          <div 
+            className="relative"
+            onMouseEnter={() => setShowContactInfo(true)}
+            onMouseLeave={() => setShowContactInfo(false)}
+          >
+            <div className="hover:text-white transition-colors cursor-pointer">CONTACT</div>
+            
+            {/* Contact Popover Info */}
+            {showContactInfo && (
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 glass-dark p-6 rounded-2xl border border-white/10 shadow-2xl backdrop-blur-2xl z-50 text-center"
+              >
+                <p className="text-[10px] text-neon-blue font-black tracking-widest mb-2 uppercase">Core Development Team</p>
+                <h4 className="text-xl font-black text-white mb-3">Persistence Pixel</h4>
+                <p className="text-[10px] text-slate-400 font-medium leading-relaxed mb-4 normal-case">
+                  Dedicated to engineering resilient digital infrastructures for global safety and emergency response.
+                </p>
+                <div className="w-full h-px bg-white/10 mb-4" />
+                <a href="mailto:contact@persistencepixel.com" className="text-[10px] font-bold text-neon-blue underline lowercase">
+                  contact@persistencepixel.com
+                </a>
+              </motion.div>
+            )}
+          </div>
+
+          <Link to="/sos" className="text-neon-red hover:text-white transition-colors flex items-center gap-2 group">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-red opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-red"></span>
+            </span>
+            SOS
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-6">
+          <Link to="/auth" className="px-8 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-sm hover:bg-white/10 backdrop-blur-md transition-all">
+            Sign in
+          </Link>
+          <Link to="/auth" className="px-8 py-3 rounded-xl bg-neon-blue text-white font-bold text-sm hover:bg-neon-blue/80 shadow-[0_0_20px_rgba(46,125,233,0.4)] transition-all">
+            Register
+          </Link>
+        </div>
+      </nav>
+
+      {/* Main Hero Content */}
+      <div className="relative z-10 h-screen w-full flex flex-col items-center justify-center text-center px-6">
+        <motion.div
+           initial={{ opacity: 0, y: 40 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ duration: 1.2, delay: 0.2 }}
+           className="max-w-5xl"
+        >
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight mb-6 drop-shadow-2xl">
+            Welcome to <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/70">Disaster Management</span> <br />
+            <span className="text-neon-blue font-extrabold tracking-widest text-3xl md:text-5xl lg:text-6xl uppercase mt-2 block">System</span>
+          </h1>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 1 }}
+            className="flex flex-col items-center"
+          >
+            <div className="w-20 h-1 bg-neon-blue/40 mb-6 rounded-full" />
+            <p className="text-xl md:text-2xl text-white/80 font-medium italic max-w-2xl leading-relaxed">
+              "{dailyQuote}"
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 1 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12"
+          >
+            <button 
+              onClick={() => setIsUpdatesOpen(true)}
+              className="flex items-center gap-3 bg-neon-blue/90 text-dark-900 px-8 py-4 rounded-xl font-black text-sm hover:bg-neon-blue shadow-[0_10px_30px_rgba(46,125,233,0.3)] transition-all group uppercase tracking-widest"
             >
-              <div className={`w-16 h-16 rounded-2xl bg-${item.color.split('-')[1]}/10 flex items-center justify-center mb-8 border border-${item.color.split('-')[1]}/20`}>
-                <item.icon className={`w-8 h-8 ${item.color} group-hover:scale-110 transition-transform`} />
-              </div>
-              <h3 className="text-2xl font-black mb-4 group-hover:text-neon-blue transition-colors">{item.title}</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
-            </motion.div>
-          ))}
+              UPDATES <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+            
+            <Link to="/map" className="flex items-center gap-3 bg-white/10 backdrop-blur-md text-white px-8 py-4 rounded-xl font-black text-sm hover:bg-white/20 border border-white/10 shadow-2xl transition-all group uppercase tracking-widest">
+              DISASTER MAP <Map className="w-5 h-5 group-hover:scale-110 transition-transform text-neon-blue" />
+            </Link>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Bottom Status Interface */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 px-12 py-12 w-full max-w-[1600px] mx-auto flex items-end justify-end pointer-events-none">
+        <div className="hidden lg:flex flex-col items-end text-right pointer-events-none">
+          <div className="bg-neon-red/20 border border-neon-red/40 px-6 py-2 rounded-full backdrop-blur-lg mb-4 pointer-events-auto">
+            <span className="text-neon-red text-[10px] font-black uppercase tracking-widest animate-pulse">
+              ● Red Alert: Cyclone Approaching
+            </span>
+          </div>
+          <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest">Global Safety AI Shield • Active</p>
         </div>
       </div>
+
+      {/* Scrollable Information Section */}
+      <section className="relative z-10 bg-transparent py-32 px-12">
+        <motion.div
+           initial={{ opacity: 0, y: 50 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           transition={{ duration: 1 }}
+           viewport={{ once: true }}
+           className="max-w-[1400px] mx-auto"
+        >
+          {/* Blue Info Rectangle */}
+          <div className="relative group overflow-hidden rounded-[60px] bg-gradient-to-br from-neon-blue to-blue-700 p-1 bg-[length:200%_200%] animate-gradient-xy shadow-[0_40px_100px_rgba(46,125,233,0.3)]">
+            <div className="bg-dark-900 rounded-[58px] p-16 md:p-24 flex flex-col lg:flex-row items-center gap-20 overflow-hidden relative">
+              
+              {/* Decorative Glow */}
+              <div className="absolute top-0 right-0 w-96 h-96 bg-neon-blue/20 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
+              
+              <div className="flex-1 space-y-10 relative z-10">
+                <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-neon-blue/10 border border-neon-blue/30">
+                  <Shield className="w-5 h-5 text-neon-blue" />
+                  <span className="text-xs font-black text-neon-blue uppercase tracking-[0.3em]">Core Mission</span>
+                </div>
+                
+                <h2 className="text-5xl md:text-7xl font-black text-white leading-[1.1] tracking-tighter">
+                  INTELLIGENCE <br /> 
+                  <span className="text-neon-blue">FOR GLOBAL</span> <br />
+                  RESILIENCE.
+                </h2>
+                
+                <p className="text-xl text-slate-400 font-medium leading-relaxed max-w-2xl">
+                  DisasterX is a cutting-edge platform engineered to predict, monitor, and mitigate 
+                  natural catastrophes using high-velocity AI neural networks. 
+                  Built for teams like <span className="text-white font-bold">Persistence Pixel</span>, 
+                  we bridge the gap between predictive data and life-saving action.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-6">
+                  <div className="space-y-4 p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-neon-blue/20 transition-all group/card">
+                     <div className="flex justify-between items-start">
+                        <Activity className="w-8 h-8 text-neon-blue mb-4 group-hover/card:scale-110 transition-transform" />
+                        <span className="text-[9px] font-black uppercase px-2 py-1 bg-neon-blue/20 text-neon-blue rounded-md animate-pulse">Live Stream</span>
+                     </div>
+                     <h4 className="text-xl font-bold text-white">Live Monitoring</h4>
+                     <p className="text-sm text-slate-500 leading-relaxed mb-4">Continuous satellite stream analysis for early detection of hazards.</p>
+                     <div className="pt-4 border-t border-white/10 flex items-center gap-3">
+                        <div className="relative flex h-2 w-2">
+                           <div className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-green opacity-75"></div>
+                           <div className="relative inline-flex rounded-full h-2 w-2 bg-neon-green"></div>
+                        </div>
+                        <span className="text-[10px] font-mono text-neon-green uppercase tracking-widest">{liveData.monitoring}</span>
+                     </div>
+                  </div>
+                  <div className="space-y-4 p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-neon-blue/20 transition-all group/card">
+                     <div className="flex justify-between items-start">
+                        <Map className="w-8 h-8 text-neon-blue mb-4 group-hover/card:scale-110 transition-transform" />
+                        <span className="text-[9px] font-black uppercase px-2 py-1 bg-neon-yellow/20 text-neon-yellow rounded-md">AI Predictive</span>
+                     </div>
+                     <h4 className="text-xl font-bold text-white">Heatmap Prediction</h4>
+                     <p className="text-sm text-slate-500 leading-relaxed mb-4">Visualizing threat intensities across geographical sectors.</p>
+                     <div className="pt-4 border-t border-white/10 flex items-center gap-3">
+                        <div className="relative flex h-2 w-2">
+                           <div className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-yellow opacity-75"></div>
+                           <div className="relative inline-flex rounded-full h-2 w-2 bg-neon-yellow"></div>
+                        </div>
+                        <span className="text-[10px] font-mono text-neon-yellow uppercase tracking-widest">{liveData.heatmap}</span>
+                     </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-full lg:w-1/3 aspect-square relative z-10 flex items-center justify-center">
+                 <div className="absolute inset-0 bg-neon-blue/20 rounded-full animate-pulse-slow blur-[60px]" />
+                 <div className="w-full h-full glass-dark border border-white/10 rounded-[50px] p-12 flex flex-col justify-between shadow-2xl overflow-hidden group/diag">
+                    <div className="space-y-2">
+                       <p className="text-[10px] font-black text-neon-blue uppercase tracking-widest">Active System Node</p>
+                       <p className="text-6xl font-black text-white leading-none">99.8%</p>
+                       <p className="text-sm text-slate-500 font-bold uppercase tracking-widest">Accuracy Rating</p>
+                    </div>
+                    <div className="space-y-6">
+                       <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            whileInView={{ width: '99.8%' }}
+                            transition={{ duration: 2, delay: 0.5 }}
+                            className="h-full bg-neon-blue shadow-[0_0_15px_rgba(80,215,255,1)]" 
+                          />
+                       </div>
+                       <div className="flex justify-between items-end">
+                          <div className="space-y-1">
+                             <p className="text-[10px] text-slate-600 font-bold uppercase">Uptime</p>
+                             <p className="text-xs text-neon-green font-black">STABLE</p>
+                          </div>
+                          <Link to="/dashboard" className="w-12 h-12 rounded-2xl bg-neon-blue flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_20px_rgba(80,215,255,0.4)]">
+                             <ChevronRight className="w-6 h-6 text-dark-900" />
+                          </Link>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Custom Keyframes for Gradient & Animations */}
+      <style>{`
+        @keyframes ken-burns {
+          from { transform: scale(1); }
+          to { transform: scale(1.15); }
+        }
+        @keyframes gradient-xy {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        .animate-ken-burns {
+          animation: ken-burns 20s ease-in-out infinite alternate;
+        }
+        .animate-gradient-xy {
+          animation: gradient-xy 10s ease infinite;
+        }
+      `}</style>
     </motion.div>
   );
 };
