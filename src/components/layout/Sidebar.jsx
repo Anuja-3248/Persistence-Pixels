@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  Shield, Map, AlertTriangle, LayoutDashboard, 
-  BookOpen, LogIn, Settings, User, Bell
+  LayoutDashboard, Map, AlertTriangle, Package, Users, BarChart2, Settings, ShieldAlert 
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -10,81 +9,84 @@ const Sidebar = ({ isOpen }) => {
   const location = useLocation();
   
   const menuItems = [
-    { name: 'Home', path: '/', icon: Shield },
+    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Live Map', path: '/map', icon: Map },
-    { name: 'S.O.S Emergency', path: '/sos', icon: AlertTriangle, color: 'text-neon-red' },
-    { name: 'AI Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { name: 'Resources', path: '/resources', icon: BookOpen },
-    { name: 'Admin Panel', path: '/admin', icon: Settings },
-    { name: 'Login / Register', path: '/auth', icon: LogIn },
+    { name: 'Alerts', path: '/sos', icon: AlertTriangle, badge: 12 },
+    { name: 'Resources', path: '/resources', icon: Package },
+    { name: 'Rescue Teams', path: '/admin', icon: Users },
+    { name: 'Analytics', path: '/analytics', icon: BarChart2 },
+    { name: 'Settings', path: '/settings', icon: Settings },
   ];
 
   return (
     <aside 
-      className={`fixed top-0 left-0 h-full glass-dark z-50 transition-all duration-300 ${isOpen ? 'w-64' : 'w-20'} border-r border-white/10`}
+      className={`fixed top-0 left-0 h-full bg-white border-r border-neutral-200 z-50 transition-all duration-300 ${isOpen ? 'w-64' : 'w-20'} flex flex-col`}
     >
-      <div className="flex flex-col h-full">
-        {/* Logo */}
-        <div className="h-16 flex items-center px-6 border-b border-white/10">
-          <Shield className="w-8 h-8 text-neon-blue shrink-0" />
-          {isOpen && (
-            <motion.span 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="ml-3 text-lg font-black tracking-tighter whitespace-nowrap"
-            >
-              DISASTER <span className="text-neon-red">X</span>
-            </motion.span>
-          )}
+      <div className="h-16 flex items-center px-6 border-b border-neutral-200 shrink-0">
+        <div className="bg-tertiary-500 p-1.5 rounded-md min-w-[32px]">
+          <ShieldAlert className="w-5 h-5 text-white" />
         </div>
+        {isOpen && (
+          <motion.span 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="ml-3 font-heading font-bold text-lg tracking-tight text-neutral-900"
+          >
+            Aegis Response
+          </motion.span>
+        )}
+      </div>
 
-        {/* Menu */}
-        <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto scrollbar-hide">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.path;
-            
-            return (
-              <Link 
-                key={item.path} 
-                to={item.path}
-                className={`flex items-center px-4 py-3 rounded-xl transition-all group relative ${
-                  isActive 
-                    ? 'bg-neon-blue/20 border border-neon-blue/30 text-neon-blue shadow-[0_0_15px_rgba(80,215,255,0.1)]' 
-                    : 'hover:bg-white/5 text-slate-400 hover:text-white'
-                }`}
-              >
-                <Icon className={`w-6 h-6 shrink-0 ${item.color || ''} group-hover:scale-110 transition-transform`} />
+      <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+        {menuItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = location.pathname === item.path;
+          
+          return (
+            <Link 
+              key={item.path} 
+              to={item.path}
+              className={`flex items-center justify-between px-3 py-2.5 rounded-md font-medium transition-colors ${
+                isActive 
+                  ? 'bg-primary-50 text-primary-700' 
+                  : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-primary-600' : ''}`} />
                 {isOpen && (
                   <motion.span 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="ml-4 font-semibold whitespace-nowrap overflow-hidden"
+                    className="whitespace-nowrap"
                   >
                     {item.name}
                   </motion.span>
                 )}
-                {!isOpen && isActive && (
-                  <div className="absolute right-0 w-1.5 h-6 bg-neon-blue rounded-l-full shadow-[0_0_10px_rgba(80,215,255,1)]" />
-                )}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* User Profile */}
-        <div className="p-4 border-t border-white/10">
-          <div className={`flex items-center ${isOpen ? 'px-4' : 'justify-center'}`}>
-            <div className="w-10 h-10 rounded-full bg-slate-800 border border-white/10 flex items-center justify-center shrink-0">
-              <User className="w-5 h-5 text-slate-400" />
-            </div>
-            {isOpen && (
-              <div className="ml-3 overflow-hidden">
-                <p className="text-sm font-bold truncate">John Doe</p>
-                <p className="text-[10px] text-neon-blue font-bold tracking-widest uppercase">Premium</p>
               </div>
-            )}
-          </div>
+              {isOpen && item.badge && (
+                <span className="bg-tertiary-100 text-tertiary-700 py-0.5 px-2 rounded-full text-xs font-bold">
+                  {item.badge}
+                </span>
+              )}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="p-4 border-t border-neutral-200">
+        <div className={`bg-neutral-100 p-4 rounded-lg overflow-hidden ${!isOpen ? 'text-center p-2' : ''}`}>
+          {isOpen ? (
+            <>
+              <h4 className="font-heading font-semibold text-sm text-neutral-900 mb-1">System Status</h4>
+              <div className="flex items-center gap-2 text-sm text-green-600 font-medium">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                Operational
+              </div>
+            </>
+          ) : (
+            <span className="w-3 h-3 bg-green-500 rounded-full inline-block animate-pulse"></span>
+          )}
         </div>
       </div>
     </aside>
