@@ -137,14 +137,44 @@ const SOS = () => {
         )}
       </AnimatePresence>
 
-      <div className="mt-20 flex gap-20 opacity-30 pointer-events-none">
+      <div className="mt-16 w-full max-w-2xl">
+         <div className="flex items-center justify-between mb-4 px-2">
+            <h3 className="text-xs font-black uppercase tracking-[0.3em] text-neon-blue flex items-center gap-2">
+               <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-blue opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-blue"></span>
+               </span>
+               Live Emergency Log
+            </h3>
+            <span className="text-[10px] text-slate-600 font-bold uppercase tracking-widest">Protocol 9.4 Active</span>
+         </div>
+         
+         <div className="glass-dark border border-white/5 rounded-3xl p-6 space-y-4 overflow-hidden relative">
+            {[
+               { time: '15:04:12', event: 'Satellite link secured (GSAT-29)', status: 'online' },
+               { time: '15:05:08', event: 'Positioning data verified via GPS/GLONASS', status: 'verified' },
+               { time: '15:06:45', event: 'Local emergency services on standby', status: 'ready' }
+            ].map((log, i) => (
+               <div key={i} className="flex items-center gap-4 text-[10px] font-mono">
+                  <span className="text-slate-600">[{log.time}]</span>
+                  <span className="text-slate-300 uppercase tracking-wider flex-1 truncate">{log.event}</span>
+                  <span className={`px-2 py-0.5 rounded bg-${log.status === 'online' ? 'neon-blue' : (log.status === 'ready' ? 'neon-green' : 'white')}/10 text-${log.status === 'online' ? 'neon-blue' : (log.status === 'ready' ? 'neon-green' : 'white')} font-bold uppercase`}>
+                     {log.status}
+                  </span>
+               </div>
+            ))}
+            <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-dark-900 pointer-events-none" />
+         </div>
+      </div>
+
+      <div className="mt-12 flex gap-20 opacity-30 pointer-events-none">
          <div className="flex flex-col items-center">
             <Users className="w-10 h-10 mb-2" />
-            <span className="text-[10px] font-black uppercase tracking-widest">RESCUE TEAM: ALPHA-9</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-white">RESCUE TEAM: ALPHA-9</span>
          </div>
          <div className="flex flex-col items-center">
             <Shield className="w-10 h-10 mb-2" />
-            <span className="text-[10px] font-black uppercase tracking-widest">SECURE CHANNEL 0291-B</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-white">SECURE CHANNEL 0291-B</span>
          </div>
       </div>
     </motion.div>

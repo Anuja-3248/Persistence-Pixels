@@ -33,7 +33,7 @@ const Sidebar = ({ isOpen }) => {
               animate={{ opacity: 1 }}
               className="ml-3 text-lg font-black tracking-tighter whitespace-nowrap"
             >
-              AI DISASTER SHIELD
+              DISASTER <span className="text-neon-red">X</span>
             </motion.span>
           )}
         </div>
