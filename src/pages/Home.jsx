@@ -1,150 +1,215 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { 
-  ShieldAlert, ArrowRight, Activity, Map, Globe, Shield, 
-  BarChart, Users, CheckCircle, Package
-} from 'lucide-react';
+import { Shield, ChevronRight, Activity, Map } from 'lucide-react';
+import heroBg from '../assets/hero-bg.png';
 
 const Home = () => {
+  const quotes = [
+    "Preparation through education is less costly than learning through tragedy.",
+    "The best time to prepare for a disaster was yesterday. The second best time is now.",
+    "Disaster management is about making order out of chaos.",
+    "Safety is not a gadget but a state of mind.",
+    "Resilience is not just about surviving, but thriving after the storm.",
+    "Nature's power is unpredictable; our preparedness must be absolute.",
+    "Unity and information are our strongest shields against devastation."
+  ];
+  
+  const [showContactInfo, setShowContactInfo] = React.useState(false);
+  const dailyQuote = quotes[new Date().getDate() % quotes.length];
+  
+  // High-Performance System Status (Real-time Simulation)
+  const [systemNode, setSystemNode] = React.useState({
+    accuracy: '99.8%',
+    status: 'OPERATIONAL',
+    uptime: '100% Guaranteed',
+    monitoring: 'Scanning Sector 7-G...'
+  });
+
+  React.useEffect(() => {
+    const sectors = ['Sector 7-G', 'Sector 2-A', 'Coastal Zone 1', 'Northern District', 'Basin Alpha'];
+    const interval = setInterval(() => {
+      setSystemNode(prev => ({
+        ...prev,
+        monitoring: `Scanning ${sectors[Math.floor(Math.random() * sectors.length)]}...`
+      }));
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="flex flex-col min-h-screen bg-background-50 font-body">
-      {/* Hero Section */}
-      <section className="relative pt-20 pb-32 overflow-hidden bg-white border-b border-neutral-100">
-        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[600px] h-[600px] bg-primary-50 rounded-full blur-3xl opacity-50" />
-        <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-[400px] h-[400px] bg-tertiary-50 rounded-full blur-3xl opacity-30" />
-        
-        <div className="max-w-[1200px] mx-auto px-6 relative z-10">
-          <div className="max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 border border-primary-100 text-primary-700 text-xs font-bold uppercase tracking-wider mb-6">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
-                </span>
-                Next-Gen Disaster Intelligence
-              </div>
-              <h1 className="font-heading text-5xl md:text-7xl font-extrabold text-neutral-900 leading-[1.1] mb-6">
-                Precision Response for <br/>
-                <span className="text-primary-600">Global Safety.</span>
-              </h1>
-              <p className="text-xl text-neutral-500 leading-relaxed max-w-2xl mb-10">
-                Aegis represents the pinnacle of disaster management technology. We empower rescue teams with real-time predictive analytics, satellite monitoring, and rapid coordination tools.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                <Link to="/dashboard" className="flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg font-bold text-lg shadow-lg shadow-primary-500/20 transition-all group">
-                  Launch Dashboard <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-                <Link to="/map" className="flex items-center justify-center gap-2 bg-white border border-neutral-200 hover:bg-neutral-50 text-neutral-900 px-8 py-4 rounded-lg font-bold text-lg transition-all">
-                  <Map className="w-5 h-5 text-primary-500" /> Live Incident Map
-                </Link>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="relative min-h-screen w-full flex flex-col font-sans overflow-hidden"
+    >
+      {/* Immersive Persistent Background */}
+      <div 
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat animate-ken-burns"
+        style={{ backgroundImage: `url(${heroBg})` }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/90 via-[#0f172a]/20 to-[#0f172a]/95" />
+        <div className="absolute inset-0 bg-blue-900/5 mix-blend-overlay" />
+      </div>
 
-      {/* Stats/Proof Section */}
-      <section className="py-20 bg-background-50">
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { label: 'Network Accuracy', val: '99.8%', desc: 'Satellite AI verified precision', icon: Activity, color: 'text-primary-600' },
-              { label: 'Active Deployments', val: '1.2k+', desc: 'Operational teams worldwide', icon: Users, color: 'text-tertiary-600' },
-              { label: 'Response Time', val: '< 2m', desc: 'Average alert dissemination', icon: CheckCircle, color: 'text-green-600' }
-            ].map((stat, i) => (
+      {/* Top Navigation Overlay */}
+      <nav className="relative z-20 flex items-center justify-between px-12 py-8 w-full max-w-[1600px] mx-auto">
+        <div className="flex items-center gap-3">
+          <div className="bg-neon-blue/20 p-2 rounded-lg border border-neon-blue/40 backdrop-blur-md transition-all hover:scale-110">
+            <Activity className="w-8 h-8 text-neon-blue" />
+          </div>
+          <span className="text-3xl font-black tracking-tighter text-white drop-shadow-lg uppercase">
+            Disaster <span className="text-neon-blue">X</span>
+          </span>
+        </div>
+
+        <div className="hidden md:flex items-center gap-12 font-black text-xs uppercase tracking-[0.2em] text-white/70">
+          <Link to="/" className="text-white hover:text-white transition-colors border-b-2 border-neon-blue pb-1">HOME</Link>
+          <Link to="/dashboard" className="hover:text-white transition-colors">DASHBOARD</Link>
+          
+          <div 
+            className="relative"
+            onMouseEnter={() => setShowContactInfo(true)}
+            onMouseLeave={() => setShowContactInfo(false)}
+          >
+            <div className="hover:text-white transition-colors cursor-pointer">CONTACT</div>
+            {showContactInfo && (
               <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-white p-8 rounded-2xl border border-neutral-200 shadow-custom"
+                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 glass-dark p-6 rounded-2xl border border-white/10 shadow-2xl z-50 text-center"
               >
-                <stat.icon className={`w-8 h-8 ${stat.color} mb-4`} />
-                <h3 className="text-4xl font-extrabold text-neutral-900 mb-1">{stat.val}</h3>
-                <p className="font-heading font-bold text-sm text-neutral-500 uppercase tracking-widest mb-1">{stat.label}</p>
-                <p className="text-sm text-neutral-400">{stat.desc}</p>
+                <p className="text-[10px] text-neon-blue font-black tracking-widest mb-2 uppercase text-center">Core Development Team</p>
+                <h4 className="text-xl font-black text-white mb-3 text-center">Persistence Pixel</h4>
+                <p className="text-[10px] text-slate-400 font-medium leading-relaxed mb-4 normal-case text-center">
+                  Dedicated to engineering resilient digital infrastructures for global safety and emergency response.
+                </p>
               </motion.div>
-            ))}
+            )}
           </div>
+
+          <Link to="/sos" className="text-neon-red hover:text-white transition-colors flex items-center gap-2 group">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-red opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-red"></span>
+            </span>
+            SOS
+          </Link>
         </div>
-      </section>
 
-      {/* Feature Grid */}
-      <section className="py-24 bg-white">
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="font-heading text-4xl font-bold text-neutral-900 mb-6">Built for High-Stakes Operations</h2>
-            <p className="text-lg text-neutral-500">Every feature is engineered for reliability, speed, and clarity in the most challenging environments.</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {[
-              { title: 'Satellite Heatmaps', text: 'Real-time thermal and water-level sensing directly from orbital nodes.', icon: Globe },
-              { title: 'AI Risk Prediction', text: 'Proprietary neural networks forecast hazards with unprecedented multi-hour lead time.', icon: BarChart },
-              { title: 'Rapid SOS Protocol', text: 'One-touch emergency broadcasts to decentralized rescue clusters.', icon: ShieldAlert },
-              { title: 'Resource Logistics', text: 'Automated tracking of medical supplies, ambulances, and shelter capacity.', icon: Package },
-              { title: 'Team Coordination', text: 'Seamless communication across encrypted channels for rescue units.', icon: Users },
-              { title: 'Global Resilience', text: 'Designed to scale across borders for unified disaster management.', icon: Shield }
-            ].map((feat, i) => (
-              <div key={i} className="group">
-                <div className="w-12 h-12 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600 mb-6 group-hover:bg-primary-500 group-hover:text-white transition-colors">
-                  <feat.icon className="w-6 h-6" />
-                </div>
-                <h4 className="font-heading font-bold text-xl text-neutral-900 mb-3">{feat.title}</h4>
-                <p className="text-neutral-500 leading-relaxed">{feat.text}</p>
-              </div>
-            ))}
-          </div>
+        <div className="flex items-center gap-6">
+          <Link to="/auth" className="px-8 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-sm hover:bg-white/10 transition-all backdrop-blur-md">
+            Sign in
+          </Link>
+          <Link to="/auth" className="px-8 py-3 rounded-xl bg-neon-blue text-white font-bold text-sm hover:bg-neon-blue/80 shadow-[0_0_20px_rgba(46,125,233,0.4)] transition-all">
+            Register
+          </Link>
         </div>
-      </section>
+      </nav>
 
-      {/* Call to Action */}
-      <section className="py-24 bg-neutral-900 overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary-600/10 rounded-full blur-3xl" />
-        <div className="max-w-[1200px] mx-auto px-6 relative z-10 text-center">
-          <h2 className="font-heading text-4xl font-bold text-white mb-8">Integrated Disaster Protection.</h2>
-          <p className="text-xl text-neutral-400 mb-12 max-w-2xl mx-auto">Join the institutions relying on Aegis to protect lives and infrastructure.</p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link to="/auth" className="bg-primary-500 hover:bg-primary-600 text-white px-10 py-4 rounded-lg font-bold text-lg transition-all shadow-xl shadow-primary-500/20">
-              Get Started for Free
+      {/* Main Hero Content */}
+      <div className="relative z-10 h-screen w-full flex flex-col items-center justify-center text-center px-6">
+        <motion.div
+           initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, delay: 0.2 }}
+           className="max-w-5xl"
+        >
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight mb-6 drop-shadow-2xl">
+            Welcome to <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/70">Disaster Management</span> <br />
+            <span className="text-neon-blue font-extrabold tracking-widest text-3xl md:text-5xl lg:text-6xl uppercase mt-2 block">System</span>
+          </h1>
+
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 1 }}
+            className="flex flex-col items-center"
+          >
+            <div className="w-20 h-1 bg-neon-blue/40 mb-6 rounded-full" />
+            <p className="text-xl md:text-2xl text-white/80 font-medium italic max-w-2xl leading-relaxed">
+              "{dailyQuote}"
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2, duration: 1 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12"
+          >
+            <Link to="/dashboard" className="flex items-center gap-3 bg-neon-blue/90 text-dark-900 px-10 py-4 rounded-xl font-black text-sm hover:bg-neon-blue shadow-[0_10px_30px_rgba(46,125,233,0.3)] transition-all group uppercase tracking-widest">
+               COMMAND CENTER <ChevronRight className="w-5 h-5 group-hover:translate-x-1" />
             </Link>
-            <button className="bg-white/5 hover:bg-white/10 text-white border border-white/10 px-10 py-4 rounded-lg font-bold text-lg transition-all">
-              Request a Demo
-            </button>
+            
+            <Link to="/map" className="flex items-center gap-3 bg-white/10 backdrop-blur-md text-white px-8 py-4 rounded-xl font-black text-sm hover:bg-white/20 border border-white/10 shadow-2xl transition-all group uppercase tracking-widest">
+               DISASTER MAP <Map className="w-5 h-5 text-neon-blue" />
+            </Link>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Information Section */}
+      <section className="relative z-10 py-32 px-12">
+        <motion.div
+           initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} viewport={{ once: true }}
+           className="max-w-[1400px] mx-auto"
+        >
+          <div className="relative group overflow-hidden rounded-[60px] bg-gradient-to-br from-neon-blue to-blue-700 p-1 animate-gradient-xy shadow-[0_40px_100px_rgba(46,125,233,0.3)]">
+            <div className="bg-dark-900 rounded-[58px] p-16 md:p-24 flex flex-col lg:flex-row items-center gap-20 overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-96 h-96 bg-neon-blue/20 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
+              
+              <div className="flex-1 space-y-10 relative z-10 text-left">
+                <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-neon-blue/10 border border-neon-blue/30">
+                  <Shield className="w-5 h-5 text-neon-blue" />
+                  <span className="text-xs font-black text-neon-blue uppercase tracking-[0.3em]">Core Mission</span>
+                </div>
+                
+                <h2 className="text-5xl md:text-7xl font-black text-white leading-[1.1] tracking-tighter text-left">
+                  INTELLIGENCE <br /> 
+                  <span className="text-neon-blue">FOR GLOBAL</span> <br />
+                  RESILIENCE.
+                </h2>
+                
+                <p className="text-xl text-slate-400 font-medium leading-relaxed max-w-2xl text-left">
+                  DisasterX is a cutting-edge platform engineered to predict, monitor, and mitigate 
+                  natural catastrophes using high-velocity data networks. 
+                  Built for teams like <span className="text-white font-bold">Persistence Pixel</span>, 
+                  we bridge the gap between data and life-saving action.
+                </p>
+              </div>
+
+              <div className="w-full lg:w-1/3 aspect-square relative z-10 flex items-center justify-center">
+                 <div className="absolute inset-0 bg-neon-blue/20 rounded-full animate-pulse blur-[60px]" />
+                 <div className="w-full h-full glass-dark border border-white/10 rounded-[50px] p-12 flex flex-col justify-between shadow-2xl overflow-hidden text-left">
+                    <div className="space-y-2 text-left">
+                       <p className="text-[10px] font-black text-neon-blue uppercase tracking-widest text-left">Accuracy Rating</p>
+                       <p className="text-6xl font-black text-white leading-none text-left">{systemNode.accuracy}</p>
+                       <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2 text-left">{systemNode.monitoring}</p>
+                    </div>
+                    <div className="space-y-6">
+                       <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+                          <motion.div initial={{ width: 0 }} whileInView={{ width: '99.8%' }} transition={{ duration: 2 }} className="h-full bg-neon-blue" />
+                       </div>
+                       <div className="flex justify-between items-end">
+                          <div className="space-y-1 text-left">
+                             <p className="text-[10px] text-slate-600 font-bold uppercase text-left">Status</p>
+                             <p className="text-xs text-neon-green font-black text-left">{systemNode.status}</p>
+                          </div>
+                          <Link to="/dashboard" className="w-12 h-12 rounded-2xl bg-neon-blue flex items-center justify-center hover:scale-110 transition-transform">
+                             <ChevronRight className="w-6 h-6 text-dark-900" />
+                          </Link>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 bg-white border-t border-neutral-200">
-        <div className="max-w-[1200px] mx-auto px-6 text-center md:text-left">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="flex items-center gap-2">
-              <div className="bg-tertiary-500 p-1.5 rounded-md">
-                <ShieldAlert className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-heading font-bold text-xl tracking-tight text-neutral-900">Aegis Response</span>
-            </div>
-            <div className="flex gap-8 text-sm font-medium text-neutral-500">
-              <a href="#" className="hover:text-primary-600 transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-primary-600 transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-primary-600 transition-colors">Documentation</a>
-              <a href="#" className="hover:text-primary-600 transition-colors">Contact</a>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-neutral-100 text-center text-xs text-neutral-400">
-            © {new Date().getFullYear()} Aegis Response Intelligence Platforms. Built by Persistence Pixel.
-          </div>
-        </div>
-      </footer>
-    </div>
+      <style>{`
+        @keyframes ken-burns { from { transform: scale(1); } to { transform: scale(1.1); } }
+        @keyframes gradient-xy { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        .animate-ken-burns { animation: ken-burns 20s ease-in-out infinite alternate; }
+        .animate-gradient-xy { animation: gradient-xy 10s ease infinite; }
+      `}</style>
+    </motion.div>
   );
 };
 

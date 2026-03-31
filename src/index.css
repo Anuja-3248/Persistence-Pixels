@@ -49,6 +49,12 @@
   --color-background-100: #f1f5f9;
   --color-background-200: #e2e8f0;
 
+  --color-neon-blue: #2ed9ff;
+  --color-neon-red: #ff3d68;
+  --color-neon-green: #2effa1;
+  --color-neon-yellow: #fff32e;
+  --color-dark-900: #0f172a;
+
   --font-heading: 'Inter', sans-serif;
   --font-body: 'Roboto', sans-serif;
 

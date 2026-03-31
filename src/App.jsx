@@ -14,7 +14,7 @@ import Auth from './pages/Auth';
 import { AnimatePresence, motion } from 'framer-motion';
 
 function App() {
-  const [showSplash, setShowSplash] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
 
