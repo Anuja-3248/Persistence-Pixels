@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Shield, ChevronRight, Activity, Map } from 'lucide-react';
+import { Shield, ChevronRight, Activity, Map, Globe } from 'lucide-react';
 import heroBg from '../assets/hero-bg.png';
 import ScenarioCards from '../components/ScenarioCards';
 
