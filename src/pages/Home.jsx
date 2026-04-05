@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Shield, ChevronRight, Activity, Map } from 'lucide-react';
+import { Shield, ChevronRight, Activity, Map, Globe } from 'lucide-react';
 import heroBg from '../assets/hero-bg.png';
+import ScenarioCards from '../components/ScenarioCards';
 
 const Home = () => {
   const quotes = [
@@ -202,6 +203,31 @@ const Home = () => {
           </div>
         </motion.div>
       </section>
+
+      {/* Scenario Learning Section */}
+      <section className="relative z-10 bg-dark-900 overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-[500px] bg-blue-600/5 blur-[150px] rounded-full pointer-events-none" />
+        <ScenarioCards />
+      </section>
+
+      <footer className="relative z-10 py-16 px-12 border-t border-white/5">
+        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+           <div className="flex items-center gap-3">
+              <Globe className="w-6 h-6 text-neon-blue" />
+              <span className="text-xl font-black tracking-tighter text-white uppercase">
+                 Disaster <span className="text-neon-blue">X</span>
+              </span>
+           </div>
+           <p className="text-slate-500 text-sm font-medium tracking-wide">
+              &copy; 2026 Persistence Pixel. All rights reserved. System Operational.
+           </p>
+           <div className="flex gap-8 text-[10px] font-black uppercase tracking-widest text-slate-400">
+              <a href="#" className="hover:text-white transition-colors">Privacy</a>
+              <a href="#" className="hover:text-white transition-colors">Terms</a>
+              <a href="#" className="hover:text-white transition-colors">Status</a>
+           </div>
+        </div>
+      </footer>
 
       <style>{`
         @keyframes ken-burns { from { transform: scale(1); } to { transform: scale(1.1); } }
