@@ -11,6 +11,7 @@ import Dashboard from './pages/Dashboard';
 import Resources from './pages/Resources';
 import Admin from './pages/Admin';
 import Auth from './pages/Auth';
+import Onboarding from './pages/Onboarding';
 import { AnimatePresence, motion } from 'framer-motion';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
   const location = useLocation();
 
   const isAuthPage = location.pathname === '/auth';
+  const isOnboardingPage = location.pathname === '/onboarding';
   const isHomePage = location.pathname === '/';
 
   return (
@@ -28,16 +30,17 @@ function App() {
           <motion.div key="splash" exit={{ opacity: 0, scale: 1.05 }} transition={{ duration: 0.6 }}>
             <SplashScreen onComplete={() => setShowSplash(false)} />
           </motion.div>
-        ) : isAuthPage ? (
+        ) : isAuthPage || isOnboardingPage ? (
           <motion.div 
             key="auth" 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             transition={{ duration: 0.8 }}
-            className="min-h-screen bg-neutral-900 text-slate-100 font-body"
+            className="min-h-screen bg-[#0C0B1B] text-slate-100 font-body"
           >
             <Routes location={location} key={location.pathname}>
               <Route path="/auth" element={<Auth />} />
+              <Route path="/onboarding" element={<Onboarding />} />
             </Routes>
           </motion.div>
         ) : (
