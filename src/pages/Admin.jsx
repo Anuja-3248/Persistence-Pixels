@@ -25,6 +25,7 @@ const Admin = () => {
   const [sosEntries, setSosEntries] = useState([
     { id: 'SOS-9402', reporterName: 'Amit Sharma', location: 'Satara District', status: 'DISPATCHING', submittedAt: Date.now() - 120000, severity: 'CRITICAL', source: 'FIREBASE' },
     { id: 'SOS-9401', reporterName: 'Priya Patel', location: 'Bavdhan, Pune', status: 'IN_PROGRESS', submittedAt: Date.now() - 720000, severity: 'HIGH', source: 'FIREBASE' },
+    { id: 'SOS-9398', reporterName: 'Rahul Varma', location: 'Karve Nagar', status: 'RESOLVED', submittedAt: Date.now() - 2700000, severity: 'MEDIUM', source: 'LOCAL' },
   ]);
   const [reports, setReports] = useState([]);
 
@@ -37,12 +38,13 @@ const Admin = () => {
         const data = doc.data();
         fbAlerts.push({
           id: data.id || doc.id,
-          reporterName: 'System User',
+          reporterName: data.user || 'System User',
           location: `${data.lat}, ${data.lng}`,
           status: data.status,
           submittedAt: data.timestamp?.toDate() ? data.timestamp.toDate().getTime() : Date.now(),
           severity: data.severity || 'HIGH',
-          source: 'FIREBASE'
+          source: 'FIREBASE',
+          message: data.message
         });
       });
       
@@ -54,10 +56,30 @@ const Admin = () => {
       console.warn("Firestore listener failed (using local fallback):", error);
     });
 
-    // 2. Load Aegis Reports
+    // 2. Load Aegis Reports & Local Emergency Alerts
     setReports(getStoredReports());
     const handler = () => setReports(getStoredReports());
     window.addEventListener('aegis:new-report', handler);
+
+    const loadLocal = () => {
+      const local = JSON.parse(localStorage.getItem('emergency_alerts') || '[]');
+      if (local.length > 0) {
+        setSosEntries(prev => {
+          const formattedLocal = local.map(a => ({
+            id: a.id || `LOCAL-${Math.random()}`,
+            reporterName: 'Local User',
+            location: `${a.lat}, ${a.lng}`,
+            status: a.status || 'PENDING',
+            submittedAt: a.timestamp ? new Date(a.timestamp).getTime() : Date.now(),
+            severity: a.severity || 'HIGH',
+            source: 'LOCAL'
+          }));
+          const combined = [...formattedLocal, ...prev];
+          return combined.filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
+        });
+      }
+    };
+    loadLocal();
 
     return () => {
       unsubscribe();
