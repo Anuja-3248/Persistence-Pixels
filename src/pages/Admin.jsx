@@ -1,25 +1,68 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { LayoutDashboard, Users, AlertTriangle, CheckCircle, Activity, Shield, Bell, User, Filter, Search, MoreVertical, MapPin, ExternalLink, RefreshCw, BarChart, TrendingUp } from 'lucide-react';
 import { 
   BarChart as ReBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, 
   LineChart, Line
 } from 'recharts';
+import { db } from '../firebase';
+import { collection, query, onSnapshot, orderBy } from 'firebase/firestore';
 
 const Admin = () => {
-  const stats = [
-    { title: 'Active Alerts', value: '14', color: 'text-neon-red', icon: Bell, trend: '+2' },
-    { title: 'S.O.S Requests', value: '42', color: 'text-neon-yellow', icon: AlertTriangle, trend: 'NEW' },
-    { title: 'Rescues Done', value: '1,280', color: 'text-neon-green', icon: CheckCircle, trend: '+45' },
-    { title: 'Active Units', value: '89', color: 'text-neon-blue', icon: MapPin, trend: 'STABLE' },
-  ];
-
-  const sosEntries = [
+  const [sosEntries, setSosEntries] = useState([
     { id: 'SOS-9402', user: 'Amit Sharma', location: 'Satara District', status: 'DISPATCHING', time: '2m ago', severity: 'CRITICAL' },
     { id: 'SOS-9401', user: 'Priya Patel', location: 'Bavdhan, Pune', status: 'IN_PROGRESS', time: '12m ago', severity: 'HIGH' },
     { id: 'SOS-9398', user: 'Rahul Varma', location: 'Karve Nagar', status: 'RESOLVED', time: '45m ago', severity: 'MEDIUM' },
     { id: 'SOS-9395', user: 'Sneha Desh.', location: 'Wakad, Pune', status: 'RESOLVED', time: '1h ago', severity: 'HIGH' },
     { id: 'SOS-9392', user: 'Karan Mehra', location: 'Kothrud, Pune', status: 'RESOLVED', time: '3h ago', severity: 'CRITICAL' },
+  ]);
+
+  useEffect(() => {
+    // 1. Listen for Real-time Firebase Alerts
+    const q = query(collection(db, "alerts"), orderBy("timestamp", "desc"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const fbAlerts = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        fbAlerts.push({
+          id: data.id || doc.id,
+          user: 'System User',
+          location: `${data.lat}, ${data.lng}`,
+          status: data.status,
+          time: data.timestamp?.toDate() ? data.timestamp.toDate().toLocaleTimeString() : 'Just now',
+          severity: data.severity || 'HIGH',
+          message: data.message
+        });
+      });
+      
+      setSosEntries(prev => {
+        const combined = [...fbAlerts, ...prev];
+        return combined.filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
+      });
+    }, (error) => {
+      console.warn("Firestore listener failed (using local fallback):", error);
+    });
+
+    // 2. Local Fallback Listener
+    const loadLocal = () => {
+      const local = JSON.parse(localStorage.getItem('emergency_alerts') || '[]');
+      if (local.length > 0) {
+        setSosEntries(prev => {
+          const combined = [...local.map(a => ({...a, user: 'Local User', location: `${a.lat}, ${a.lng}`, time: 'Local Sync'})), ...prev];
+          return combined.filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
+        });
+      }
+    };
+    loadLocal();
+
+    return () => unsubscribe();
+  }, []);
+
+  const stats = [
+    { title: 'Active Alerts', value: '14', color: 'text-neon-red', icon: Bell, trend: '+2' },
+    { title: 'S.O.S Requests', value: '42', color: 'text-neon-yellow', icon: AlertTriangle, trend: 'NEW' },
+    { title: 'Rescues Done', value: '1,280', color: 'text-neon-green', icon: CheckCircle, trend: '+45' },
+    { title: 'Active Units', value: '89', color: 'text-neon-blue', icon: MapPin, trend: 'STABLE' },
   ];
 
   const chartData = [

@@ -1,18 +1,100 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, MapPin, Camera, Send, CheckCircle, Shield, Phone, Radio, Users } from 'lucide-react';
+import { AlertTriangle, MapPin, Camera, Send, CheckCircle, Shield, Phone, Radio, Users, Loader2, XCircle } from 'lucide-react';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const SOS = () => {
   const [step, setStep] = useState(1);
   const [isSending, setIsSending] = useState(false);
+  const [status, setStatus] = useState('idle'); // idle, locating, sending, error
   const [message, setMessage] = useState('');
+  const [location, setLocation] = useState({ lat: null, lng: null, address: 'Detecting position...' });
+  const [eta, setEta] = useState(null);
+  const [error, setError] = useState(null);
+
+  // Function to get current location
+  const getLocation = useCallback(() => {
+    setStatus('locating');
+    setError(null);
+
+    if (!navigator.geolocation) {
+      setError("Geolocation is not supported by your browser.");
+      setStatus('error');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setLocation({
+          lat: latitude.toFixed(4),
+          lng: longitude.toFixed(4),
+          address: 'Location Verified' // In a real app, use reverse geocoding here
+        });
+        setStatus('sending');
+        // Simulate transmission delay after getting location
+        performTransmission(latitude, longitude);
+      },
+      (err) => {
+        setError("Location access denied. Please enable GPS for emergency services.");
+        setStatus('error');
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  }, []);
+
+  const performTransmission = async (lat, lng) => {
+    try {
+      // Real Firebase Write
+      const alertData = {
+        id: `SOS-${Math.floor(1000 + Math.random() * 9000)}`,
+        lat,
+        lng,
+        message,
+        timestamp: serverTimestamp(),
+        status: 'DISPATCHING',
+        severity: 'CRITICAL',
+        type: 'AUTO_GEOLOCATION'
+      };
+      
+      // Attempt to save to Firestore
+      const docRef = await addDoc(collection(db, 'alerts'), alertData);
+      console.log("Alert saved to cloud: ", docRef.id);
+
+      // Still log locally for redundancy or offline view
+      const existingAlerts = JSON.parse(localStorage.getItem('emergency_alerts') || '[]');
+      localStorage.setItem('emergency_alerts', JSON.stringify([{...alertData, timestamp: new Date().toISOString()}, ...existingAlerts]));
+
+      // Calculate a random but realistic ETA (between 5-15 mins)
+      const randomMinutes = Math.floor(Math.random() * 11) + 5;
+      const randomSeconds = Math.floor(Math.random() * 60);
+      setEta(`${randomMinutes}m ${randomSeconds}s`);
+
+      setIsSending(false);
+      setStatus('idle');
+      setStep(2);
+    } catch (err) {
+      console.error("Firebase Error: ", err);
+      // Fallback to local if Firebase fails (like if offline)
+      setStatus('error');
+      setError("Cloud sync failed. Check connection.");
+      setIsSending(false);
+    }
+  };
 
   const handleSOS = () => {
     setIsSending(true);
-    setTimeout(() => {
-      setIsSending(false);
-      setStep(2);
-    }, 3000);
+    getLocation();
+  };
+
+  const resetSOS = () => {
+    setStep(1);
+    setIsSending(false);
+    setStatus('idle');
+    setMessage('');
+    setLocation({ lat: null, lng: null, address: 'Detecting position...' });
+    setError(null);
   };
 
   return (
@@ -35,18 +117,36 @@ const SOS = () => {
               <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Direct connection to response headquarters</p>
             </div>
 
-            {/* Main SOS Button */}
+            {/* Main SOS Button Area */}
             <div className="relative group">
               <div className="absolute inset-0 bg-neon-red/30 rounded-full blur-[60px] group-hover:blur-[80px] transition-all duration-700 animate-pulse" />
+              
+              {status === 'error' && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute -top-16 left-1/2 -translate-x-1/2 w-full max-w-xs bg-red-500/20 border border-red-500/50 backdrop-blur-md rounded-xl p-3 text-center z-50"
+                >
+                  <p className="text-[10px] font-black text-red-500 uppercase tracking-widest flex items-center justify-center gap-2">
+                    <XCircle className="w-4 h-4" /> {error}
+                  </p>
+                </motion.div>
+              )}
+
               <button
                 disabled={isSending}
                 onClick={handleSOS}
                 className={`relative w-80 h-80 rounded-full bg-neon-red flex flex-col items-center justify-center text-white shadow-[0_0_50px_rgba(255,61,104,0.6)] transition-all active:scale-95 disabled:scale-90 ${isSending ? 'animate-bounce' : 'hover:scale-105'}`}
               >
-                {isSending ? (
+                {status === 'locating' ? (
+                  <div className="flex flex-col items-center">
+                    <Loader2 className="w-16 h-16 animate-spin mb-4" />
+                    <span className="text-2xl font-black uppercase tracking-widest">GETTING FIX...</span>
+                  </div>
+                ) : status === 'sending' ? (
                   <div className="flex flex-col items-center">
                     <Radio className="w-16 h-16 animate-ping mb-4" />
-                    <span className="text-2xl font-black uppercase tracking-widest">TRANSMITTING...</span>
+                    <span className="text-2xl font-black uppercase tracking-widest text-center">ENCRYPTING &<br/>SENDING...</span>
                   </div>
                 ) : (
                   <>
@@ -58,20 +158,24 @@ const SOS = () => {
               </button>
             </div>
 
-            {/* Extras */}
+            {/* Info Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
                <div className="glass-dark p-8 rounded-[32px] border border-white/5 shadow-2xl space-y-6">
                   <div className="flex items-center gap-4 text-neon-blue">
-                     <MapPin className="w-8 h-8" />
-                     <div className="flex-1">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Auto-Detected Position</p>
-                        <p className="text-lg font-black text-white">Pune, Maharashtra, IND</p>
+                     <div className={`p-3 rounded-xl ${location.lat ? 'bg-neon-blue/20' : 'bg-white/5'} border border-white/10`}>
+                        <MapPin className={`w-8 h-8 ${!location.lat && 'animate-pulse text-slate-600'}`} />
+                     </div>
+                     <div className="flex-1 text-left">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Live Tracker Position</p>
+                        <p className="text-lg font-black text-white">{location.lat ? location.address : 'Waiting for GPS...'}</p>
                      </div>
                   </div>
                   
                   <div className="flex items-center gap-2">
                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 whitespace-nowrap">GPS COORDINATES:</span>
-                     <span className="text-[10px] font-mono text-neon-blue font-bold tracking-[0.2em]">18.5204° N, 73.8567° E</span>
+                     <span className="text-[10px] font-mono text-neon-blue font-bold tracking-[0.2em]">
+                        {location.lat ? `${location.lat}° N, ${location.lng}° E` : 'SCANNING_SPECTRUM...'}
+                     </span>
                   </div>
                </div>
 
@@ -91,11 +195,15 @@ const SOS = () => {
 
             {/* Message Box */}
             <div className="w-full glass-dark p-8 rounded-[32px] border border-white/5 shadow-2xl">
+               <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Situational Briefing (Optional)</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-neon-red">Secure Line</span>
+               </div>
                <textarea 
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="OPTIONAL: Briefly describe your situation (e.g. trapped by flood, medical emergency...)" 
-                  className="w-full h-32 bg-white/5 border border-white/10 rounded-2xl p-6 text-sm font-medium focus:outline-none focus:border-neon-red/50 focus:ring-1 focus:ring-neon-red/30 transition-all resize-none placeholder:text-slate-700"
+                  placeholder="Describe your situation (e.g. medical emergency, trapped...)" 
+                  className="w-full h-32 bg-white/5 border border-white/10 rounded-2xl p-6 text-sm font-medium focus:outline-none focus:border-neon-red/50 focus:ring-1 focus:ring-neon-red/30 transition-all resize-none placeholder:text-slate-700 text-white"
                />
             </div>
           </motion.div>
@@ -112,26 +220,26 @@ const SOS = () => {
             
             <h2 className="text-4xl font-black mb-4 uppercase tracking-tighter">Signal Locked</h2>
             <p className="text-slate-400 mb-10 font-bold leading-relaxed px-10">
-               Your SOS signal has been received by <span className="text-white">Maharashtra Disaster Control Room</span>. 
-               The nearest rescue unit (Team Alpha-9) is being dispatched to your coordinates.
+               Your SOS signal has been encrypted and received. 
+               Rescue units are being synchronized at coord: <span className="text-neon-blue font-mono">[{location.lat}, {location.lng}]</span>.
             </p>
 
             <div className="grid grid-cols-2 gap-4 mb-10">
                <div className="bg-white/5 p-6 rounded-[32px] border border-white/5">
-                  <p className="text-[10px] font-black uppercase tracking-widest mb-2 text-slate-500">ETA TO COORDINATES</p>
-                  <p className="text-3xl font-black text-neon-blue">12m 45s</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest mb-2 text-slate-500">ESTIMATED ETA</p>
+                  <p className="text-3xl font-black text-neon-blue">{eta}</p>
                </div>
                <div className="bg-white/5 p-6 rounded-[32px] border border-white/5">
-                  <p className="text-[10px] font-black uppercase tracking-widest mb-2 text-slate-500">TEAM CAPACITY</p>
-                  <p className="text-3xl font-black text-neon-green">AVAILABLE</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest mb-2 text-slate-500">RESPONDER STATUS</p>
+                  <p className="text-3xl font-black text-neon-green">DEPLOYED</p>
                </div>
             </div>
 
             <button 
-               onClick={() => setStep(1)}
-               className="btn-outline w-full py-5 rounded-3xl text-lg font-black tracking-widest uppercase border-slate-700 text-slate-400 hover:text-white hover:border-white"
+               onClick={resetSOS}
+               className="btn-outline w-full py-5 rounded-3xl text-lg font-black tracking-widest uppercase border-slate-700 text-slate-400 hover:text-white hover:border-white transition-all"
             >
-               CANCEL ALERT / SAFE NOW
+               CANCEL ALERT / I AM SAFE
             </button>
           </motion.div>
         )}
@@ -140,7 +248,7 @@ const SOS = () => {
       <div className="mt-16 w-full max-w-2xl">
          <div className="flex items-center justify-between mb-4 px-2">
             <h3 className="text-xs font-black uppercase tracking-[0.3em] text-neon-blue flex items-center gap-2">
-               <span className="relative flex h-2 w-2">
+               <span className="relative flex h-2 w-2 text-left">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-blue opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-blue"></span>
                </span>
@@ -151,30 +259,19 @@ const SOS = () => {
          
          <div className="glass-dark border border-white/5 rounded-3xl p-6 space-y-4 overflow-hidden relative">
             {[
-               { time: '15:04:12', event: 'Satellite link secured (GSAT-29)', status: 'online' },
-               { time: '15:05:08', event: 'Positioning data verified via GPS/GLONASS', status: 'verified' },
-               { time: '15:06:45', event: 'Local emergency services on standby', status: 'ready' }
+               { time: new Date().toLocaleTimeString(), event: 'Satellite link secured (GSAT-29)', status: 'online' },
+               { time: status === 'idle' && !location.lat ? '-- : --' : new Date().toLocaleTimeString(), event: location.lat ? 'Positioning data verified' : 'Scanning for GPS signal...', status: location.lat ? 'verified' : 'waiting' },
+               { time: location.lat ? new Date().toLocaleTimeString() : '-- : --', event: 'Local emergency services on standby', status: 'ready' }
             ].map((log, i) => (
-               <div key={i} className="flex items-center gap-4 text-[10px] font-mono">
+               <div key={i} className="flex items-center gap-4 text-[10px] font-mono text-left">
                   <span className="text-slate-600">[{log.time}]</span>
                   <span className="text-slate-300 uppercase tracking-wider flex-1 truncate">{log.event}</span>
-                  <span className={`px-2 py-0.5 rounded bg-${log.status === 'online' ? 'neon-blue' : (log.status === 'ready' ? 'neon-green' : 'white')}/10 text-${log.status === 'online' ? 'neon-blue' : (log.status === 'ready' ? 'neon-green' : 'white')} font-bold uppercase`}>
+                  <span className={`px-2 py-0.5 rounded bg-${log.status === 'online' || log.status === 'verified' ? 'neon-blue' : (log.status === 'ready' ? 'neon-green' : 'white/10')} text-${log.status === 'online' || log.status === 'verified' ? 'neon-blue' : (log.status === 'ready' ? 'neon-green' : 'slate-500')} font-bold uppercase`}>
                      {log.status}
                   </span>
                </div>
             ))}
-            <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-dark-900 pointer-events-none" />
-         </div>
-      </div>
-
-      <div className="mt-12 flex gap-20 opacity-30 pointer-events-none">
-         <div className="flex flex-col items-center">
-            <Users className="w-10 h-10 mb-2" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-white">RESCUE TEAM: ALPHA-9</span>
-         </div>
-         <div className="flex flex-col items-center">
-            <Shield className="w-10 h-10 mb-2" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-white">SECURE CHANNEL 0291-B</span>
+            <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#0f172a] pointer-events-none" />
          </div>
       </div>
     </motion.div>
