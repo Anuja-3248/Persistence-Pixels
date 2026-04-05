@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Bell, Menu, Search, Globe, Moon, Radio, ShieldAlert } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -49,11 +50,15 @@ const Navbar = ({ toggleSidebar }) => {
             </button>
           </div>
           <div className="h-8 w-px bg-neutral-200 hidden sm:block"></div>
-          <button className="bg-tertiary-500 hover:bg-tertiary-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 shadow-sm">
-            <Radio className="w-4 h-4" />
-            <span className="hidden sm:inline">Send Alert</span>
-          </button>
-          <div className="w-8 h-8 rounded-full border border-neutral-200 overflow-hidden cursor-pointer">
+          <Link
+            to="/report"
+            className="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-lg text-base font-black transition-all flex items-center gap-2 shadow-lg shadow-red-500/30 hover:scale-105 active:scale-95 relative"
+          >
+            <span className="text-lg leading-none">⚠️</span>
+            <span className="hidden sm:inline">Report Disaster</span>
+            <span className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-red-400 rounded-full border-2 border-white animate-pulse" />
+          </Link>
+          <div className="w-8 h-8 rounded-full border border-neutral-200 overflow-hidden cursor-pointer ml-2">
             <img 
               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
               alt="User" 
