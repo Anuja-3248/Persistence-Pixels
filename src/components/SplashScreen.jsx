@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Shield, LogIn, Info, X, Activity, Globe, Lock } from 'lucide-react';
+import { Shield, LogIn, Info, X, Activity, Globe, Lock, ShieldAlert, ArrowRight } from 'lucide-react';
 import bgImage from '../assets/splash-bg.png';
 
 const SplashScreen = ({ onComplete }) => {
   const navigate = useNavigate();
   const [showInfo, setShowInfo] = useState(false);
+  const [showButtons, setShowButtons] = useState(false);
 
-  const handleLogin = () => {
-    navigate('/auth', { state: { isLogin: true } });
+  useEffect(() => {
+    const timer = setTimeout(() => { setShowButtons(true); }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleEnter = () => {
+    onComplete();
+    navigate('/dashboard');
+  };
+
+  const handleAction = (isLogin) => {
+    navigate('/auth', { state: { isLogin } });
     onComplete();
   };
 
@@ -43,36 +54,42 @@ const SplashScreen = ({ onComplete }) => {
               transition={{ duration: 0.4 }}
               className="flex flex-col items-center justify-center space-y-8"
             >
-              {/* Logo Icon */}
-              <div className="w-16 h-16 rounded-full bg-purple-600/20 flex items-center justify-center backdrop-blur-md border border-purple-500/30 shadow-[0_0_40px_rgba(147,51,234,0.3)]">
-                <Shield className="w-8 h-8 text-purple-500" />
-              </div>
+              <motion.div
+                 initial={{ opacity: 0, y: 20 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 className="flex items-center gap-3 mb-2"
+              >
+                 <ShieldAlert className="w-6 h-6 text-purple-400 animate-pulse" />
+                 <span className="text-purple-200 text-xs font-black uppercase tracking-[0.3em]">System Initialization</span>
+              </motion.div>
 
               {/* Title */}
               <h1 className="text-6xl md:text-8xl font-black text-white tracking-tight drop-shadow-2xl">
                 Disaster<span className="text-purple-500">X</span>
               </h1>
 
-              {/* Buttons */}
-              <div className="flex items-center gap-4 mt-4">
-                {/* Login Button */}
-                <button 
-                  onClick={handleLogin}
-                  className="flex items-center gap-2 px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm rounded-xl transition-all shadow-[0_0_20px_rgba(147,51,234,0.4)] hover:shadow-[0_0_30px_rgba(147,51,234,0.6)] hover:-translate-y-0.5"
-                >
-                  <LogIn className="w-5 h-5" />
-                  Login
-                </button>
-
-                {/* Know More Button */}
-                <button 
-                  onClick={() => setShowInfo(true)}
-                  className="flex items-center gap-2 px-8 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-sm rounded-xl backdrop-blur-md border border-white/5 transition-all hover:-translate-y-0.5"
-                >
-                  <Info className="w-5 h-5" />
-                  Know More
-                </button>
-              </div>
+              {/* Buttons Area */}
+              <AnimatePresence>
+                {showButtons && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex flex-col items-center gap-4 w-full max-w-xs"
+                  >
+                    <button
+                      onClick={handleEnter}
+                      className="w-full py-4 px-8 rounded-2xl bg-purple-600 text-white font-black uppercase tracking-widest text-xs hover:bg-purple-500 transition-all shadow-[0_0_20px_rgba(147,51,234,0.4)] flex items-center justify-center gap-3 group"
+                    >
+                      Enter System <ArrowRight className="w-4 h-4 group-hover:translate-x-1" />
+                    </button>
+                    
+                    <div className="flex gap-3 w-full">
+                      <button onClick={() => handleAction(true)} className="flex-1 py-3 bg-white/10 hover:bg-white/20 border border-white/5 text-white text-[9px] font-black uppercase rounded-xl transition-all">Sign In</button>
+                      <button onClick={() => setShowInfo(true)} className="flex-1 py-3 bg-white/10 hover:bg-white/20 border border-white/5 text-white text-[9px] font-black uppercase rounded-xl transition-all">Know More</button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           ) : (
             <motion.div
@@ -124,7 +141,7 @@ const SplashScreen = ({ onComplete }) => {
 
               <div className="mt-10 flex justify-end">
                 <button 
-                  onClick={handleLogin}
+                  onClick={() => handleAction(true)}
                   className="px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm rounded-xl transition-all shadow-[0_0_20px_rgba(147,51,234,0.4)] flex items-center gap-2"
                 >
                   Enter Platform <LogIn className="w-4 h-4 ml-1" />

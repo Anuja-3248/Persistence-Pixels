@@ -1,11 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+<<<<<<< HEAD
 import { Link, useNavigate } from 'react-router-dom';
 import { Shield, ChevronRight, Activity, Map, Globe, Heart, User, LogOut } from 'lucide-react';
+=======
+import { Link } from 'react-router-dom';
+import { Shield, ChevronRight, Activity, Map, Globe } from 'lucide-react';
+>>>>>>> 849247728b38486012928a87a3e626f14224a596
 import heroBg from '../assets/hero-bg.png';
 import ScenarioCards from '../components/ScenarioCards';
 
 const Home = () => {
+<<<<<<< HEAD
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [userData, setUserData] = React.useState(null);
@@ -27,6 +33,16 @@ const Home = () => {
 
   const quotes = [
     // ... (rest of quotes)
+=======
+  const quotes = [
+    "Preparation through education is less costly than learning through tragedy.",
+    "The best time to prepare for a disaster was yesterday. The second best time is now.",
+    "Disaster management is about making order out of chaos.",
+    "Safety is not a gadget but a state of mind.",
+    "Resilience is not just about surviving, but thriving after the storm.",
+    "Nature's power is unpredictable; our preparedness must be absolute.",
+    "Unity and information are our strongest shields against devastation."
+>>>>>>> 849247728b38486012928a87a3e626f14224a596
   ];
   
   const [showContactInfo, setShowContactInfo] = React.useState(false);
@@ -112,6 +128,7 @@ const Home = () => {
         </div>
 
         <div className="flex items-center gap-6">
+<<<<<<< HEAD
           {isLoggedIn ? (
             <>
               <Link to="/profile" className="px-8 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-sm hover:bg-white/10 transition-all backdrop-blur-md flex items-center gap-2">
@@ -132,6 +149,14 @@ const Home = () => {
               </Link>
             </>
           )}
+=======
+          <Link to="/auth" className="px-8 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-sm hover:bg-white/10 transition-all backdrop-blur-md">
+            Sign in
+          </Link>
+          <Link to="/auth" className="px-8 py-3 rounded-xl bg-neon-blue text-white font-bold text-sm hover:bg-neon-blue/80 shadow-[0_0_20px_rgba(46,125,233,0.4)] transition-all">
+            Register
+          </Link>
+>>>>>>> 849247728b38486012928a87a3e626f14224a596
         </div>
       </nav>
 
@@ -148,11 +173,19 @@ const Home = () => {
           </h1>
 
           <motion.div
+<<<<<<< HEAD
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
             className="flex flex-col items-center my-8 bg-white/5 border border-white/10 p-6 md:p-8 rounded-3xl backdrop-blur-md w-full max-w-3xl mx-auto shadow-2xl"
           >
             <div className="w-12 h-1.5 bg-neon-blue mb-6 rounded-full" />
             <p className="text-xl md:text-3xl text-white font-black italic leading-relaxed text-center drop-shadow-xl">
+=======
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 1 }}
+            className="flex flex-col items-center"
+          >
+            <div className="w-20 h-1 bg-neon-blue/40 mb-6 rounded-full" />
+            <p className="text-xl md:text-2xl text-white/80 font-medium italic max-w-2xl leading-relaxed">
+>>>>>>> 849247728b38486012928a87a3e626f14224a596
               "{dailyQuote}"
             </p>
           </motion.div>
@@ -161,8 +194,17 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2, duration: 1 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12"
           >
+<<<<<<< HEAD
             <Link to="/donation" className="flex items-center gap-3 bg-neon-blue/90 text-dark-900 px-10 py-4 rounded-xl font-black text-sm hover:bg-neon-blue shadow-[0_10px_30px_rgba(46,125,233,0.3)] transition-all group uppercase tracking-widest">
                DONATION <Heart className="w-5 h-5 group-hover:scale-110 transition-transform" />
+=======
+            <Link to="/dashboard" className="flex items-center gap-3 bg-neon-blue/90 text-dark-900 px-10 py-4 rounded-xl font-black text-sm hover:bg-neon-blue shadow-[0_10px_30px_rgba(46,125,233,0.3)] transition-all group uppercase tracking-widest">
+               COMMAND CENTER <ChevronRight className="w-5 h-5 group-hover:translate-x-1" />
+            </Link>
+            
+            <Link to="/map" className="flex items-center gap-3 bg-white/10 backdrop-blur-md text-white px-8 py-4 rounded-xl font-black text-sm hover:bg-white/20 border border-white/10 shadow-2xl transition-all group uppercase tracking-widest">
+               DISASTER MAP <Map className="w-5 h-5 text-neon-blue" />
+>>>>>>> 849247728b38486012928a87a3e626f14224a596
             </Link>
           </motion.div>
         </motion.div>

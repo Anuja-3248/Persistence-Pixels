@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+<<<<<<< HEAD
 import { BookOpen, CheckCircle, Shield, Phone, Radio, Users, Droplets, Flame, Activity, Zap, Info, ChevronRight, HelpCircle, Download } from 'lucide-react';
+=======
+import { BookOpen, CheckCircle, Shield, Phone, Radio, Users, Droplets, Flame, Globe, Zap, Info, ChevronRight, HelpCircle, Download } from 'lucide-react';
+>>>>>>> 849247728b38486012928a87a3e626f14224a596
 
 const Resources = () => {
   const [activeCategory, setActiveCategory] = useState('Flood');
@@ -8,7 +12,11 @@ const Resources = () => {
   const categories = [
     { name: 'Flood', icon: Droplets, color: 'text-neon-blue' },
     { name: 'Wildfire', icon: Flame, color: 'text-neon-red' },
+<<<<<<< HEAD
     { name: 'Earthquake', icon: Activity, color: 'text-neon-yellow' },
+=======
+    { name: 'Earthquake', icon: Globe, color: 'text-neon-yellow' },
+>>>>>>> 849247728b38486012928a87a3e626f14224a596
     { name: 'Safety Kit', icon: Zap, color: 'text-neon-green' }
   ];
 

@@ -1,10 +1,17 @@
+<<<<<<< HEAD
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { LayoutDashboard, Users, AlertTriangle, CheckCircle, Activity, Shield, Bell, User, Filter, Search, MoreVertical, MapPin, ExternalLink, RefreshCw, BarChart, TrendingUp } from 'lucide-react';
+=======
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { LayoutDashboard, Users, AlertTriangle, CheckCircle, Globe, Shield, Bell, User, Filter, Search, MoreVertical, MapPin, ExternalLink, RefreshCw, BarChart, TrendingUp, Check, X } from 'lucide-react';
+>>>>>>> 849247728b38486012928a87a3e626f14224a596
 import { 
   BarChart as ReBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, 
   LineChart, Line
 } from 'recharts';
+<<<<<<< HEAD
 import { db } from '../firebase';
 import { collection, query, onSnapshot, orderBy } from 'firebase/firestore';
 
@@ -60,6 +67,40 @@ const Admin = () => {
 
   const stats = [
     { title: 'Active Alerts', value: '14', color: 'text-neon-red', icon: Bell, trend: '+2' },
+=======
+
+// Fetch stored reports helper
+const getStoredReports = () => {
+  try {
+    return JSON.parse(localStorage.getItem('aegis_user_reports') || '[]');
+  } catch {
+    return [];
+  }
+};
+
+const Admin = () => {
+  const [reports, setReports] = useState([]);
+
+  // Load actual reports
+  useEffect(() => {
+    setReports(getStoredReports());
+    const handler = () => setReports(getStoredReports());
+    window.addEventListener('aegis:new-report', handler);
+    return () => window.removeEventListener('aegis:new-report', handler);
+  }, []);
+
+  const handleUpdateStatus = (id, newStatus) => {
+    const updated = reports.map(r => r.id === id ? { ...r, status: newStatus } : r);
+    localStorage.setItem('aegis_user_reports', JSON.stringify(updated));
+    setReports(updated);
+    window.dispatchEvent(new CustomEvent('aegis:new-report', { detail: updated }));
+  };
+
+  const pendingCount = reports.filter(r => r.status === 'PENDING').length;
+
+  const stats = [
+    { title: 'Active Alerts', value: pendingCount.toString(), color: 'text-neon-red', icon: Bell, trend: '+2' },
+>>>>>>> 849247728b38486012928a87a3e626f14224a596
     { title: 'S.O.S Requests', value: '42', color: 'text-neon-yellow', icon: AlertTriangle, trend: 'NEW' },
     { title: 'Rescues Done', value: '1,280', color: 'text-neon-green', icon: CheckCircle, trend: '+45' },
     { title: 'Active Units', value: '89', color: 'text-neon-blue', icon: MapPin, trend: 'STABLE' },
@@ -84,11 +125,19 @@ const Admin = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
            <h2 className="text-4xl font-black uppercase italic tracking-tighter">Command <span className="text-neon-blue">HQ</span> Admin</h2>
+<<<<<<< HEAD
            <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-1">Operational Command System / Alpha Protocol Active</p>
         </div>
         
         <div className="flex gap-4">
            <button className="px-6 py-2.5 glass border border-white/5 rounded-2xl flex items-center gap-2 hover:bg-white/5 transition-all text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white">
+=======
+           <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-1">Operational Command System / Incident Verification</p>
+        </div>
+        
+        <div className="flex gap-4">
+           <button onClick={() => setReports(getStoredReports())} className="px-6 py-2.5 glass border border-white/5 rounded-2xl flex items-center gap-2 hover:bg-white/5 transition-all text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white">
+>>>>>>> 849247728b38486012928a87a3e626f14224a596
               <RefreshCw className="w-4 h-4" />
               Sync Data
            </button>
@@ -129,11 +178,19 @@ const Admin = () => {
          {/* SOS Table */}
          <div className="lg:col-span-2 glass-dark border border-white/5 rounded-[50px] shadow-2xl p-10 overflow-hidden">
             <div className="flex items-center justify-between mb-10">
+<<<<<<< HEAD
                <h4 className="text-2xl font-black uppercase tracking-tighter">Emergency Queue</h4>
                <div className="flex gap-4">
                   <div className="bg-white/5 border border-white/10 rounded-xl flex items-center px-4 py-2 w-64 focus-within:ring-1 focus-within:ring-neon-blue transition-all">
                      <Search className="w-4 h-4 text-slate-500 mr-3" />
                      <input type="text" placeholder="Search by ID or User..." className="bg-transparent border-none text-[10px] font-black uppercase tracking-widest outline-none w-full" />
+=======
+               <h4 className="text-2xl font-black uppercase tracking-tighter">Emergency Verification Queue</h4>
+               <div className="flex gap-4">
+                  <div className="bg-white/5 border border-white/10 rounded-xl flex items-center px-4 py-2 w-64 focus-within:ring-1 focus-within:ring-neon-blue transition-all">
+                     <Search className="w-4 h-4 text-slate-500 mr-3" />
+                     <input type="text" placeholder="Search by ID or User..." className="bg-transparent border-none text-[10px] font-black uppercase tracking-widest outline-none w-full text-white" />
+>>>>>>> 849247728b38486012928a87a3e626f14224a596
                   </div>
                   <button className="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all">
                      <Filter className="w-5 h-5 text-slate-400" />
@@ -149,6 +206,7 @@ const Admin = () => {
                         <th className="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Requester</th>
                         <th className="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Location</th>
                         <th className="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Severity</th>
+<<<<<<< HEAD
                         <th className="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Status</th>
                      </tr>
                   </thead>
@@ -172,11 +230,39 @@ const Admin = () => {
                              <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${
                                entry.severity === 'CRITICAL' ? 'bg-neon-red/10 text-neon-red' : 
                                entry.severity === 'HIGH' ? 'bg-neon-yellow/10 text-neon-yellow' : 'bg-neon-green/10 text-neon-green'
+=======
+                        <th className="pb-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 text-right">Verification</th>
+                     </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                     {reports.length === 0 ? (
+                        <tr><td colSpan="5" className="py-10 text-center text-slate-500 text-sm font-bold uppercase tracking-widest">No active reports found</td></tr>
+                     ) : reports.map((entry, idx) => (
+                       <tr key={entry.id} className="group hover:bg-white/5 transition-all">
+                          <td className="py-6 font-mono text-neon-blue font-bold text-[10px] tracking-widest">{entry.id.slice(0, 8)}</td>
+                          <td className="py-6">
+                             <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-[10px] font-black text-white">
+                                   {entry.reporterName.substring(0, 2).toUpperCase()}
+                                </div>
+                                <div>
+                                   <p className="text-sm font-black text-white">{entry.reporterName}</p>
+                                   <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{new Date(entry.submittedAt).toLocaleTimeString()}</p>
+                                </div>
+                             </div>
+                          </td>
+                          <td className="py-6 text-sm font-medium text-slate-400 max-w-[200px] truncate">{entry.location}</td>
+                          <td className="py-6">
+                             <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${
+                               entry.severity === 'High' ? 'bg-neon-red/10 text-neon-red' : 
+                               entry.severity === 'Medium' ? 'bg-neon-yellow/10 text-neon-yellow' : 'bg-neon-green/10 text-neon-green'
+>>>>>>> 849247728b38486012928a87a3e626f14224a596
                              }`}>
                                 {entry.severity}
                              </span>
                           </td>
                           <td className="py-6">
+<<<<<<< HEAD
                              <div className="flex items-center gap-4">
                                 <span className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-2 ${
                                   entry.status === 'RESOLVED' ? 'text-neon-green' : 'text-neon-blue animate-pulse'
@@ -187,6 +273,26 @@ const Admin = () => {
                                 <button className="p-1.5 hover:bg-white/10 rounded-lg text-slate-500 transition-colors">
                                    <MoreVertical className="w-4 h-4" />
                                 </button>
+=======
+                             <div className="flex items-center justify-end gap-2">
+                                {entry.status === 'PENDING' || !entry.status ? (
+                                  <>
+                                     <button onClick={() => handleUpdateStatus(entry.id, 'APPROVED')} className="p-2 bg-neon-green/10 text-neon-green hover:bg-neon-green/20 rounded-xl transition-all" title="Approve & Show on Map">
+                                        <Check className="w-4 h-4" />
+                                     </button>
+                                     <button onClick={() => handleUpdateStatus(entry.id, 'REJECTED')} className="p-2 bg-neon-red/10 text-neon-red hover:bg-neon-red/20 rounded-xl transition-all" title="Reject (Spam/False)">
+                                        <X className="w-4 h-4" />
+                                     </button>
+                                  </>
+                                ) : (
+                                  <span className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-2 ${
+                                    entry.status === 'APPROVED' ? 'text-neon-green' : 'text-slate-500'
+                                  }`}>
+                                     <div className={`w-1.5 h-1.5 rounded-full ${entry.status === 'APPROVED' ? 'bg-neon-green' : 'bg-slate-500'}`} />
+                                     {entry.status}
+                                  </span>
+                                )}
+>>>>>>> 849247728b38486012928a87a3e626f14224a596
                              </div>
                           </td>
                        </tr>
@@ -208,7 +314,11 @@ const Admin = () => {
                   <h4 className="text-2xl font-black uppercase tracking-tighter">Response Efficiency</h4>
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Global Rescue Velocity</p>
                </div>
+<<<<<<< HEAD
                <Activity className="w-6 h-6 text-neon-green opacity-50" />
+=======
+               <Globe className="w-6 h-6 text-neon-green opacity-50" />
+>>>>>>> 849247728b38486012928a87a3e626f14224a596
             </div>
 
             <div className="flex-1 w-full">

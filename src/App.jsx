@@ -14,6 +14,7 @@ import Auth from './pages/Auth';
 import Onboarding from './pages/Onboarding';
 import Donation from './pages/Donation';
 import Profile from './pages/Profile';
+import ReportDisaster from './pages/ReportDisaster';
 import { AnimatePresence, motion } from 'framer-motion';
 
 function App() {
@@ -71,6 +72,7 @@ function App() {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/resources" element={<Resources />} />
                     <Route path="/admin" element={<Admin />} />
+                    <Route path="/report" element={<ReportDisaster />} />
                   </Routes>
                 </AnimatePresence>
               </main>
