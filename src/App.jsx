@@ -12,15 +12,19 @@ import Resources from './pages/Resources';
 import Admin from './pages/Admin';
 import Auth from './pages/Auth';
 import Onboarding from './pages/Onboarding';
+import Donation from './pages/Donation';
+import Profile from './pages/Profile';
 import { AnimatePresence, motion } from 'framer-motion';
 
 function App() {
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => localStorage.getItem('isLoggedIn') !== 'true');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
 
   const isAuthPage = location.pathname === '/auth';
   const isOnboardingPage = location.pathname === '/onboarding';
+  const isDonationPage = location.pathname === '/donation';
+  const isProfilePage = location.pathname === '/profile';
   const isHomePage = location.pathname === '/';
 
   return (
@@ -30,7 +34,7 @@ function App() {
           <motion.div key="splash" exit={{ opacity: 0, scale: 1.05 }} transition={{ duration: 0.6 }}>
             <SplashScreen onComplete={() => setShowSplash(false)} />
           </motion.div>
-        ) : isAuthPage || isOnboardingPage ? (
+        ) : isAuthPage || isOnboardingPage || isDonationPage || isProfilePage ? (
           <motion.div 
             key="auth" 
             initial={{ opacity: 0 }} 
@@ -41,6 +45,8 @@ function App() {
             <Routes location={location} key={location.pathname}>
               <Route path="/auth" element={<Auth />} />
               <Route path="/onboarding" element={<Onboarding />} />
+              <Route path="/donation" element={<Donation />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </motion.div>
         ) : (
