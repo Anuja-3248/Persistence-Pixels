@@ -42,7 +42,7 @@ const SOS = () => {
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
-  }, []);
+  }, [message]);
 
   const performTransmission = async (lat, lng) => {
     try {
@@ -59,8 +59,12 @@ const SOS = () => {
       };
       
       // Attempt to save to Firestore
-      const docRef = await addDoc(collection(db, 'alerts'), alertData);
-      console.log("Alert saved to cloud: ", docRef.id);
+      try {
+        const docRef = await addDoc(collection(db, 'alerts'), alertData);
+        console.log("Alert saved to cloud: ", docRef.id);
+      } catch (e) {
+        console.warn("Firestore save failed, using local fallback", e);
+      }
 
       // Still log locally for redundancy or offline view
       const existingAlerts = JSON.parse(localStorage.getItem('emergency_alerts') || '[]');
@@ -75,8 +79,7 @@ const SOS = () => {
       setStatus('idle');
       setStep(2);
     } catch (err) {
-      console.error("Firebase Error: ", err);
-      // Fallback to local if Firebase fails (like if offline)
+      console.error("Transmission Error: ", err);
       setStatus('error');
       setError("Cloud sync failed. Check connection.");
       setIsSending(false);
@@ -246,9 +249,9 @@ const SOS = () => {
       </AnimatePresence>
 
       <div className="mt-16 w-full max-w-2xl">
-         <div className="flex items-center justify-between mb-4 px-2">
+         <div className="flex items-center justify-between mb-4 px-2 text-left">
             <h3 className="text-xs font-black uppercase tracking-[0.3em] text-neon-blue flex items-center gap-2">
-               <span className="relative flex h-2 w-2 text-left">
+               <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-blue opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-blue"></span>
                </span>
@@ -266,12 +269,23 @@ const SOS = () => {
                <div key={i} className="flex items-center gap-4 text-[10px] font-mono text-left">
                   <span className="text-slate-600">[{log.time}]</span>
                   <span className="text-slate-300 uppercase tracking-wider flex-1 truncate">{log.event}</span>
-                  <span className={`px-2 py-0.5 rounded bg-${log.status === 'online' || log.status === 'verified' ? 'neon-blue' : (log.status === 'ready' ? 'neon-green' : 'white/10')} text-${log.status === 'online' || log.status === 'verified' ? 'neon-blue' : (log.status === 'ready' ? 'neon-green' : 'slate-500')} font-bold uppercase`}>
+                  <span className={`px-2 py-0.5 rounded bg-white/5 text-slate-300 font-bold uppercase`}>
                      {log.status}
                   </span>
                </div>
             ))}
-            <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#0f172a] pointer-events-none" />
+            <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#0C0B1B] pointer-events-none" />
+         </div>
+      </div>
+
+      <div className="mt-12 flex gap-20 opacity-30 pointer-events-none">
+         <div className="flex flex-col items-center">
+            <Users className="w-10 h-10 mb-2" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-white text-center">RESCUE TEAM: ALPHA-9</span>
+         </div>
+         <div className="flex flex-col items-center">
+            <Shield className="w-10 h-10 mb-2 text-center" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-white text-center">SECURE CHANNEL 0291-B</span>
          </div>
       </div>
     </motion.div>

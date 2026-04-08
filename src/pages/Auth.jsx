@@ -13,6 +13,7 @@ const Auth = () => {
   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
   const [strength, setStrength] = useState(0);
+  const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
     if (location.state?.isLogin !== undefined) {
@@ -39,8 +40,33 @@ const Auth = () => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+
+    // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 2000));
-    navigate('/onboarding');
+
+    const formData = new FormData(e.target);
+    const emailStr = formData.get('email') || '';
+    let parsedName = formData.get('name') || '';
+    
+    if (!parsedName && emailStr) {
+      const emailPrefix = emailStr.split('@')[0];
+      parsedName = emailPrefix.charAt(0).toUpperCase() + emailPrefix.slice(1);
+    }
+    
+    const userData = {
+      name: parsedName || 'Operator',
+      email: emailStr,
+      phone: formData.get('phone') || '',
+      isLoggedIn: true,
+      role: 'ADMIN_NODE_01',
+      joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    };
+
+    // Store in localStorage for persistence
+    localStorage.setItem('disasterx_user', JSON.stringify(userData));
+    localStorage.setItem('isLoggedIn', 'true');
+
+    navigate('/');
     setIsLoading(false);
   };
 
@@ -53,7 +79,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#0C0B1B] overflow-hidden font-body selection:bg-purple-500/30 selection:text-white">
+    <div className="flex min-h-screen bg-[#0C0B1B] overflow-hidden font-body selection:bg-purple-500/30 selection:text-white text-white">
       {/* INFO PANEL (LEFT SIDE) */}
       <div className="hidden lg:flex w-1/2 relative flex-col justify-center p-24 overflow-hidden group">
         {/* Background Image with Parallax-ish feel */}
@@ -76,7 +102,7 @@ const Auth = () => {
             <div className="w-12 h-12 rounded-xl bg-purple-600 flex items-center justify-center shadow-lg shadow-purple-900/50">
               <Shield className="w-8 h-8 text-white" />
             </div>
-            <span className="text-2xl font-bold tracking-tighter text-white">DisasterX</span>
+            <span className="text-2xl font-bold tracking-tighter text-white uppercase">DisasterX</span>
           </motion.div>
 
           <div className="space-y-6">
@@ -158,7 +184,7 @@ const Auth = () => {
                   <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 ml-1">Email address</label>
                   <div className="relative group focus-within:ring-2 focus-within:ring-purple-600 rounded-xl bg-slate-900/50 border border-slate-800 transition-all">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 group-focus-within:text-purple-500" />
-                    <input type="email" placeholder="email@domain.com" className="w-full bg-transparent py-4 pl-12 pr-4 text-sm font-bold text-white outline-none" required />
+                    <input name="email" type="email" placeholder="email@domain.com" className="w-full bg-transparent py-4 pl-12 pr-4 text-sm font-bold text-white outline-none" required />
                   </div>
                 </div>
 
@@ -206,14 +232,14 @@ const Auth = () => {
                     <label className="text-[9px] font-bold uppercase text-slate-500 ml-1">Full Name</label>
                     <div className="relative group focus-within:ring-2 focus-within:ring-purple-600 rounded-lg bg-slate-900/50 border border-slate-800">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-600" />
-                      <input type="text" placeholder="NAME" className="w-full bg-transparent py-3 pl-10 pr-4 text-[10px] font-bold text-white outline-none tracking-widest" required />
+                      <input name="name" type="text" placeholder="NAME" className="w-full bg-transparent py-3 pl-10 pr-4 text-[10px] font-bold text-white outline-none tracking-widest" required />
                     </div>
                   </div>
                   <div className="space-y-1">
                     <label className="text-[9px] font-bold uppercase text-slate-500 ml-1 tracking-widest">Mobile</label>
                     <div className="relative group focus-within:ring-2 focus-within:ring-purple-600 rounded-lg bg-slate-900/50 border border-slate-800">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-600" />
-                      <input type="tel" placeholder="+91 XXX" className="w-full bg-transparent py-3 pl-10 pr-4 text-[10px] font-bold text-white outline-none tracking-widest" required />
+                      <input name="phone" type="tel" placeholder="+91 XXX" className="w-full bg-transparent py-3 pl-10 pr-4 text-[10px] font-bold text-white outline-none tracking-widest" required />
                     </div>
                   </div>
                 </div>
@@ -222,7 +248,7 @@ const Auth = () => {
                    <label className="text-[9px] font-bold uppercase text-slate-500 ml-1">Email Address</label>
                    <div className="relative group focus-within:ring-2 focus-within:ring-purple-600 rounded-lg bg-slate-900/50 border border-slate-800">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-600" />
-                      <input type="email" placeholder="EMAIL@DOMAIN.COM" className="w-full bg-transparent py-3 pl-10 pr-4 text-[10px] font-bold text-white outline-none tracking-widest" required />
+                      <input name="email" type="email" placeholder="EMAIL@DOMAIN.COM" className="w-full bg-transparent py-3 pl-10 pr-4 text-[10px] font-bold text-white outline-none tracking-widest" required />
                    </div>
                 </div>
 
@@ -233,7 +259,7 @@ const Auth = () => {
                       <input type={showPassword ? 'text' : 'password'} value={password} onChange={handlePasswordChange} placeholder="PASSWORD" className="w-full bg-transparent py-3 pl-10 pr-4 text-[10px] font-bold text-white outline-none tracking-widest" required />
                    </div>
                    <div className="flex gap-1 px-1 pt-1 opacity-60">
-                      {[1, 2, 3, 4].map((step) => <div key={step} className={`h-0.5 flex-1 rounded-full ${step <= strength ? strengthColors[strength] : 'bg-slate-800'} transition-colors duration-500`} />)}
+                      {[1, 2, 3, 4].map((step) => <div key={step} className={`h-0.5 flex-1 rounded-full ${step <= strength ? strengthColors[step] : 'bg-slate-800'} transition-colors duration-500`} />)}
                    </div>
                 </div>
 
@@ -256,5 +282,3 @@ const Auth = () => {
 };
 
 export default Auth;
-
-

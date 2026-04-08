@@ -84,14 +84,14 @@ const Onboarding = () => {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ type: "spring", duration: 1 }}
             >
-              <Shield className="w-16 h-16 text-purple-500 mb-6 animate-pulse" />
+              <Shield className="w-20 h-20 text-purple-500 mb-8 animate-pulse" />
             </motion.div>
 
             <motion.h1 
               variants={containerVariants}
               initial="hidden"
               animate="visible"
-              className="text-5xl font-black italic tracking-tighter text-white flex flex-wrap justify-center gap-3"
+              className="text-5xl md:text-7xl font-black italic tracking-tighter text-white flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6"
             >
               <div className="flex">
                 {"WELCOME".split("").map((char, i) => (
@@ -114,7 +114,7 @@ const Onboarding = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 2, duration: 1 }}
-              className="mt-6 text-purple-400/60 font-bold tracking-[0.4em] uppercase text-[10px]"
+              className="mt-8 text-purple-400/60 font-medium tracking-[0.5em] uppercase text-xs"
             >
               Establishing Neural Link...
             </motion.p>

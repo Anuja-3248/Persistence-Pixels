@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  LayoutDashboard, Map, AlertTriangle, Package, Users, BarChart2, Settings, ShieldAlert 
+  LayoutDashboard, Map, AlertTriangle, Package, Users, BarChart2, Settings, ShieldAlert, Radio
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -12,6 +12,7 @@ const Sidebar = ({ isOpen }) => {
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Live Map', path: '/map', icon: Map },
     { name: 'Alerts', path: '/sos', icon: AlertTriangle, badge: 12 },
+    { name: 'Report Disaster', path: '/report', icon: Radio },
     { name: 'Resources', path: '/resources', icon: Package },
     { name: 'Rescue Teams', path: '/admin', icon: Users },
     { name: 'Analytics', path: '/analytics', icon: BarChart2 },

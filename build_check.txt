@@ -1,0 +1,21 @@
+
+> persisitance-pixel@1.0.0 build
+> vite build
+
+[36mvite v8.0.3 [32mbuilding client environment for production...[36m[39m
+[2Ktransforming...✓ 2762 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         1.25 kB │ gzip:   0.62 kB
+dist/assets/splash-bg-DUt3iPsA.png     41.21 kB
+dist/assets/auth-bg-DltEG1Oi.png       75.01 kB
+dist/assets/hero-bg-CO7gaSaT.png      894.98 kB
+dist/assets/index-Daw8RurM.css        110.43 kB │ gzip:  20.66 kB
+dist/assets/index-2eRys8fg.js       1,291.74 kB │ gzip: 387.97 kB
+
+[32m✓ built in 809ms[39m
+[33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
