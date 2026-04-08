@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Shield, ChevronRight, Activity, Map, Globe } from 'lucide-react';
 import heroBg from '../assets/hero-bg.png';
-import ScenarioCards from '../components/ScenarioCards';
+// import ScenarioCards from '../components/ScenarioCards';
 
 const Home = () => {
   const quotes = [
@@ -207,7 +207,7 @@ const Home = () => {
       {/* Scenario Learning Section */}
       <section className="relative z-10 bg-dark-900 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-[500px] bg-blue-600/5 blur-[150px] rounded-full pointer-events-none" />
-        <ScenarioCards />
+        {/* <ScenarioCards /> */}
       </section>
 
       <footer className="relative z-10 py-16 px-12 border-t border-white/5">
