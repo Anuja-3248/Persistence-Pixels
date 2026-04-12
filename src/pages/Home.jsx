@@ -158,10 +158,9 @@ const Home = () => {
 
           <motion.div
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
-            className="flex flex-col items-center my-8 bg-white/5 border border-white/10 p-6 md:p-8 rounded-3xl backdrop-blur-md w-full max-w-3xl mx-auto shadow-2xl"
+            className="flex flex-col items-center my-8 w-full max-w-3xl mx-auto"
           >
-            <div className="w-12 h-1.5 bg-neon-blue mb-6 rounded-full" />
-            <p className="text-xl md:text-3xl text-white font-black italic leading-relaxed text-center drop-shadow-xl">
+            <p className="text-xl md:text-3xl text-white font-black italic leading-relaxed text-center drop-shadow-2xl">
               "{dailyQuote}"
             </p>
           </motion.div>
