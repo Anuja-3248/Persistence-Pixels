@@ -160,7 +160,7 @@ const Home = () => {
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
             className="flex flex-col items-center my-8 w-full max-w-3xl mx-auto"
           >
-            <p className="text-xl md:text-3xl text-white font-black italic leading-relaxed text-center drop-shadow-2xl">
+            <p className="text-xl md:text-3xl text-white font-black italic font-serif leading-relaxed text-center drop-shadow-2xl">
               "{dailyQuote}"
             </p>
           </motion.div>
