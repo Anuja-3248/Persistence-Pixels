@@ -18,7 +18,7 @@ import ReportDisaster from './pages/ReportDisaster';
 import { AnimatePresence, motion } from 'framer-motion';
 
 function App() {
-  const [showSplash, setShowSplash] = useState(() => localStorage.getItem('isLoggedIn') !== 'true');
+  const [showSplash, setShowSplash] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
 

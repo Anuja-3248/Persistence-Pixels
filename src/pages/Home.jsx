@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Shield, ChevronRight, Activity, Map, Globe, Heart, User, LogOut } from 'lucide-react';
 import heroBg from '../assets/hero-bg.png';
-// import ScenarioCards from '../components/ScenarioCards';
+import donationBg from '../assets/donation-bg.png';
+import EmergencyProtocols from '../components/EmergencyProtocols';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -115,6 +116,8 @@ const Home = () => {
             </span>
             SOS
           </Link>
+
+          <a href="#about" className="hover:text-white transition-colors">ABOUT US</a>
         </div>
 
         <div className="flex items-center gap-6">
@@ -167,101 +170,180 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2, duration: 1 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12"
           >
-            <Link to="/donation" className="flex items-center gap-3 bg-neon-blue/90 text-dark-900 px-10 py-4 rounded-xl font-black text-sm hover:bg-neon-blue shadow-[0_10px_30px_rgba(46,125,233,0.3)] transition-all group uppercase tracking-widest">
+            <Link to="/donation" className="flex items-center gap-3 bg-neon-red/10 border border-neon-red/40 text-neon-red px-10 py-4 rounded-xl font-black text-sm hover:bg-neon-red/20 transition-all group uppercase tracking-widest">
                DONATION <Heart className="w-5 h-5 group-hover:scale-110 transition-transform" />
-            </Link>
-            <Link to="/dashboard" className="flex items-center gap-3 bg-neon-blue/90 text-dark-900 px-10 py-4 rounded-xl font-black text-sm hover:bg-neon-blue shadow-[0_10px_30px_rgba(46,125,233,0.3)] transition-all group uppercase tracking-widest">
-               COMMAND CENTER <ChevronRight className="w-5 h-5 group-hover:translate-x-1" />
-            </Link>
-            
-            <Link to="/map" className="flex items-center gap-3 bg-white/10 backdrop-blur-md text-white px-8 py-4 rounded-xl font-black text-sm hover:bg-white/20 border border-white/10 shadow-2xl transition-all group uppercase tracking-widest">
-               DISASTER MAP <Map className="w-5 h-5 text-neon-blue" />
             </Link>
           </motion.div>
         </motion.div>
       </div>
 
-      {/* Information Section */}
-      <section className="relative z-10 py-32 px-12">
-        <motion.div
-           initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} viewport={{ once: true }}
-           className="max-w-[1400px] mx-auto"
-        >
-          <div className="relative group overflow-hidden rounded-[60px] bg-gradient-to-br from-neon-blue to-blue-700 p-1 animate-gradient-xy shadow-[0_40px_100px_rgba(46,125,233,0.3)]">
-            <div className="bg-dark-900 rounded-[58px] p-16 md:p-24 flex flex-col lg:flex-row items-center gap-20 overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-96 h-96 bg-neon-blue/20 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
-              
-              <div className="flex-1 space-y-10 relative z-10 text-left">
-                <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-neon-blue/10 border border-neon-blue/30">
-                  <Shield className="w-5 h-5 text-neon-blue" />
-                  <span className="text-xs font-black text-neon-blue uppercase tracking-[0.3em]">Core Mission</span>
-                </div>
-                
-                <h2 className="text-5xl md:text-7xl font-black text-white leading-[1.1] tracking-tighter text-left">
-                  INTELLIGENCE <br /> 
-                  <span className="text-neon-blue">FOR GLOBAL</span> <br />
-                  RESILIENCE.
-                </h2>
-                
-                <p className="text-xl text-slate-400 font-medium leading-relaxed max-w-2xl text-left">
-                  DisasterX is a cutting-edge platform engineered to predict, monitor, and mitigate 
-                  natural catastrophes using high-velocity data networks. 
-                  Built for teams like <span className="text-white font-bold">Persistence Pixel</span>, 
-                  we bridge the gap between data and life-saving action.
-                </p>
-              </div>
+      {/* Humanitarian Quote Section */}
+      <section className="relative z-10 py-16 bg-white text-center">
+        <div className="max-w-4xl mx-auto space-y-4 px-6">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-4xl font-bold text-slate-800 tracking-tight"
+          >
+            "Every calamity is just news, until it hits us." — Unknown
+          </motion.h2>
+          <div className="w-24 h-1 bg-neon-red mx-auto my-6" />
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-slate-500 font-medium tracking-wide"
+          >
+            "Be the light in someone's darkest hour, support disaster relief today."
+          </motion.p>
+        </div>
+      </section>
 
-              <div className="w-full lg:w-1/3 aspect-square relative z-10 flex items-center justify-center">
-                 <div className="absolute inset-0 bg-neon-blue/20 rounded-full animate-pulse blur-[60px]" />
-                 <div className="w-full h-full glass-dark border border-white/10 rounded-[50px] p-12 flex flex-col justify-between shadow-2xl overflow-hidden text-left">
-                    <div className="space-y-2 text-left">
-                       <p className="text-[10px] font-black text-neon-blue uppercase tracking-widest text-left">Accuracy Rating</p>
-                       <p className="text-6xl font-black text-white leading-none text-left">{systemNode.accuracy}</p>
-                       <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2 text-left">{systemNode.monitoring}</p>
-                    </div>
-                    <div className="space-y-6">
-                       <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
-                          <motion.div initial={{ width: 0 }} whileInView={{ width: '99.8%' }} transition={{ duration: 2 }} className="h-full bg-neon-blue" />
-                       </div>
-                       <div className="flex justify-between items-end">
-                          <div className="space-y-1 text-left">
-                             <p className="text-[10px] text-slate-600 font-bold uppercase text-left">Status</p>
-                             <p className="text-xs text-neon-green font-black text-left">{systemNode.status}</p>
-                          </div>
-                          <Link to="/dashboard" className="w-12 h-12 rounded-2xl bg-neon-blue flex items-center justify-center hover:scale-110 transition-transform">
-                             <ChevronRight className="w-6 h-6 text-dark-900" />
-                          </Link>
-                       </div>
-                    </div>
-                 </div>
-              </div>
-            </div>
+      {/* Donation Banner Section */}
+      <section 
+        className="relative z-10 py-32 px-6 flex flex-col items-center justify-center text-center overflow-hidden"
+        style={{ 
+          backgroundImage: `url(${donationBg})`, 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center' 
+        }}
+      >
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
+        
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          className="relative z-10 max-w-3xl space-y-8"
+        >
+          <h2 className="text-4xl md:text-5xl font-black text-white tracking-widest uppercase">
+            Your Donation Changes Lives
+          </h2>
+          <div className="w-20 h-0.5 bg-white/40 mx-auto" />
+          <p className="text-white/90 text-lg md:text-xl font-medium leading-relaxed italic">
+            "In the face of a crisis often the difference between life and death is immediate access to relief items. 
+            We are a pioneer in delivering life saving relief supplies on time at scale. Help us to do more."
+          </p>
+          <div className="pt-6">
+            <Link 
+              to="/donation" 
+              className="inline-block px-12 py-4 border-2 border-white text-white font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300"
+            >
+              Donate Now
+            </Link>
           </div>
         </motion.div>
       </section>
 
-      {/* Scenario Learning Section */}
-      <section className="relative z-10 bg-dark-900 overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-[500px] bg-blue-600/5 blur-[150px] rounded-full pointer-events-none" />
-        {/* <ScenarioCards /> */}
+      {/* Emergency Protocols Section (From User Image) */}
+      <EmergencyProtocols />
+
+      {/* About Us Section */}
+      <section id="about" className="relative z-10 py-28 px-12 bg-black text-center border-y border-white/5">
+        <div className="max-w-4xl mx-auto space-y-12">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-5xl font-extrabold text-white"
+          >
+            About Us
+          </motion.h2>
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="space-y-8"
+          >
+            <p className="text-lg text-slate-300 leading-relaxed font-medium">
+              DisasterX is dedicated to fostering global resilience and safety. We combine 
+              cutting-edge situational awareness with traditional emergency protocols to 
+              create a transparent, secure, and accessible disaster management platform.
+            </p>
+            <p className="text-lg text-slate-300 leading-relaxed font-medium">
+              Our mission is to connect communities with critical resources and information, 
+              ensuring that every user is prepared, informed, and protected when it matters most.
+            </p>
+          </motion.div>
+        </div>
       </section>
 
-      <footer className="relative z-10 py-16 px-12 border-t border-white/5">
-        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-           <div className="flex items-center gap-3">
-              <Globe className="w-6 h-6 text-neon-blue" />
-              <span className="text-xl font-black tracking-tighter text-white uppercase">
-                 Disaster <span className="text-neon-blue">X</span>
-              </span>
-           </div>
-           <p className="text-slate-500 text-sm font-medium tracking-wide">
-              &copy; 2026 Persistence Pixel. All rights reserved. System Operational.
-           </p>
-           <div className="flex gap-8 text-[10px] font-black uppercase tracking-widest text-slate-400">
-              <a href="#" className="hover:text-white transition-colors">Privacy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms</a>
-              <a href="#" className="hover:text-white transition-colors">Status</a>
-           </div>
+      <footer className="relative z-10 py-20 px-12 bg-white text-dark-900 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            {/* Column 1: Info */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-2">
+                <Globe className="w-6 h-6 text-neon-blue" />
+                <span className="text-xl font-black tracking-tighter uppercase">
+                  Disaster <span className="text-neon-blue">X</span>
+                </span>
+              </div>
+              <p className="text-sm text-slate-500 leading-relaxed font-medium">
+                Empowering communities through transparent and secure disaster management tools across the world.
+              </p>
+            </div>
+
+            {/* Column 2: Quick Links */}
+            <div className="space-y-6">
+              <h4 className="text-sm font-black uppercase tracking-widest text-slate-900">Quick Links</h4>
+              <ul className="space-y-4 text-sm text-slate-500 font-bold">
+                <li><Link to="/" className="hover:text-neon-blue transition-colors">Home</Link></li>
+                <li><Link to="/dashboard" className="hover:text-neon-blue transition-colors">Dashboard</Link></li>
+                <li><a href="#about" className="hover:text-neon-blue transition-colors">About Us</a></li>
+                <li><Link to="/sos" className="hover:text-neon-blue transition-colors">SOS</Link></li>
+              </ul>
+            </div>
+
+            {/* Column 3: Resources */}
+            <div className="space-y-6">
+              <h4 className="text-sm font-black uppercase tracking-widest text-slate-900">Resources</h4>
+              <ul className="space-y-4 text-sm text-slate-500 font-bold">
+                <li><Link to="/resources" className="hover:text-neon-blue transition-colors">Emergency Protocols</Link></li>
+                <li><Link to="/map" className="hover:text-neon-blue transition-colors">Live Map</Link></li>
+                <li><Link to="/dashboard" className="hover:text-neon-blue transition-colors">Training Modules</Link></li>
+              </ul>
+            </div>
+
+            {/* Column 4: Newsletter */}
+            <div className="space-y-6">
+              <h4 className="text-sm font-black uppercase tracking-widest text-slate-900">Connect With Us</h4>
+              <div className="flex gap-4">
+                <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 cursor-pointer transition-colors text-slate-600">
+                  <Activity className="w-4 h-4" />
+                </div>
+                <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 cursor-pointer transition-colors text-slate-600">
+                  <Globe className="w-4 h-4" />
+                </div>
+                <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 cursor-pointer transition-colors text-slate-600">
+                  <Shield className="w-4 h-4" />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Email Us</p>
+                <a href="mailto:support@disasterx.com" className="text-sm font-bold text-slate-600 hover:text-neon-blue transition-colors underline decoration-dotted">
+                  support@disasterx.com
+                </a>
+              </div>
+              <div className="space-y-3">
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Subscribe to our newsletter</p>
+                <div className="flex gap-2">
+                  <input 
+                    type="email" 
+                    placeholder="Enter your email" 
+                    className="bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-lg text-xs w-full focus:outline-none focus:border-neon-blue transition-colors"
+                  />
+                  <button className="bg-slate-900 text-white px-4 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition-colors">
+                    Subscribe
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </footer>
 
