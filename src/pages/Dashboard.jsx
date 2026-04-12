@@ -342,9 +342,6 @@ const Dashboard = () => {
               </div>
            </div>
         </div>
-              </div>
-           </div>
-        </div>
 
         {/* SLIDING SIDE PANEL (Merged from both sides) */}
         <AnimatePresence>
@@ -392,11 +389,6 @@ const Dashboard = () => {
                            </div>
                         </div>
                      </div>
-                  </div>
-               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
                   </div>
                </div>
             </motion.div>

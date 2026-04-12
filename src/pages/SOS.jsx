@@ -288,7 +288,6 @@ const SOS = () => {
             <Shield className="w-10 h-10 mb-2 text-center" />
             <span className="text-[10px] font-black uppercase tracking-widest text-white text-center">SECURE CHANNEL 0291-B</span>
          </div>
-         </div>
       </div>
     </motion.div>
   );
