@@ -61,7 +61,7 @@ const Donation = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-5xl md:text-7xl font-black italic tracking-tighter mb-6 uppercase"
+            className="text-5xl md:text-7xl font-black tracking-tighter mb-6 uppercase"
           >
             Empower <span className="text-rose-500">Resilience</span>
           </motion.h1>
@@ -98,7 +98,7 @@ const Donation = () => {
           <div className="lg:w-2/5 bg-gradient-to-br from-rose-600 to-rose-900 p-12 text-white flex flex-col justify-between relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-[80px] rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="relative z-10">
-              <h2 className="text-3xl font-black uppercase italic leading-none mb-6">Transparency Matters</h2>
+              <h2 className="text-3xl font-black uppercase leading-none mb-6">Transparency Matters</h2>
               <div className="space-y-6">
                 <div className="flex gap-4">
                   <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
@@ -171,7 +171,7 @@ const Donation = () => {
                   className="space-y-8"
                 >
                   <div>
-                    <h3 className="text-xl font-bold mb-4 uppercase italic tracking-tight">Select Amount</h3>
+                    <h3 className="text-xl font-bold mb-4 uppercase tracking-tight">Select Amount</h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                       {donationTiers.map((tier) => (
                         <button
@@ -188,7 +188,7 @@ const Donation = () => {
 
                   <div className="bg-white/5 rounded-2xl p-6 border border-white/5">
                     <p className="text-sm font-medium text-slate-400">
-                      <span className="text-rose-500 font-bold uppercase mr-2 italic">Impact:</span>
+                      <span className="text-rose-500 font-bold uppercase mr-2">Impact:</span>
                       {donationTiers.find(t => t.amount === selectedAmount)?.impact}
                     </p>
                   </div>
@@ -238,7 +238,7 @@ const Donation = () => {
                         </div>
                         <div className="flex-1">
                           <div className="flex justify-between items-center mb-3">
-                            <h4 className="text-xl font-bold italic uppercase tracking-tight">{category.type}</h4>
+                            <h4 className="text-xl font-bold uppercase tracking-tight">{category.type}</h4>
                             <span className="text-[10px] font-black text-rose-500 border border-rose-500/30 px-3 py-1 rounded-full uppercase tracking-tighter">High Demand</span>
                           </div>
                           <div className="flex flex-wrap gap-2">
@@ -254,7 +254,7 @@ const Donation = () => {
                   </div>
 
                   <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-3xl p-8 text-center mt-10">
-                    <p className="text-lg font-bold mb-4 italic tracking-tight">Prefer to drop off or ship?</p>
+                    <p className="text-lg font-bold mb-4 tracking-tight">Prefer to drop off or ship?</p>
                     <p className="text-sm text-slate-400 mb-6">Contact our logistics team to coordinate the pickup or delivery of physical aid packages.</p>
                     <div className="flex flex-col md:flex-row gap-4">
                        <button className="flex-1 py-4 bg-white text-dark-900 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-rose-100 transition-colors">Request Pickup</button>

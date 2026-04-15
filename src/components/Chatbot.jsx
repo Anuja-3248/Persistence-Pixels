@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hello! I am ShieldAI. How can I assist you during this emergency?", sender: 'bot' }
+    { id: 1, text: "Hello! I am Kavach. How can I assist you during this emergency?", sender: 'bot' }
   ]);
   const [inputValue, setInputValue] = useState('');
 
@@ -71,7 +71,7 @@ const Chatbot = () => {
                   <Bot className="w-6 h-6 text-neon-blue" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm tracking-wide">ShieldAI Assistant</h4>
+                  <h4 className="font-bold text-sm tracking-wide">Kavach Rescue Assistant</h4>
                   <div className="flex items-center gap-1.5">
                     <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                     <span className="text-[10px] text-green-500 font-bold uppercase tracking-widest">Always Active</span>

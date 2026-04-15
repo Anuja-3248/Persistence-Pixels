@@ -118,12 +118,12 @@ const Admin = () => {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-8 space-y-12 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-           <h2 className="text-4xl font-black uppercase italic tracking-tighter">Command <span className="text-neon-blue">HQ</span> Admin</h2>
+           <h2 className="text-4xl font-black uppercase tracking-tighter">Command <span className="text-neon-blue">HQ</span> Admin</h2>
            <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-1">Operational Command System / Incident Verification</p>
         </div>
         
         <div className="flex gap-4">
-           <button onClick={() => setReports(getStoredReports())} className="px-6 py-2.5 glass border border-white/5 rounded-2xl flex items-center gap-2 hover:bg-white/5 transition-all text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white">
+           <button onClick={() => setReports(getStoredReports())} className="px-6 py-2.5 glass border border-white/20 shadow-2xl flex items-center gap-2 hover:bg-white/5 transition-all text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white">
               <RefreshCw className="w-4 h-4" /> Sync Data
            </button>
            <button className="px-6 py-2.5 bg-neon-blue text-dark-900 rounded-2xl flex items-center gap-2 shadow-[0_0_20px_rgba(80,215,255,0.4)] transition-all text-xs font-black uppercase tracking-widest">

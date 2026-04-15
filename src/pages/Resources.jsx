@@ -35,12 +35,12 @@ const Resources = () => {
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-           <h2 className="text-4xl font-black uppercase italic tracking-tighter">Safety <span className="text-neon-blue">Intel</span> & Resources</h2>
+           <h2 className="text-4xl font-black uppercase tracking-tighter">Safety <span className="text-neon-blue">Intel</span> & Resources</h2>
            <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-1">Official Protection Procedures / Response Guide 2026</p>
         </div>
         
         <div className="flex gap-4">
-           <button className="px-8 py-3 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-2 hover:bg-neon-blue/10 hover:border-neon-blue/30 transition-all text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white group">
+           <button className="px-8 py-3 bg-white/5 border border-white/20 shadow-2xl flex items-center gap-2 hover:bg-neon-blue/10 hover:border-neon-blue/30 transition-all text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white group">
               <Download className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
               Survivor's Data Pack (OFFLINE)
            </button>

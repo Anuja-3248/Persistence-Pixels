@@ -164,7 +164,7 @@ const SOS = () => {
 
             {/* Info Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-               <div className="glass-dark p-8 rounded-[32px] border border-white/5 shadow-2xl space-y-6">
+               <div className="glass-dark p-8 rounded-[32px] border border-white/20 shadow-2xl space-y-6">
                   <div className="flex items-center gap-4 text-neon-blue">
                      <div className={`p-3 rounded-xl ${location.lat ? 'bg-neon-blue/20' : 'bg-white/5'} border border-white/10`}>
                         <MapPin className={`w-8 h-8 ${!location.lat && 'animate-pulse text-slate-600'}`} />
@@ -183,7 +183,7 @@ const SOS = () => {
                   </div>
                </div>
 
-               <div className="glass-dark p-8 rounded-[32px] border border-white/5 shadow-2xl flex flex-col justify-center">
+               <div className="glass-dark p-8 rounded-[32px] border border-white/20 shadow-2xl flex flex-col justify-center">
                   <div className="flex gap-4">
                      <button className="flex-1 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center gap-3 hover:bg-neon-blue/10 hover:border-neon-blue/40 transition-all group">
                         <Camera className="w-6 h-6 text-slate-400 group-hover:text-neon-blue transition-colors" />
@@ -198,7 +198,7 @@ const SOS = () => {
             </div>
 
             {/* Message Box */}
-            <div className="w-full glass-dark p-8 rounded-[32px] border border-white/5 shadow-2xl">
+            <div className="w-full glass-dark p-8 rounded-[32px] border border-white/20 shadow-2xl">
                <div className="flex items-center justify-between mb-4">
                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Situational Briefing (Optional)</span>
                   <span className="text-[10px] font-black uppercase tracking-widest text-neon-red">Secure Line</span>

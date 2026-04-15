@@ -1,369 +1,524 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker, ZoomControl } from 'react-leaflet';
-import L from 'leaflet';
-import MarkerClusterGroup from 'react-leaflet-cluster';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import React, { useState, useEffect } from 'react';
 import {
-  Navigation, Search, Shield, Radio, Activity, Compass, 
-  RefreshCw, Hospital, ShieldAlert, Tent, ChevronRight, 
-  Maximize2, Minimize2, AlertTriangle, MapPin, Navigation2,
-  Filter, Layers, Info, Plus, Minus
+  Activity, Flame, Wind, Waves, AlertTriangle,
+  Clock, MapPin, ArrowLeft, X, Shield, Users,
+  Thermometer, Navigation, AlertCircle, ChevronRight,
+  Home, Zap
 } from 'lucide-react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { Link } from 'react-router-dom';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { motion, AnimatePresence } from 'framer-motion';
 
-// --- CONFIG & CONSTANTS ---
-const API_ENDPOINTS = {
-  USGS_EARTHQUAKE: 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=30&minmagnitude=4.5',
-  GDACS: 'https://www.gdacs.org/gdacsapi/api/events/geteventlist/EVENTS4APP',
-  OVERPASS: 'https://overpass-api.de/api/interpreter',
-};
+// ─── MARKER ICONS ────────────────────────────────────────────────────────────
+const getIcon = (type, color) => {
+  const svgPath =
+    type === 'FIRE'
+      ? '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.203 1.15-3.142C7 12.5 8 13 8.5 14.5z"/>'
+      : type === 'STORM'
+      ? '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><path d="m11 13-4 4h7l-4 4"/>'
+      : type === 'FLOOD'
+      ? '<path d="M12 22s8-4.5 8-11.8A8 8 0 0 0 4 10.2c0 7.3 8 11.8 8 11.8Z"/><circle cx="12" cy="10" r="1" fill="currentColor"/>'
+      : '<path d="M2 12h5l2 8 4-16 2 8h7"/>';
 
-const TILE_LAYERS = {
-  DEFAULT: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-  SATELLITE: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-};
-
-// Fix Leaflet icons
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-});
-
-// Professional Icon Factory (Pranay's Pulsing Glow Style)
-const createPranayIcon = (type) => {
-  const color = type === 'CRITICAL' ? '#ef4444' : type === 'WARNING' ? '#f97316' : '#3b82f6';
   return L.divIcon({
-    className: 'pranay-map-marker',
+    className: 'custom-marker',
     html: `
-      <div class="relative flex items-center justify-center">
-        <div class="w-5 h-5 rounded-full border-2 border-white shadow-lg z-10" style="background: ${color}"></div>
-        <div class="absolute inset-0 rounded-full animate-ping opacity-75" style="background: ${color}"></div>
-      </div>
-    `,
-    iconSize: [20, 20],
-    iconAnchor: [10, 10],
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;width:52px;height:52px;">
+        <!-- Outer pulse ring -->
+        <div style="position:absolute;width:52px;height:52px;border-radius:50%;background:${color};opacity:0.25;animation:ping 1.8s cubic-bezier(0,0,0.2,1) infinite;"></div>
+        <!-- Mid ring -->
+        <div style="position:absolute;width:40px;height:40px;border-radius:50%;border:1.5px solid ${color};opacity:0.5;animation:ping 1.8s 0.4s cubic-bezier(0,0,0.2,1) infinite;"></div>
+        <!-- Icon chip — white bg so it pops on satellite -->
+        <div style="
+          position:relative;
+          width:38px;height:38px;
+          border-radius:12px;
+          background:#ffffff;
+          border:2.5px solid ${color};
+          display:flex;align-items:center;justify-content:center;
+          box-shadow:0 0 0 3px ${color}44, 0 4px 20px ${color}88, 0 2px 8px rgba(0,0,0,0.5);
+        ">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${svgPath}</svg>
+        </div>
+      </div>`,
+    iconSize: [52, 52],
+    iconAnchor: [26, 26],
   });
 };
 
-// --- SUB-COMPONENTS ---
-const MapEvents = ({ onBoundsChange }) => {
+// ─── MAP FLY-TO CONTROLLER ────────────────────────────────────────────────────
+const MapFly = ({ pos }) => {
   const map = useMap();
   useEffect(() => {
-    const handleMove = () => onBoundsChange(map.getBounds(), map.getZoom());
-    map.on('moveend', handleMove);
-    return () => map.off('moveend', handleMove);
-  }, [map, onBoundsChange]);
+    if (pos) map.flyTo(pos, 7, { duration: 2.2, easeLinearity: 0.2 });
+  }, [pos, map]);
   return null;
 };
 
-const FlyToLoc = ({ coords, zoom = 12 }) => {
-  const map = useMap();
-  useEffect(() => {
-    if (coords) map.flyTo(coords, zoom, { duration: 1.5 });
-  }, [coords, zoom, map]);
-  return null;
+// ─── SAFETY MEASURES BY TYPE ──────────────────────────────────────────────────
+const safetyData = {
+  FIRE: [
+    { tip: 'Evacuate immediately via designated routes.', note: 'Status: Open / Guided by Dispatch' },
+    { tip: 'Wear N95 masks for smoke protection.', note: 'Stock available at nearest shelter' },
+    { tip: 'Keep all windows and doors sealed.', note: 'Standard structural air containment protocol' },
+    { tip: 'Do not return until authorities give all-clear.', note: 'Monitor official emergency broadcasts' },
+  ],
+  STORM: [
+    { tip: 'Shelter in a sturdy building away from windows.', note: 'Status: All shelters on standby' },
+    { tip: 'Avoid flooded roads and low-lying areas.', note: 'Water levels updated every 15 minutes' },
+    { tip: 'Disconnect electrical appliances immediately.', note: 'Power surge risk is HIGH' },
+    { tip: 'Keep emergency kit with 3 days of supplies.', note: 'Nearest distribution point: 2.1 km' },
+  ],
+  FLOOD: [
+    { tip: 'Move to higher ground immediately.', note: 'Status: Evacuation routes active' },
+    { tip: 'Do not walk or drive through floodwater.', note: '15cm of water can sweep a person off their feet' },
+    { tip: 'Disconnect electricity if water enters home.', note: 'Report outages to local grid authority' },
+    { tip: 'Listen to emergency broadcasts for updates.', note: 'National Disaster Radio on 102.4 FM' },
+  ],
+  QUAKE: [
+    { tip: 'Drop, Cover and Hold On until shaking stops.', note: 'Do NOT stand in doorways — myth debunked' },
+    { tip: 'Stay away from windows and heavy furniture.', note: 'Falling objects cause 80% of injuries' },
+    { tip: 'Do not use elevators after an earthquake.', note: 'Use stairways only after structural check' },
+    { tip: 'Expect aftershocks — stay alert for 48 hours.', note: 'Strongest aftershock ETA unknown' },
+  ],
 };
 
-// --- MAIN COMPONENT ---
-const MapPage = () => {
-  // State: Core Data (My Logic)
-  const [incidents, setIncidents] = useState([]); 
-  const [resources, setResources] = useState([]); 
-  const [alerts, setAlerts] = useState([]);
-  
-  // State: UI
-  const [loading, setLoading] = useState(false);
-  const [activeLayer, setActiveLayer] = useState('DEFAULT');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [flyCoords, setFlyCoords] = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [lastSync, setLastSync] = useState(null);
-  const [nearestHelp, setNearestHelp] = useState(null);
-  const [statusMsg, setStatusMsg] = useState(null);
+const shelterData = {
+  FIRE: { name: 'North Valley Evacuation Camp', dist: '3.2 km from epicenter', capacity: 78 },
+  STORM: { name: 'Central City Storm Shelter', dist: '1.8 km from epicenter', capacity: 62 },
+  FLOOD: { name: 'Highland Ridge Relief Camp', dist: '4.5 km from epicenter', capacity: 55 },
+  QUAKE: { name: 'Seismic Response Hub Delta', dist: '2.1 km from epicenter', capacity: 91 },
+};
 
-  // 1. Fetch Real-time Incidents (My Logic)
-  const syncIncidents = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [uRes, gRes] = await Promise.all([
-        fetch(API_ENDPOINTS.USGS_EARTHQUAKE).then(r => r.json()),
-        fetch(API_ENDPOINTS.GDACS).then(r => r.json())
-      ]);
+const intensityMap = (type, magnitude) => {
+  if (type === 'QUAKE') {
+    if (magnitude >= 7) return { grade: 'Grade 5', label: 'Catastrophic', color: '#dc2626' };
+    if (magnitude >= 6) return { grade: 'Grade 4', label: 'Critical Condition', color: '#dc2626' };
+    if (magnitude >= 5) return { grade: 'Grade 3', label: 'Severe', color: '#ea580c' };
+    return { grade: 'Grade 2', label: 'Moderate', color: '#d97706' };
+  }
+  return { grade: 'Grade 4', label: 'Critical Condition', color: '#dc2626' };
+};
 
-      const quakes = (uRes.features || []).map(f => ({
-        id: f.id,
-        type: 'QUAKE',
-        severity: f.properties.mag >= 6 ? 'CRITICAL' : 'WARNING',
-        title: `M${f.properties.mag} Earthquake`,
-        location: f.properties.place,
-        timestamp: new Date(f.properties.time).toISOString(),
-        pos: [f.geometry.coordinates[1], f.geometry.coordinates[0]],
-        url: f.properties.url
-      }));
+// ─── RIGHT SIDEBAR ─────────────────────────────────────────────────────────────
+const IncidentSidebar = ({ incident, onClose }) => {
+  if (!incident) return null;
 
-      const major = (gRes.features || [])
-        .filter(f => ['FL', 'TC', 'WF', 'EQ'].includes(f.properties.eventtype.toUpperCase()))
-        .map(f => ({
-          id: f.properties.eventid,
-          type: f.properties.eventtype.toUpperCase(),
-          severity: f.properties.alertlevel === 'Red' ? 'CRITICAL' : 'WARNING',
-          title: f.properties.name,
-          location: f.properties.country,
-          timestamp: new Date(f.properties.fromdate).toISOString(),
-          pos: [f.geometry.coordinates[1], f.geometry.coordinates[0]],
-          url: `https://www.gdacs.org/report.aspx?eventid=${f.properties.eventid}&eventtype=${f.properties.eventtype}`
-        }));
+  const safety = safetyData[incident.type] || safetyData.QUAKE;
+  const shelter = shelterData[incident.type] || shelterData.QUAKE;
+  const intensity = intensityMap(incident.type, incident.magnitude);
+  const typeLabels = { FIRE: 'Fire', STORM: 'Storm', FLOOD: 'Flood', QUAKE: 'Earthquake' };
+  const typeLabel = typeLabels[incident.type] || incident.type;
 
-      const combined = [...quakes, ...major].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-      setIncidents(combined);
-      setAlerts(combined.slice(0, 10));
-      setLastSync(new Date());
-    } catch (err) { console.error('Incident sync failed:', err); }
-    finally { setLoading(false); }
-  }, []);
-
-  // 2. Fetch Resources (My Logic)
-  const syncResources = async (bounds, zoom) => {
-    if (!bounds || zoom < 13) {
-      if (resources.length > 0) setResources([]);
-      return;
-    }
-    const sw = bounds.getSouthWest();
-    const ne = bounds.getNorthEast();
-    const query = `[out:json][timeout:25];(node["amenity"~"hospital|police|fire_station"](${sw.lat},${sw.lng},${ne.lat},${ne.lng}););out body;`;
-    
-    try {
-      const res = await fetch(API_ENDPOINTS.OVERPASS, {
-        method: 'POST',
-        body: `data=${encodeURIComponent(query)}`
-      }).then(r => r.json());
-
-      const mapped = (res.elements || []).map(e => ({
-        id: `res-${e.id}`,
-        type: e.tags.amenity,
-        name: e.tags.name || `Authorized ${e.tags.amenity}`,
-        pos: [e.lat, e.lon]
-      }));
-      setResources(mapped);
-    } catch (err) { console.error('Resource fetch failed:', err); }
-  };
-
-  useEffect(() => {
-    syncIncidents();
-    const interval = setInterval(syncIncidents, 600000); 
-    return () => clearInterval(interval);
-  }, [syncIncidents]);
-
-  // 3. KILLER FEATURE: Find Nearest Help (My Logic)
-  const findNearestHelp = () => {
-    if (!navigator.geolocation) return;
-    setLoading(true);
-    setStatusMsg("INITIATING SCAN: SEARCHING FOR NEAREST AUTHORIZED SOS CENTER...");
-    
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      const userPos = [pos.coords.latitude, pos.coords.longitude];
-      setFlyCoords(userPos);
-      
-      const margin = 0.08; 
-      const sw = [userPos[0] - margin, userPos[1] - margin];
-      const ne = [userPos[0] + margin, userPos[1] + margin];
-      const query = `[out:json][timeout:25];(node["amenity"~"hospital|police|fire_station"](${sw[0]},${sw[1]},${ne[0]},${ne[1]}););out body;`;
-      
-      try {
-        const res = await fetch(API_ENDPOINTS.OVERPASS, { method: 'POST', body: `data=${encodeURIComponent(query)}` }).then(r => r.json());
-        if (res.elements && res.elements.length > 0) {
-           let closest = null;
-           let minDist = Infinity;
-           res.elements.forEach(e => {
-              const d = Math.sqrt(Math.pow((e.lat - userPos[0]) * 111, 2) + Math.pow((e.lon - userPos[1]) * 111, 2));
-              if (d < minDist) { minDist = d; closest = e; }
-           });
-           if (closest) {
-              const name = closest.tags.name || 'EMERGENCY CENTER';
-              setNearestHelp({ pos: [closest.lat, closest.lon], name, dist: minDist.toFixed(1) });
-              setStatusMsg(`SUCCESS: FOUND ${name} (${minDist.toFixed(1)} KM)`);
-              setFlyCoords([closest.lat, closest.lon]);
-              setTimeout(() => setStatusMsg(null), 6000); 
-           }
-        } else {
-           setStatusMsg("FAIL: NO SOS CENTERS DETECTED IN 10KM RANGE.");
-           setTimeout(() => setStatusMsg(null), 4000);
-        }
-      } catch (e) { setStatusMsg("SIGNAL ERROR: DATABASE OFFLINE."); }
-      finally { setLoading(false); }
-    }, () => {
-        setStatusMsg("ACCESS DENIED: GPS PERMISSION REQUIRED.");
-        setLoading(false);
-    });
-  };
-
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) return;
-    try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchQuery)}&format=json&limit=1`);
-      const data = await res.json();
-      if (data.length > 0) {
-        setFlyCoords([parseFloat(data[0].lat), parseFloat(data[0].lon)]);
-      }
-    } catch (err) { console.error('Search failed:', err); }
-  };
+  // Calculate a pseudo-duration from rawTime
+  const minsAgo = incident.rawTime
+    ? Math.round((Date.now() - incident.rawTime) / 60000)
+    : null;
+  const durationStr = minsAgo
+    ? minsAgo > 60
+      ? `${Math.floor(minsAgo / 60)}h ${minsAgo % 60}m active`
+      : `${minsAgo}m active`
+    : 'Duration unknown';
 
   return (
-    <div className="flex h-full w-full bg-white overflow-hidden text-slate-900 font-body antialiased">
-      
-      {/* 1. Header (Pranay's UI Only) */}
-      <div className="absolute top-0 right-0 left-0 bg-white/90 backdrop-blur-md border-b border-neutral-200 p-4 flex items-center justify-between z-[1000] shadow-sm">
-        <div className="flex items-center gap-3 bg-neutral-100 px-4 py-2 rounded-lg border border-neutral-200 w-full max-w-md ml-auto md:ml-4">
-           <Search className="w-4 h-4 text-neutral-400" />
-           <form onSubmit={handleSearch} className="w-full">
-             <input 
-               type="text" 
-               placeholder="Search coordinates or sectors..." 
-               className="bg-transparent border-none text-sm outline-none w-full font-medium"
-               value={searchQuery}
-               onChange={(e) => setSearchQuery(e.target.value)}
-             />
-           </form>
+    <motion.div
+      initial={{ x: '100%', opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: '100%', opacity: 0 }}
+      transition={{ type: 'spring', damping: 28, stiffness: 220 }}
+      className="absolute top-0 right-0 h-full w-[360px] z-[3000] flex flex-col overflow-hidden"
+      style={{ background: '#ffffff', fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+    >
+      {/* ── Header ── */}
+      <div className="px-6 pt-6 pb-5 border-b border-slate-200 flex items-start justify-between flex-shrink-0">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900 leading-tight">{typeLabel} Incident Details</h2>
+          <div className="flex items-center gap-2 mt-3">
+            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-100 text-red-600 text-xs font-black uppercase tracking-wider">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              Active
+            </span>
+            <span className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 text-xs font-black uppercase tracking-wider">
+              High Intensity
+            </span>
+          </div>
         </div>
-        <div className="flex gap-2 ml-4">
-          <button className="px-3 py-1.5 text-sm bg-white border border-neutral-200 hover:bg-neutral-50 text-neutral-700 rounded-md transition-colors flex items-center gap-2 shadow-sm font-medium">
-            <Filter className="w-4 h-4" /> Filter
-          </button>
-          <button className="px-3 py-1.5 text-sm bg-white border border-neutral-200 hover:bg-neutral-50 text-neutral-700 rounded-md transition-colors flex items-center gap-2 shadow-sm font-medium">
-            <Layers className="w-4 h-4" /> Layers
-          </button>
-        </div>
+        <button
+          onClick={onClose}
+          className="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 hover:text-slate-700"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
-      {/* 2. Map Container (My Implementation) */}
-      <div className="relative flex-1 bg-neutral-100 flex flex-col pt-[72px]">
-        
-        {/* System Notification Overlay (My Logic) */}
-        <AnimatePresence>
-          {statusMsg && (
-            <motion.div 
-               initial={{ y: -100, opacity: 0 }} animate={{ y: 20, opacity: 1 }} exit={{ y: -100, opacity: 0 }}
-               className="absolute top-[80px] left-1/2 -translate-x-1/2 z-[1100] pointer-events-none"
-            >
-               <div className={`px-8 py-3 rounded-2xl border backdrop-blur-md shadow-2xl flex items-center gap-4 ${statusMsg.startsWith('SUCCESS') ? 'bg-emerald-600 border-emerald-400' : 'bg-slate-900 border-slate-700'} text-white`}>
-                  <div className={`w-2 h-2 rounded-full ${statusMsg.startsWith('INIT') ? 'bg-indigo-400 animate-ping' : 'bg-white'}`} />
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] italic">{statusMsg}</span>
-               </div>
-            </motion.div>
+      {/* ── Scrollable Body ── */}
+      <div className="flex-1 overflow-y-auto no-scrollbar">
+
+        {/* EVENT INFO */}
+        <div className="px-6 py-5 border-b border-slate-100">
+          <p className="text-xs font-black text-slate-400 uppercase tracking-[0.18em] mb-4">Event Info</p>
+
+          {/* Place */}
+          <div className="flex items-start gap-3 mb-5">
+            <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <MapPin className="w-4 h-4 text-slate-500" />
+            </div>
+            <div>
+              <p className="text-xs font-black text-slate-500 uppercase tracking-wider mb-1">Place</p>
+              <p className="text-base font-bold text-slate-900 leading-snug">{incident.title}</p>
+              <p className="text-sm text-slate-500 font-medium mt-1">
+                {incident.pos[0].toFixed(3)}° N, {incident.pos[1].toFixed(3)}° E
+              </p>
+            </div>
+          </div>
+
+          {/* Timing + Duration */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <Clock className="w-4 h-4 text-slate-500" />
+              </div>
+              <div>
+                <p className="text-xs font-black text-slate-500 uppercase tracking-wider mb-1">Timing</p>
+                <p className="text-sm font-bold text-slate-900 leading-tight">{incident.time}</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <Activity className="w-4 h-4 text-slate-500" />
+              </div>
+              <div>
+                <p className="text-xs font-black text-slate-500 uppercase tracking-wider mb-1">Duration</p>
+                <p className="text-sm font-bold text-slate-900 leading-tight">{durationStr}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Magnitude badge if quake */}
+          {typeof incident.magnitude === 'number' && (
+            <div className="mt-4 flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                <Zap className="w-4 h-4 text-slate-500" />
+              </div>
+              <div>
+                <p className="text-xs font-black text-slate-500 uppercase tracking-wider mb-1">Magnitude</p>
+                <p className="text-base font-bold text-slate-900">{incident.magnitude} Mw</p>
+              </div>
+            </div>
           )}
-        </AnimatePresence>
+        </div>
 
-        <MapContainer
-          center={[20.5937, 78.9629]} zoom={5}
-          style={{ width: '100%', height: '100%', background: '#f8fafc' }}
-          zoomControl={false} attributionControl={false}
-        >
-          <FlyToLoc coords={flyCoords} />
-          <MapEvents onBoundsChange={syncResources} />
-          <TileLayer url={TILE_LAYERS[activeLayer]} />
-
-          {/* Incident Markers (My Logic + Pranay's UI Style) */}
-          <MarkerClusterGroup chunkedLoading>
-            {incidents.map(inc => (
-              <Marker 
-                key={inc.id} 
-                position={inc.pos} 
-                icon={createPranayIcon(inc.severity)}
-              >
-                <Popup className="pro-map-popup">
-                  <div className="p-4 w-60">
-                    <div className="flex items-center gap-2 mb-2">
-                       <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${inc.severity === 'CRITICAL' ? 'bg-red-50 text-red-600' : 'bg-neutral-100 text-neutral-600'}`}>{inc.severity}</span>
-                    </div>
-                    <h4 className="font-bold text-neutral-900 text-sm mb-1 uppercase tracking-tight">{inc.title}</h4>
-                    <p className="text-xs text-neutral-500 mb-3 truncate font-medium uppercase tracking-tighter">{inc.location}</p>
-                    <a href={inc.url} target="_blank" rel="noreferrer" className="block w-full py-2 bg-neutral-900 text-white text-[10px] font-bold uppercase tracking-widest text-center rounded-md hover:bg-neutral-700 transition-colors">Analyze Node →</a>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
-          </MarkerClusterGroup>
-
-          {/* Resources (My Logic) */}
-          {resources.map(res => (
-            <CircleMarker 
-              key={res.id} center={res.pos} radius={8}
-              pathOptions={{ color: '#fff', fillColor: res.type === 'hospital' ? '#3b82f6' : '#6366f1', fillOpacity: 0.9, weight: 3 }}
-            >
-              <Popup>
-                 <div className="p-3">
-                    <div className="flex items-center gap-2 mb-2 text-indigo-600">
-                       {res.type === 'hospital' ? <Hospital className="w-4 h-4" /> : <ShieldAlert className="w-4 h-4" />}
-                       <span className="text-[10px] font-black uppercase tracking-widest">{res.type} Unit</span>
-                    </div>
-                    <h4 className="text-sm font-black text-slate-900 uppercase tracking-tight">{res.name}</h4>
-                 </div>
-              </Popup>
-            </CircleMarker>
-          ))}
-
-          {nearestHelp && (
-            <Marker position={nearestHelp.pos} icon={createPranayIcon('READY')}>
-                <Popup autoOpen>
-                   <div className="p-2 text-center">
-                      <p className="text-[10px] font-black uppercase text-indigo-600 mb-1">Closest Aid Found</p>
-                      <h4 className="text-sm font-black uppercase tracking-tight italic">{nearestHelp.name}</h4>
-                   </div>
-                </Popup>
-            </Marker>
-          )}
-
-          {flyCoords && <CircleMarker center={flyCoords} radius={10} pathOptions={{ color: '#fff', fillColor: '#3b82f6', fillOpacity: 0.5, weight: 3 }} />}
-        </MapContainer>
-
-        {/* 3. Legend (Pranay's UI Styling) */}
-        <div className="absolute left-6 bottom-10 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-neutral-200 w-48 z-[900]">
-          <h4 className="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-3">Map Legend</h4>
-          <div className="space-y-2.5">
-            <div className="flex items-center gap-2.5 text-sm font-medium text-neutral-700">
-              <span className="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]" /> Critical Incident
+        {/* CURRENT INTENSITY */}
+        <div className="px-6 py-5 border-b border-slate-100">
+          <p className="text-xs font-black text-slate-400 uppercase tracking-[0.18em] mb-4">Current Intensity</p>
+          <div className="rounded-2xl p-5 flex items-center justify-between" style={{ background: intensity.color }}>
+            <div>
+              <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-1">Grade Level</p>
+              <p className="text-white text-4xl font-black leading-none">{intensity.grade}</p>
+              <p className="text-white/80 text-sm font-bold mt-1.5">{intensity.label}</p>
             </div>
-            <div className="flex items-center gap-2.5 text-sm font-medium text-neutral-700">
-              <span className="w-3 h-3 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.4)]" /> High Warning
+            <AlertTriangle className="w-10 h-10 text-white/30" />
+          </div>
+        </div>
+
+        {/* RESCUE RESOURCES */}
+        <div className="px-6 py-5 border-b border-slate-100">
+          <p className="text-xs font-black text-slate-400 uppercase tracking-[0.18em] mb-4">Rescue Resources</p>
+          <div className="border border-slate-200 rounded-2xl p-5">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <p className="text-xs font-black text-slate-500 uppercase tracking-wider mb-1">Nearest Camp</p>
+                <p className="text-base font-bold text-slate-900 leading-snug">{shelter.name}</p>
+                <p className="text-sm text-slate-500 font-medium mt-1">{shelter.dist}</p>
+              </div>
+              <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
+                <Home className="w-4 h-4 text-red-500" />
+              </div>
             </div>
-            <div className="flex items-center gap-2.5 text-sm font-medium text-neutral-700">
-              <span className="w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.4)]" /> Monitoring
-            </div>
-            <div className="flex items-center gap-2.5 text-sm font-medium text-neutral-700">
-              <span className="w-3 h-3 rounded-full bg-indigo-500" /> Aid Found
+            <div>
+              <div className="flex justify-between mb-2">
+                <p className="text-xs font-black text-slate-500 uppercase tracking-wider">Capacity Utilization</p>
+                <p className="text-xs font-black text-slate-700">{shelter.capacity}% full</p>
+              </div>
+              <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${shelter.capacity}%` }}
+                  transition={{ duration: 1, delay: 0.3 }}
+                  className="h-full rounded-full"
+                  style={{ background: shelter.capacity > 80 ? '#dc2626' : shelter.capacity > 60 ? '#f59e0b' : '#22c55e' }}
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* 4. Controls (Pranay's UI Styling) */}
-        <div className="absolute right-6 bottom-10 flex flex-col gap-3 z-[900]">
-           <div className="flex flex-col bg-white rounded-lg shadow-lg border border-neutral-200 overflow-hidden">
-              <button onClick={() => syncIncidents()} className="p-3 hover:bg-neutral-50 text-neutral-600 border-b border-neutral-100 flex items-center justify-center"><RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} /></button>
-              <button onClick={() => setActiveLayer(activeLayer === 'DEFAULT' ? 'SATELLITE' : 'DEFAULT')} className="p-3 hover:bg-neutral-50 text-neutral-600"><Compass className="w-5 h-5" /></button>
-           </div>
-           <button 
-             onClick={findNearestHelp}
-             className="p-5 bg-indigo-600 text-white rounded-2xl shadow-xl hover:bg-indigo-700 transition-all active:scale-95 flex items-center justify-center group"
-             title="Find Nearest Help"
-           >
-              <Navigation className="w-8 h-8 fill-current group-hover:animate-bounce" />
-           </button>
+        {/* SAFETY MEASURES */}
+        <div className="px-6 py-5">
+          <p className="text-xs font-black text-slate-400 uppercase tracking-[0.18em] mb-5">Safety Measures</p>
+          <div className="space-y-4">
+            {safety.map((item, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <div className="w-2 h-2 rounded-full bg-slate-800 flex-shrink-0 mt-1.5" />
+                <div>
+                  <p className="text-sm font-bold text-slate-900 leading-snug">{item.tip}</p>
+                  <p className="text-[10px] text-slate-400 font-medium mt-0.5">{item.note}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-
       </div>
 
+      {/* ── Footer CTA ── */}
+      <div className="px-6 py-4 border-t border-slate-200 flex-shrink-0">
+        <Link
+          to="/sos"
+          className="block w-full py-3.5 rounded-2xl text-center text-sm font-black uppercase tracking-widest text-white transition-all active:scale-95"
+          style={{ background: '#dc2626' }}
+        >
+          Trigger SOS Emergency
+        </Link>
+      </div>
+    </motion.div>
+  );
+};
+
+// ─── MAIN MAP COMPONENT ────────────────────────────────────────────────────────
+const LiveMap = () => {
+  const [incidents, setIncidents] = useState([]);
+  const [syncing, setSyncing] = useState(false);
+  const [flyTo, setFlyTo] = useState(null);
+  const [selected, setSelected] = useState(null);
+
+  // ── Fetch data ──
+  const fetchData = async () => {
+    setSyncing(true);
+    try {
+      // USGS Earthquakes
+      const qRes = await fetch(
+        'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=25&minmagnitude=4.5'
+      );
+      const qData = await qRes.json();
+      const quakes = (qData.features || []).map((f) => ({
+        id: f.id,
+        title: f.properties.place,
+        magnitude: f.properties.mag,
+        type: 'QUAKE',
+        time: new Date(f.properties.time).toLocaleString(),
+        rawTime: f.properties.time,
+        pos: [f.geometry.coordinates[1], f.geometry.coordinates[0]],
+        color: '#f59e0b',
+        severityLabel: f.properties.mag >= 6 ? 'CRITICAL' : 'MAJOR',
+      }));
+
+      // NASA EONET
+      const nRes = await fetch('https://eonet.gsfc.nasa.gov/api/v2.1/events?days=20&status=open');
+      const nData = await nRes.json();
+      const natural = (nData.events || [])
+        .map((ev) => {
+          const catId = ev.categories?.[0]?.id;
+          let type = 'STORM', color = '#3b82f6';
+          if (catId === 8 || catId === 12) { type = 'FIRE'; color = '#ef4444'; }
+          if (catId === 15) { type = 'FLOOD'; color = '#06b6d4'; }
+          const pos = ev.geometries?.[0]?.coordinates;
+          if (!pos) return null;
+          return {
+            id: ev.id,
+            title: ev.title,
+            magnitude: 'LIVE',
+            type,
+            time: new Date(ev.geometries[0].date).toLocaleString(),
+            rawTime: new Date(ev.geometries[0].date).getTime(),
+            pos: [pos[1], pos[0]],
+            color,
+            severityLabel: 'MONITORED',
+          };
+        })
+        .filter(Boolean);
+
+      setIncidents([...quakes, ...natural].sort((a, b) => b.rawTime - a.rawTime));
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    const t = setInterval(fetchData, 60000);
+    return () => clearInterval(t);
+  }, []);
+
+  // ── Jump to most dangerous of that type ──
+  const jumpTo = (type) => {
+    const matching = incidents.filter((i) => i.type === type);
+    if (!matching.length) return;
+    const worst = matching.sort((a, b) => {
+      const vA = typeof a.magnitude === 'number' ? a.magnitude : 5;
+      const vB = typeof b.magnitude === 'number' ? b.magnitude : 5;
+      return vB - vA;
+    })[0];
+    setSelected(worst);
+    setFlyTo(worst.pos);
+  };
+
+  const disasterButtons = [
+    { type: 'QUAKE', label: 'Earthquake', icon: Activity, color: '#f59e0b' },
+    { type: 'FIRE',  label: 'Wildfire',   icon: Flame,    color: '#ef4444' },
+    { type: 'STORM', label: 'Storm',      icon: Wind,     color: '#3b82f6' },
+    { type: 'FLOOD', label: 'Flood',      icon: Waves,    color: '#06b6d4' },
+  ];
+
+  return (
+    <div className="fixed inset-0 bg-[#0a1628] overflow-hidden" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+
+      {/* ── FULL-SCREEN MAP ── */}
+      <MapContainer
+        center={[20, 78]}
+        zoom={4}
+        className="w-full h-full"
+        zoomControl={false}
+        attributionControl={false}
+      >
+        {/* Satellite base layer */}
+        <TileLayer
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          maxZoom={19}
+        />
+        {/* Country & city labels overlay */}
+        <TileLayer
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
+          maxZoom={19}
+          opacity={0.85}
+        />
+        <MapFly pos={flyTo} />
+        {incidents.map((inc) => (
+          <Marker
+            key={inc.id}
+            position={inc.pos}
+            icon={getIcon(inc.type, inc.color)}
+            eventHandlers={{ click: () => { setSelected(inc); setFlyTo(inc.pos); } }}
+          >
+            <Popup className="dark-popup">
+              <div className="p-3 w-56 bg-[#0d0d18] border border-white/20 rounded-xl text-white">
+                <p className="text-[9px] font-black uppercase tracking-widest mb-1" style={{ color: inc.color }}>
+                  {inc.type}
+                </p>
+                <p className="text-sm font-bold leading-snug mb-2">{inc.title}</p>
+                <p className="text-[9px] text-slate-400 font-medium">{inc.time}</p>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+
+      {/* ── VIGNETTE OVERLAY for depth ── */}
+      <div
+        className="absolute inset-0 pointer-events-none z-[1]"
+        style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.45) 100%)' }}
+      />
+
+      {/* ── TOP-LEFT BRANDING ── */}
+      <div className="absolute top-6 left-6 z-[2000] flex items-center gap-3">
+        <Link
+          to="/dashboard"
+          className="p-3 bg-[#0d0d18]/90 border border-white/15 rounded-xl hover:bg-white/10 transition-all backdrop-blur-md shadow-xl group"
+        >
+          <ArrowLeft className="w-5 h-5 text-white group-hover:-translate-x-0.5 transition-transform" />
+        </Link>
+        <div className="px-5 py-3.5 bg-[#0d0d18]/90 border border-white/15 rounded-xl backdrop-blur-md shadow-xl">
+          <p className="text-2xl font-black text-white uppercase tracking-tight leading-none">Live Map</p>
+        </div>
+      </div>
+
+      {/* ── TOP-RIGHT STATUS ── */}
+      <div className="absolute top-6 right-6 z-[2000] flex items-center gap-2.5 px-5 py-3 bg-[#0d0d18]/90 border border-white/15 rounded-xl backdrop-blur-md shadow-xl">
+        <div>
+          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest text-right">
+            {syncing ? 'Syncing...' : 'Live Feed Online'}
+          </p>
+          <p className="text-[9px] font-black text-emerald-400 uppercase tracking-widest text-right mt-0.5">
+            {incidents.length} nodes active
+          </p>
+        </div>
+        <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${syncing ? 'bg-blue-500 animate-pulse' : 'bg-emerald-400'}`} />
+      </div>
+
+      {/* ── BOTTOM DISASTER-TYPE BUTTONS ── */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[2000]">
+        <div
+          className="flex items-center gap-1.5 px-2.5 py-2.5 rounded-[44px] backdrop-blur-2xl"
+          style={{
+            background: 'rgba(8,8,20,0.88)',
+            border: '1.5px solid rgba(255,255,255,0.14)',
+            boxShadow: '0 25px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06)'
+          }}
+        >
+          {disasterButtons.map((btn) => {
+            const count = incidents.filter(i => i.type === btn.type).length;
+            return (
+              <button
+                key={btn.type}
+                onClick={() => jumpTo(btn.type)}
+                className="relative flex items-center gap-2.5 px-5 py-3 rounded-[32px] transition-all duration-200 active:scale-95 group overflow-hidden"
+                style={{
+                  background: selected?.type === btn.type ? `${btn.color}28` : `${btn.color}14`,
+                  border: `1.5px solid ${selected?.type === btn.type ? btn.color : btn.color + '44'}`,
+                  color: btn.color,
+                  boxShadow: selected?.type === btn.type ? `0 0 20px ${btn.color}44` : 'none',
+                }}
+              >
+                {/* hover glow */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200" style={{ background: `${btn.color}20` }} />
+                <btn.icon style={{ width: 17, height: 17, flexShrink: 0 }} className="transition-transform group-hover:scale-110 group-hover:rotate-6" />
+                <span className="text-[11px] font-black uppercase tracking-[0.16em] whitespace-nowrap relative">{btn.label}</span>
+                {/* live count badge */}
+                {count > 0 && (
+                  <span
+                    className="flex items-center justify-center w-5 h-5 rounded-full text-[9px] font-black text-white flex-shrink-0"
+                    style={{ background: btn.color }}
+                  >
+                    {count > 99 ? '99+' : count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+
+          <div className="flex items-center gap-2 pl-3 ml-1 border-l border-white/10">
+            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping flex-shrink-0" />
+            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Live</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── RIGHT SIDEBAR (slides in) ── */}
+      <AnimatePresence>
+        {selected && (
+          <IncidentSidebar incident={selected} onClose={() => setSelected(null)} />
+        )}
+      </AnimatePresence>
+
       <style>{`
-        .pro-map-popup .leaflet-popup-content-wrapper { border-radius: 12px; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 0; overflow: hidden; }
-        .pro-map-popup .leaflet-popup-tip { display: none; }
-        .pranay-map-marker { background: transparent !important; border: none !important; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+        .leaflet-container { background: #0a1628 !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .leaflet-popup-content-wrapper { background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; }
+        .leaflet-popup-tip-container { display: none !important; }
+        @keyframes ping {
+          75%, 100% { transform: scale(2); opacity: 0; }
+        }
+        .animate-scan { animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite; }
+
+        .dark-popup .leaflet-popup-content { margin: 0; }
       `}</style>
     </div>
   );
 };
 
-export default MapPage;
+export default LiveMap;

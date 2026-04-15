@@ -326,13 +326,13 @@ const Quiz = ({ questions, color }) => {
         <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden">
           <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 1, delay: 0.3 }} className="h-full rounded-full" style={{ background: color }} />
         </div>
-        <button onClick={reset} className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest px-5 py-2.5 rounded-xl border border-white/10 hover:bg-white/5 transition-colors text-slate-300"><RotateCcw className="w-3.5 h-3.5" /> Retry Quiz</button>
+        <button onClick={reset} className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest px-5 py-2.5 rounded-xl border border-white/20 hover:bg-white/5 transition-colors text-slate-300"><RotateCcw className="w-3.5 h-3.5" /> Retry Quiz</button>
       </motion.div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 space-y-4">
+    <div className="rounded-2xl border border-white/20 bg-white/[0.03] p-6 space-y-4">
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-2">
           <Trophy className="w-4 h-4" style={{ color }} />
@@ -349,10 +349,10 @@ const Quiz = ({ questions, color }) => {
       <div className="grid grid-cols-1 gap-2">
         {q.options.map((opt, i) => {
           let cls = "text-left w-full px-4 py-3 rounded-xl text-xs font-bold transition-all border ";
-          if (!answered) { cls += "border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/20 hover:bg-white/[0.06] cursor-pointer"; }
+          if (!answered) { cls += "border-white/20 bg-white/[0.03] text-slate-300 hover:border-white/20 hover:bg-white/[0.06] cursor-pointer"; }
           else if (i === q.answer) { cls += "border-emerald-500/50 bg-emerald-950/40 text-emerald-300 cursor-default"; }
           else if (i === selected && i !== q.answer) { cls += "border-rose-500/50 bg-rose-950/40 text-rose-300 cursor-default"; }
-          else { cls += "border-white/5 bg-white/[0.02] text-slate-500 cursor-default"; }
+          else { cls += "border-white/20 bg-white/[0.02] text-slate-500 cursor-default"; }
           return (
             <motion.button key={i} whileHover={!answered ? { scale: 1.01 } : {}} whileTap={!answered ? { scale: 0.99 } : {}} className={cls} onClick={() => handleSelect(i)}>
               <span className="font-black mr-2 opacity-50">{String.fromCharCode(65 + i)}.</span> {opt}
@@ -376,7 +376,7 @@ const SideCard = ({ scenario, isActive, onClick }) => {
     <motion.div
       whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={onClick}
       className="cursor-pointer rounded-2xl border p-4 transition-all duration-300"
-      style={{ borderColor: isActive ? scenario.color + '70' : 'rgba(255,255,255,0.05)', background: isActive ? scenario.color + '12' : 'rgba(255,255,255,0.015)' }}
+      style={{ borderColor: isActive ? scenario.color + '70' : 'rgba(255,255,255,0.2)', background: isActive ? scenario.color + '12' : 'rgba(255,255,255,0.015)' }}
     >
       <div className="flex items-center gap-3">
         <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: isActive ? scenario.color + '22' : 'rgba(255,255,255,0.04)', border: `1px solid ${scenario.color}33` }}>
@@ -406,24 +406,24 @@ const ScenarioCards = () => {
   return (
     <div className="py-28 px-6 md:px-12 max-w-[1400px] mx-auto">
       <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-24 space-y-4">
-        <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10">
+        <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/20">
           <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Survival Academy</span>
         </div>
-        <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter italic">Tactical <span className="text-blue-500">Drills</span></h2>
+        <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter">Tactical <span className="text-blue-500">Drills</span></h2>
         <p className="text-slate-500 font-bold uppercase tracking-widest text-sm max-w-xl mx-auto">Master high-stakes survival protocols through synchronized visual and tactical simulation.</p>
       </motion.div>
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
         <div className="xl:col-span-3 space-y-3 order-2 xl:order-1">
-          <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] px-4 mb-6 italic">Threat Library</p>
+          <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] px-4 mb-6">Threat Library</p>
           {scenarios.map((s, i) => (
             <SideCard key={s.id} scenario={s} isActive={activeIndex === i} onClick={() => switchScenario(i)} />
           ))}
         </div>
 
         <div className="xl:col-span-6 order-1 xl:order-2">
-          <div className="relative aspect-video rounded-[48px] overflow-hidden border border-white/10 bg-black/40 group shadow-2xl">
+          <div className="relative aspect-video rounded-[48px] overflow-hidden border border-white/20 bg-black/40 group shadow-2xl">
              <AnimatePresence mode="wait">
                {tab === 0 && (
                  <motion.div key={`vid-${active.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0">
@@ -436,13 +436,13 @@ const ScenarioCards = () => {
                        <div className="space-y-6">
                           <h4 className="flex items-center gap-3 text-emerald-400 font-black text-xs uppercase tracking-widest"><CheckCircle2 className="w-4 h-4" /> Strategic Do's</h4>
                           <div className="space-y-3">
-                             {active.dos.map((item, i) => <p key={i} className="text-[11px] font-bold text-white/80 flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-emerald-500 mt-0.5">•</span> {item}</p>)}
+                             {active.dos.map((item, i) => <p key={i} className="text-[11px] font-bold text-white/80 flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/20"><span className="text-emerald-500 mt-0.5">•</span> {item}</p>)}
                           </div>
                        </div>
                        <div className="space-y-6">
                           <h4 className="flex items-center gap-3 text-rose-400 font-black text-xs uppercase tracking-widest"><XCircle className="w-4 h-4" /> Critical Dont's</h4>
                           <div className="space-y-3">
-                             {active.donts.map((item, i) => <p key={i} className="text-[11px] font-bold text-white/80 flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-rose-500 mt-0.5">•</span> {item}</p>)}
+                             {active.donts.map((item, i) => <p key={i} className="text-[11px] font-bold text-white/80 flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/20"><span className="text-rose-500 mt-0.5">•</span> {item}</p>)}
                           </div>
                        </div>
                     </div>
@@ -461,24 +461,24 @@ const ScenarioCards = () => {
           <div className="mt-8 flex items-center justify-between px-6">
              <div className="flex gap-2">
                 {tabs.map((t, i) => (
-                  <button key={t} onClick={() => setTab(i)} className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${tab === i ? 'bg-white text-black border-white' : 'bg-white/5 text-slate-400 border-white/5 hover:border-white/10'}`}>{t}</button>
+                  <button key={t} onClick={() => setTab(i)} className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${tab === i ? 'bg-white text-black border-white' : 'bg-white/5 text-slate-400 border-white/20 hover:border-white/20'}`}>{t}</button>
                 ))}
              </div>
              <div className="flex gap-3">
-                <button onClick={prev} className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-white hover:bg-white/10 transition-all"><ChevronLeft className="w-5 h-5" /></button>
-                <button onClick={next} className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-white hover:bg-white/10 transition-all"><ChevronRight className="w-5 h-5" /></button>
+                <button onClick={prev} className="w-10 h-10 rounded-xl bg-white/5 border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-all"><ChevronLeft className="w-5 h-5" /></button>
+                <button onClick={next} className="w-10 h-10 rounded-xl bg-white/5 border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-all"><ChevronRight className="w-5 h-5" /></button>
              </div>
           </div>
         </div>
 
         <div className="xl:col-span-3 space-y-10 order-3">
-           <div className="bg-white/5 border border-white/10 rounded-[40px] p-10 relative overflow-hidden group">
+           <div className="bg-white/5 border border-white/20 rounded-[40px] p-10 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
-              <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-10 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/20 flex items-center justify-center mb-10 group-hover:scale-110 transition-transform">
                  <Icon className="w-7 h-7" style={{ color: active.color }} />
               </div>
-              <p className="text-[10px] font-black uppercase tracking-[0.4em] mb-4 italic" style={{ color: active.color }}>Mission Brief</p>
-              <h3 className="text-3xl font-black text-white uppercase tracking-tighter leading-tight mb-8 italic">{active.title}</h3>
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] mb-4" style={{ color: active.color }}>Mission Brief</p>
+              <h3 className="text-3xl font-black text-white uppercase tracking-tighter leading-tight mb-8">{active.title}</h3>
               <p className="text-sm text-slate-500 font-bold leading-relaxed">{active.description}</p>
            </div>
            

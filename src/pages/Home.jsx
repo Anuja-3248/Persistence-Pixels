@@ -35,10 +35,10 @@ const Home = () => {
     "Nature's power is unpredictable; our preparedness must be absolute.",
     "Unity and information are our strongest shields against devastation."
   ];
-  
+
   const [showContactInfo, setShowContactInfo] = React.useState(false);
   const dailyQuote = quotes[new Date().getDate() % quotes.length];
-  
+
   // High-Performance System Status (Real-time Simulation)
   const [systemNode, setSystemNode] = React.useState({
     accuracy: '99.8%',
@@ -59,14 +59,14 @@ const Home = () => {
   }, []);
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="relative min-h-screen w-full flex flex-col font-sans overflow-hidden"
     >
       {/* Immersive Persistent Background */}
-      <div 
+      <div
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat animate-ken-burns"
         style={{ backgroundImage: `url(${heroBg})` }}
       >
@@ -88,15 +88,15 @@ const Home = () => {
         <div className="hidden md:flex items-center gap-12 font-black text-xs uppercase tracking-[0.2em] text-white/70">
           <Link to="/" className="text-white hover:text-white transition-colors border-b-2 border-neon-blue pb-1">HOME</Link>
           <Link to="/dashboard" className="hover:text-white transition-colors">DASHBOARD</Link>
-          
-          <div 
+
+          <div
             className="relative"
             onMouseEnter={() => setShowContactInfo(true)}
             onMouseLeave={() => setShowContactInfo(false)}
           >
             <div className="hover:text-white transition-colors cursor-pointer">CONTACT</div>
             {showContactInfo && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                 className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 glass-dark p-6 rounded-2xl border border-white/10 shadow-2xl z-50 text-center"
               >
@@ -147,8 +147,8 @@ const Home = () => {
       {/* Main Hero Content */}
       <div className="relative z-10 h-screen w-full flex flex-col items-center justify-center text-center px-6">
         <motion.div
-           initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, delay: 0.2 }}
-           className="max-w-5xl"
+          initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, delay: 0.2 }}
+          className="max-w-5xl"
         >
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight mb-6 drop-shadow-2xl">
             Welcome to <br />
@@ -160,7 +160,7 @@ const Home = () => {
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
             className="flex flex-col items-center my-8 w-full max-w-3xl mx-auto"
           >
-            <p className="text-xl md:text-3xl text-white font-black italic font-serif leading-relaxed text-center drop-shadow-2xl">
+            <p className="text-xl md:text-3xl text-white font-black font-serif leading-relaxed text-center drop-shadow-2xl">
               "{dailyQuote}"
             </p>
           </motion.div>
@@ -170,7 +170,7 @@ const Home = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12"
           >
             <Link to="/donation" className="flex items-center gap-3 bg-neon-red/10 border border-neon-red/40 text-neon-red px-10 py-4 rounded-xl font-black text-sm hover:bg-neon-red/20 transition-all group uppercase tracking-widest">
-               DONATION <Heart className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              DONATION <Heart className="w-5 h-5 group-hover:scale-110 transition-transform" />
             </Link>
           </motion.div>
         </motion.div>
@@ -179,7 +179,7 @@ const Home = () => {
       {/* Humanitarian Quote Section */}
       <section className="relative z-10 py-16 bg-white text-center">
         <div className="max-w-4xl mx-auto space-y-4 px-6">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -188,7 +188,7 @@ const Home = () => {
             "Every calamity is just news, until it hits us." — Unknown
           </motion.h2>
           <div className="w-24 h-1 bg-neon-red mx-auto my-6" />
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -201,17 +201,17 @@ const Home = () => {
       </section>
 
       {/* Donation Banner Section */}
-      <section 
+      <section
         className="relative z-10 py-32 px-6 flex flex-col items-center justify-center text-center overflow-hidden"
-        style={{ 
-          backgroundImage: `url(${donationBg})`, 
-          backgroundSize: 'cover', 
-          backgroundPosition: 'center' 
+        style={{
+          backgroundImage: `url(${donationBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
         }}
       >
         <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -221,13 +221,13 @@ const Home = () => {
             Your Donation Changes Lives
           </h2>
           <div className="w-20 h-0.5 bg-white/40 mx-auto" />
-          <p className="text-white/90 text-lg md:text-xl font-medium leading-relaxed italic">
-            "In the face of a crisis often the difference between life and death is immediate access to relief items. 
+          <p className="text-white/90 text-lg md:text-xl font-medium leading-relaxed">
+            "In the face of a crisis often the difference between life and death is immediate access to relief items.
             We are a pioneer in delivering life saving relief supplies on time at scale. Help us to do more."
           </p>
           <div className="pt-6">
-            <Link 
-              to="/donation" 
+            <Link
+              to="/donation"
               className="inline-block px-12 py-4 border-2 border-white text-white font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300"
             >
               Donate Now
@@ -242,7 +242,7 @@ const Home = () => {
       {/* About Us Section */}
       <section id="about" className="relative z-10 py-28 px-12 bg-black text-center border-y border-white/5">
         <div className="max-w-4xl mx-auto space-y-12">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -250,8 +250,8 @@ const Home = () => {
           >
             About Us
           </motion.h2>
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -259,12 +259,12 @@ const Home = () => {
             className="space-y-8"
           >
             <p className="text-lg text-slate-300 leading-relaxed font-medium">
-              DisasterX is dedicated to fostering global resilience and safety. We combine 
-              cutting-edge situational awareness with traditional emergency protocols to 
+              DisasterX is dedicated to fostering global resilience and safety. We combine
+              cutting-edge situational awareness with traditional emergency protocols to
               create a transparent, secure, and accessible disaster management platform.
             </p>
             <p className="text-lg text-slate-300 leading-relaxed font-medium">
-              Our mission is to connect communities with critical resources and information, 
+              Our mission is to connect communities with critical resources and information,
               ensuring that every user is prepared, informed, and protected when it matters most.
             </p>
           </motion.div>
@@ -331,9 +331,9 @@ const Home = () => {
               <div className="space-y-3">
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Subscribe to our newsletter</p>
                 <div className="flex gap-2">
-                  <input 
-                    type="email" 
-                    placeholder="Enter your email" 
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
                     className="bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-lg text-xs w-full focus:outline-none focus:border-neon-blue transition-colors"
                   />
                   <button className="bg-slate-900 text-white px-4 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition-colors">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, Menu, Search, Globe, Moon, Radio, ShieldAlert, User, LogOut } from 'lucide-react';
+import { Bell, Menu, Search, Globe, Moon, Radio, ShieldAlert, User, LogOut, Command } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -17,82 +17,65 @@ const Navbar = ({ toggleSidebar }) => {
     localStorage.removeItem('disasterx_user');
     navigate('/');
   };
+
   return (
-    <header className="bg-white border-b border-neutral-200 sticky top-0 z-50 w-full">
-      <div className="flex items-center justify-between px-4 md:px-6 h-16">
-        {/* Logo & Mobile Menu */}
-        <div className="flex items-center gap-4">
+    <header className="bg-[#0c0c0e] border-b border-[#29292e] sticky top-0 z-[1002] w-full h-20 flex items-center shrink-0">
+      <div className="flex items-center justify-between w-full px-8">
+        
+        {/* Mobile Menu & Search (Left Group) */}
+        <div className="flex items-center gap-8 flex-1">
           <button 
             onClick={toggleSidebar}
-            className="lg:hidden text-neutral-500 hover:text-neutral-900 transition-colors"
+            className="text-slate-500 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/5"
           >
             <Menu className="w-6 h-6" />
           </button>
-          <div className="flex items-center gap-2">
-            <div className="bg-tertiary-500 p-1.5 rounded-md">
-              <ShieldAlert className="w-6 h-6 text-white" />
-            </div>
-            <span className="font-heading font-bold text-xl tracking-tight text-neutral-900 hidden sm:block">Aegis Response</span>
-          </div>
-        </div>
-
-        {/* Search Bar */}
-        <div className="hidden md:flex flex-1 max-w-sm mx-6">
-          <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+          
+          <div className="hidden xl:flex items-center gap-3 bg-[#1b1b1f] border border-[#29292e] rounded-xl px-4 py-2.5 w-full max-w-md group focus-within:border-[#4182f9] transition-all">
+            <Search className="w-4 h-4 text-slate-500" />
             <input 
               type="text" 
-              placeholder="Search locations, disasters, or teams..." 
-              className="w-full pl-10 pr-4 py-2 bg-neutral-100 border border-neutral-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+              placeholder="Query Sentinel Nodes..." 
+              className="bg-transparent border-none text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none w-full"
             />
           </div>
         </div>
 
-        {/* Right Actions */}
-        <div className="flex items-center gap-3 md:gap-4">
-          <div className="hidden sm:flex items-center gap-3">
-            <button className="text-neutral-500 hover:text-neutral-900 transition-colors" title="Language">
-              <Globe className="w-5 h-5" />
-            </button>
-            <button className="text-neutral-500 hover:text-neutral-900 transition-colors" title="Dark Mode">
-              <Moon className="w-5 h-5" />
-            </button>
-            <div className="relative">
-              <button className="text-neutral-500 hover:text-neutral-900 relative transition-colors">
-                <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-tertiary-500 rounded-full border-2 border-white"></span>
-              </button>
-            </div>
-          </div>
+        {/* Tactical Actions (Right Group) */}
+        <div className="flex items-center gap-10">
           
-          <div className="h-8 w-px bg-neutral-200 mx-2 hidden lg:block"></div>
+          {/* Quick Stats Overlay */}
+          <div className="hidden lg:flex items-center gap-6 font-black text-[10px] uppercase tracking-[0.2em] text-slate-500 border-r border-[#29292e] pr-10">
+             <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></div>
+                <span>Sync Stable</span>
+             </div>
+             <div className="flex items-center gap-2">
+                <Command className="w-3.5 h-3.5 text-blue-500" />
+                <span>Sector A-7</span>
+             </div>
+          </div>
 
-          <Link
-            to="/report"
-            className="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg shadow-red-500/30 hover:scale-105 active:scale-95 relative"
-          >
-            <span className="text-lg leading-none">⚠️</span>
-            <span className="hidden sm:inline">Report Disaster</span>
-          </Link>
-
-          <Link to="/profile" className="flex items-center gap-3 group ml-2">
-            <div className="text-right hidden lg:block">
-              <p className="text-[10px] font-black text-neutral-900 leading-none mb-1 uppercase tracking-tighter">{userData?.name || 'OPERATOR'}</p>
-              <p className="text-[9px] font-black text-neutral-400 uppercase tracking-widest">{userData?.node || 'SEC_NODE_7G'}</p>
+          <div className="flex items-center gap-8">
+            <div className="relative cursor-pointer group">
+              <Bell className="w-6 h-6 text-slate-500 group-hover:text-white transition-colors" />
+              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#0c0c0e]"></div>
             </div>
-            <div className="w-10 h-10 rounded-xl border border-neutral-200 overflow-hidden cursor-pointer group-hover:border-tertiary-500 transition-colors shadow-sm">
-              <img 
-                src={`https://ui-avatars.com/api/?name=${userData?.name || 'DR'}&background=6366f1&color=fff&bold=true`} 
-                alt="User" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </Link>
 
-          <button onClick={handleSignOut} className="lg:flex hidden bg-tertiary-500 hover:bg-tertiary-600 text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all items-center gap-2 shadow-sm shadow-tertiary-500/20 active:scale-95">
-            <LogOut className="w-3.5 h-3.5" />
-            <span>SIGN OUT</span>
-          </button>
+            <Link to="/profile" className="flex items-center gap-4 bg-[#1b1b1f] border border-[#29292e] px-5 py-2.5 rounded-xl hover:bg-white/5 transition-all group">
+               <div className="text-right hidden sm:block">
+                  <p className="text-[9px] font-black text-slate-500 mb-0.5 uppercase tracking-widest">{userData?.node || 'S_NODE_09'}</p>
+                  <p className="text-xs font-black text-white whitespace-nowrap uppercase tracking-tighter">{userData?.name || 'OPERATOR'}</p>
+               </div>
+               <div className="w-9 h-9 rounded-lg bg-slate-800 border border-white/5 flex items-center justify-center overflow-hidden transition-all group-hover:border-[#4182f9]">
+                  <User className="w-5 h-5 text-white" />
+               </div>
+            </Link>
+
+            <button onClick={handleSignOut} className="py-3 px-6 bg-red-600/10 border border-red-500/20 text-red-500 hover:bg-red-600 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-[0.3em] transition-all shadow-lg active:scale-95">
+               Log Out
+            </button>
+          </div>
         </div>
       </div>
     </header>

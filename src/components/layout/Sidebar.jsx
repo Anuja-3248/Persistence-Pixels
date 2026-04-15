@@ -1,44 +1,49 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  LayoutDashboard, Map, AlertTriangle, Package, Users, BarChart2, Settings, ShieldAlert, Radio
+  Map, AlertTriangle, Package, Users, BarChart2, Settings, ShieldAlert, Radio,
+  Activity, Info, LifeBuoy, ZapOff
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Sidebar = ({ isOpen }) => {
   const location = useLocation();
   
+  // Removed Dashboard, keeping Live Map as primary Hub
   const menuItems = [
-    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+    { name: 'Dashboard', path: '/dashboard', icon: ShieldAlert },
     { name: 'Live Map', path: '/map', icon: Map },
     { name: 'Alerts', path: '/sos', icon: AlertTriangle, badge: 12 },
     { name: 'Report Disaster', path: '/report', icon: Radio },
     { name: 'Resources', path: '/resources', icon: Package },
     { name: 'Rescue Teams', path: '/admin', icon: Users },
-    { name: 'Analytics', path: '/analytics', icon: BarChart2 },
     { name: 'Settings', path: '/settings', icon: Settings },
+  ];
+
+  const bottomItems = [
+    { name: 'Support', path: '/support', icon: LifeBuoy },
+    { name: 'System Status', path: '/status', icon: Info },
   ];
 
   return (
     <aside 
-      className={`fixed top-0 left-0 h-full bg-white border-r border-neutral-200 z-50 transition-all duration-300 ${isOpen ? 'w-64' : 'w-20'} flex flex-col`}
+      className={`fixed top-0 left-0 h-full bg-[#0c0c0e] border-r border-[#29292e] z-[2001] transition-all duration-300 ${isOpen ? 'w-64' : 'w-20'} flex flex-col font-sans`}
     >
-      <div className="h-16 flex items-center px-6 border-b border-neutral-200 shrink-0">
-        <div className="bg-tertiary-500 p-1.5 rounded-md min-w-[32px]">
-          <ShieldAlert className="w-5 h-5 text-white" />
+      {/* Brand Header */}
+      <div className="h-24 flex items-center px-6 border-b border-[#29292e] shrink-0">
+        <div className="bg-[#4182f9] p-2 rounded-lg flex items-center justify-center shadow-[0_0_15px_#4182f944]">
+          <ShieldAlert className="w-6 h-6 text-white" />
         </div>
         {isOpen && (
-          <motion.span 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="ml-3 font-heading font-bold text-lg tracking-tight text-neutral-900"
-          >
-            Aegis Response
-          </motion.span>
+          <div className="ml-3 flex flex-col">
+            <span className="font-black text-lg tracking-tight text-white leading-none uppercase">STRAT-COM</span>
+            <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.2em] mt-1.5 opacity-60">Tactical Control</span>
+          </div>
         )}
       </div>
 
-      <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+      {/* Main Navigation */}
+      <nav className="flex-1 px-3 py-8 space-y-2 overflow-y-auto no-scrollbar">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
@@ -47,47 +52,51 @@ const Sidebar = ({ isOpen }) => {
             <Link 
               key={item.path} 
               to={item.path}
-              className={`flex items-center justify-between px-3 py-2.5 rounded-md font-medium transition-colors ${
+              className={`flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-200 group ${
                 isActive 
-                  ? 'bg-primary-50 text-primary-700' 
-                  : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900'
+                  ? 'bg-[#1b1b1f] border border-[#29292e] text-white shadow-xl shadow-black/40' 
+                  : 'text-slate-500 hover:text-white hover:bg-white/5'
               }`}
             >
-              <div className="flex items-center gap-3">
-                <Icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-primary-600' : ''}`} />
+              <div className="flex items-center gap-4">
+                <Icon className={`w-5 h-5 shrink-0 transition-colors ${isActive ? 'text-[#4182f9]' : 'group-hover:text-white'}`} />
                 {isOpen && (
                   <motion.span 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="whitespace-nowrap"
+                    className="text-[11px] font-black uppercase tracking-widest whitespace-nowrap"
                   >
                     {item.name}
                   </motion.span>
                 )}
               </div>
-              {isOpen && item.badge && (
-                <span className="bg-tertiary-100 text-tertiary-700 py-0.5 px-2 rounded-full text-xs font-bold">
+              {isOpen && item.badge && !isActive && (
+                <span className="bg-[#4182f9]/20 text-[#4182f9] py-0.5 px-2 rounded-lg text-[9px] font-black uppercase tracking-widest">
                   {item.badge}
                 </span>
+              )}
+              {isActive && (
+                 <div className="w-1.5 h-1.5 rounded-full bg-[#4182f9] shadow-[0_0_10px_#4182f9]"></div>
               )}
             </Link>
           );
         })}
       </nav>
 
-      <div className="p-4 border-t border-neutral-200">
-        <div className={`bg-neutral-100 p-4 rounded-lg overflow-hidden ${!isOpen ? 'text-center p-2' : ''}`}>
-          {isOpen ? (
-            <>
-              <h4 className="font-heading font-semibold text-sm text-neutral-900 mb-1">System Status</h4>
-              <div className="flex items-center gap-2 text-sm text-green-600 font-medium">
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                Operational
-              </div>
-            </>
-          ) : (
-            <span className="w-3 h-3 bg-green-500 rounded-full inline-block animate-pulse"></span>
-          )}
+      {/* Bottom Actions */}
+      <div className="px-3 py-8 space-y-6 border-t border-[#29292e]">
+        <Link to="/sos" className="w-full flex items-center justify-center gap-2 py-4.5 bg-[#4182f9] hover:bg-white hover:text-[#0c0c0e] text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] transition-all shadow-xl active:scale-95 shadow-[#4182f9]/20">
+           <ZapOff className="w-4 h-4" />
+           {isOpen && "Immediate action"}
+        </Link>
+
+        <div className="space-y-2">
+           {bottomItems.map((item) => (
+             <Link key={item.name} to={item.path} className="flex items-center gap-4 px-4 py-3 text-slate-500 hover:text-white transition-colors group">
+                <item.icon className="w-4 h-4 group-hover:text-blue-400" />
+                {isOpen && <span className="text-[10px] font-black uppercase tracking-widest">{item.name}</span>}
+             </Link>
+           ))}
         </div>
       </div>
     </aside>

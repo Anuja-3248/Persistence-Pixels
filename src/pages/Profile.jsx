@@ -113,11 +113,11 @@ const Profile = () => {
                     value={editNameValue} 
                     onChange={(e) => setEditNameValue(e.target.value)} 
                     onKeyDown={(e) => e.key === 'Enter' && saveName()}
-                    className="text-3xl font-black text-white italic tracking-tighter mb-1 uppercase bg-white/10 border border-purple-500/50 rounded-xl px-4 py-1 text-center w-full max-w-[250px] outline-none"
+                    className="text-3xl font-black text-white tracking-tighter mb-1 uppercase bg-white/10 border border-purple-500/50 rounded-xl px-4 py-1 text-center w-full max-w-[250px] outline-none"
                     autoFocus
                   />
                 ) : (
-                  <h2 className="text-3xl font-black text-white italic tracking-tighter mb-1 uppercase">{user.name}</h2>
+                  <h2 className="text-3xl font-black text-white tracking-tighter mb-1 uppercase">{user.name}</h2>
                 )}
                 
                 <div className="flex items-center gap-2 px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full mb-6 mt-2">
@@ -179,7 +179,7 @@ const Profile = () => {
                   <div className={`w-12 h-12 rounded-2xl ${stat.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                     {React.cloneElement(stat.icon, { className: stat.color })}
                   </div>
-                  <h3 className="text-4xl font-black text-white italic mb-1 uppercase tracking-tighter">{stat.value}</h3>
+                  <h3 className="text-4xl font-black text-white mb-1 uppercase tracking-tighter">{stat.value}</h3>
                   <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest">{stat.label}</p>
                 </motion.div>
               ))}
@@ -189,7 +189,7 @@ const Profile = () => {
             <div className="bg-[#131127] border border-white/5 rounded-[40px] p-10 md:p-14 shadow-2xl relative overflow-hidden">
                <div className="flex items-center justify-between mb-12">
                   <div>
-                    <h3 className="text-2xl font-black text-white italic uppercase tracking-tight">Deployment History</h3>
+                    <h3 className="text-2xl font-black text-white uppercase tracking-tight">Deployment History</h3>
                     <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Operational records for current quarter</p>
                   </div>
                   <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center">
@@ -206,7 +206,7 @@ const Profile = () => {
                     <div key={idx} className="relative pl-10 border-l border-white/5 flex items-start justify-between group">
                        <div className="absolute left-[-5px] top-0 w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.5)] group-hover:scale-150 transition-transform" />
                        <div className="space-y-1">
-                          <h4 className="font-bold text-lg text-white group-hover:text-purple-400 transition-colors uppercase italic tracking-tight">{log.event}</h4>
+                          <h4 className="font-bold text-lg text-white group-hover:text-purple-400 transition-colors uppercase tracking-tight">{log.event}</h4>
                           <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">{log.sector} // <span className="opacity-60">{log.date}</span></p>
                        </div>
                        <span className={`text-[9px] font-black uppercase px-3 py-1 rounded-lg border ${log.status === 'Active' ? 'bg-amber-500/10 border-amber-500 text-amber-500 animate-pulse' : 'bg-emerald-500/10 border-emerald-500 text-emerald-500'}`}>

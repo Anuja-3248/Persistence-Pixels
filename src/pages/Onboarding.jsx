@@ -91,7 +91,7 @@ const Onboarding = () => {
               variants={containerVariants}
               initial="hidden"
               animate="visible"
-              className="text-5xl md:text-7xl font-black italic tracking-tighter text-white flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6"
+              className="text-5xl md:text-7xl font-black tracking-tighter text-white flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6"
             >
               <div className="flex">
                 {"WELCOME".split("").map((char, i) => (

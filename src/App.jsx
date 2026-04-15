@@ -24,9 +24,17 @@ function App() {
 
   const isAuthPage = location.pathname === '/auth';
   const isOnboardingPage = location.pathname === '/onboarding';
+  const isDashboardPage = location.pathname === '/dashboard';
+  const isMapPage = location.pathname === '/map';
+  const isSOSPage = location.pathname === '/sos';
+  const isReportPage = location.pathname === '/report';
+  const isResourcesPage = location.pathname === '/resources';
+  const isAdminPage = location.pathname === '/admin';
   const isDonationPage = location.pathname === '/donation';
   const isProfilePage = location.pathname === '/profile';
   const isHomePage = location.pathname === '/';
+
+  const hideLayout = isHomePage || isDashboardPage || isMapPage || isSOSPage || isReportPage || isResourcesPage || isAdminPage || isDonationPage;
 
   return (
     <>
@@ -58,10 +66,12 @@ function App() {
             transition={{ duration: 0.8 }}
             className="min-h-screen bg-background-50 text-neutral-900 flex overflow-hidden font-body"
           >
-            {!isHomePage && <Sidebar isOpen={sidebarOpen} />}
+            {!hideLayout && <Sidebar isOpen={sidebarOpen} />}
             
-            <div className={`flex-1 flex flex-col transition-all duration-300 ${isHomePage ? 'ml-0' : (sidebarOpen ? 'ml-64' : 'ml-20')}`}>
-              {!isHomePage && <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />}
+            <div className={`flex-1 flex flex-col transition-all duration-300 ${hideLayout ? 'ml-0' : (sidebarOpen ? 'ml-64' : 'ml-20')}`}>
+              {!hideLayout && (
+                <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+              )}
               
               <main className={`flex-1 overflow-y-auto ${isHomePage ? 'mt-0' : 'mt-0'} scroll-smooth`}>
                 <AnimatePresence mode="wait">

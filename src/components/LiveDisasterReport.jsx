@@ -63,7 +63,7 @@ const LiveDisasterReport = ({ onReportSubmit }) => {
         <div className="bg-slate-900 rounded-[40px] p-10 text-white relative overflow-hidden group">
            <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 blur-3xl rounded-full" />
            <Shield className="w-12 h-12 text-red-500 mb-8" />
-           <h3 className="text-2xl font-black uppercase tracking-tighter italic mb-4">Submission Protocol</h3>
+           <h3 className="text-2xl font-black uppercase tracking-tighter mb-4">Submission Protocol</h3>
            <p className="text-slate-400 text-sm font-medium leading-relaxed">
              Ensure your location is accurate. Upload images if possible to help units assess the hazard severity on approach.
            </p>
@@ -172,7 +172,7 @@ const LiveDisasterReport = ({ onReportSubmit }) => {
            <div className="pt-4">
               <button 
                 type="submit"
-                className="w-full py-6 bg-red-600 text-white rounded-[32px] font-black uppercase tracking-[0.3em] italic text-sm hover:bg-red-700 transition-all shadow-2xl shadow-red-200 flex items-center justify-center gap-4 active:scale-[0.98]"
+                className="w-full py-6 bg-red-600 text-white rounded-[32px] font-black uppercase tracking-[0.3em] text-sm hover:bg-red-700 transition-all shadow-2xl shadow-red-200 flex items-center justify-center gap-4 active:scale-[0.98]"
               >
                  <Send className="w-5 h-5" /> 
                  Broadcast Emergency Alert
