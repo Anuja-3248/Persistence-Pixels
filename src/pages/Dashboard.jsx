@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Shield, Map as MapIcon, 
   AlertCircle, ChevronRight, BookOpen, 
   Radio, Settings, MessageSquare,
-  LayoutDashboard, Bell, Navigation, Moon
+  LayoutDashboard, Bell, Navigation, Moon, Activity
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -67,20 +67,40 @@ const Dashboard = () => {
     }
   ];
 
+  // Mouse tracking for Cursor Glow
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  
+  useEffect(() => {
+    const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-blue-500/30 overflow-x-hidden">
+    <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-blue-500/30 overflow-x-hidden relative">
+      
+      {/* --- CURSOR FOLLOW GLOW --- */}
+      <div 
+        className="pointer-events-none fixed inset-0 z-0 transition-opacity duration-300"
+        style={{
+          background: `radial-gradient(800px circle at ${mousePos.x}px ${mousePos.y}px, rgba(59,130,246,0.06), transparent 40%)`
+        }}
+      />
+
+      {/* --- TACTICAL GRID BACKGROUND --- */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none z-0" />
       
       {/* PROFILE TAB (Top Right) */}
       <div className="absolute top-8 right-8 z-[50]">
-        <div className="flex items-center gap-3 bg-[#11111a]/80 border border-white/10 pl-4 pr-2 py-1.5 rounded-2xl hover:bg-white/10 transition-all cursor-pointer group backdrop-blur-md">
+        <Link to="/profile" className="flex items-center gap-4 bg-[#11111a]/80 border border-white/10 pl-5 pr-3 py-2.5 rounded-3xl hover:bg-white/10 transition-all cursor-pointer group backdrop-blur-md hover:scale-105 active:scale-95 shadow-xl">
           <div className="text-right">
-            <p className="text-[10px] font-bold text-gray-500 uppercase leading-none mb-1">Anuja Pawar</p>
-            <p className="text-[9px] font-black text-emerald-500 uppercase leading-none">Online</p>
+            <p className="text-sm font-bold text-gray-400 uppercase leading-none mb-1.5 group-hover:text-white transition-colors">Anuja Pawar</p>
+            <p className="text-[11px] font-black text-neon-green uppercase tracking-widest leading-none">Status: Online</p>
           </div>
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-sm shadow-lg shadow-blue-500/20">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 border border-blue-400/50 flex items-center justify-center font-black text-2xl shadow-lg shadow-blue-500/30 text-white">
             A
           </div>
-        </div>
+        </Link>
       </div>
 
       <main className="max-w-7xl mx-auto px-8 py-20 relative">
@@ -89,7 +109,7 @@ const Dashboard = () => {
         <div className="absolute bottom-0 -right-20 w-96 h-96 bg-purple-500/5 blur-[120px] rounded-full pointer-events-none" />
 
         {/* --- HEADER --- */}
-        <header className="mb-20">
+        <header className="mb-10 relative z-10">
           <div className="flex items-center gap-4 mb-3">
             <div className="p-2 bg-white/5 rounded-xl border border-white/10">
                <LayoutDashboard className="w-8 h-8 text-white" />
@@ -98,6 +118,22 @@ const Dashboard = () => {
           </div>
           <p className="text-gray-500 text-lg max-w-2xl font-medium">Select a tool below to coordinate disaster response and manage mission-critical intelligence.</p>
         </header>
+
+        {/* --- LIVE TICKER TAPE --- */}
+        <div className="w-full bg-red-900/10 border-y border-red-500/20 py-3 mb-16 overflow-hidden flex relative z-10 backdrop-blur-sm rounded-xl">
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#050505] to-transparent z-10 pointer-events-none" />
+          
+          <div className="whitespace-nowrap flex animate-[ticker_20s_linear_infinite] px-4 gap-12">
+            <span className="text-red-500 font-black text-xs tracking-[0.2em] uppercase flex items-center"><AlertCircle className="w-4 h-4 mr-2"/> TROPICAL STORM DANGER IN PACIFIC SECTOR</span>
+            <span className="text-orange-500 font-black text-xs tracking-[0.2em] uppercase flex items-center"><Activity className="w-4 h-4 mr-2"/> SEISMIC ACTIVITY 4.2 MAGNITUDE DETECTED REGION 7</span>
+            <span className="text-neon-blue font-black text-xs tracking-[0.2em] uppercase flex items-center"><Shield className="w-4 h-4 mr-2"/> ALL SYSTEMS SECURE - AWAITING PROTOCOL TRIGGER</span>
+            {/* Duplicates for infinite scrolling seamless loop */}
+            <span className="text-red-500 font-black text-xs tracking-[0.2em] uppercase flex items-center"><AlertCircle className="w-4 h-4 mr-2"/> TROPICAL STORM DANGER IN PACIFIC SECTOR</span>
+            <span className="text-orange-500 font-black text-xs tracking-[0.2em] uppercase flex items-center"><Activity className="w-4 h-4 mr-2"/> SEISMIC ACTIVITY 4.2 MAGNITUDE DETECTED REGION 7</span>
+          </div>
+
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#050505] to-transparent z-10 pointer-events-none" />
+        </div>
 
         {/* --- FEATURE BOXES GRID --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -181,6 +217,11 @@ const Dashboard = () => {
 
         .no-scrollbar::-webkit-scrollbar {
           display: none;
+        }
+
+        @keyframes ticker {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
       `}</style>
     </div>
