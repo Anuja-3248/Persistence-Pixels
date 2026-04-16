@@ -234,10 +234,10 @@ const SOS = () => {
 
   // Triage Options
   const triageOptions = [
-    { id: 'MEDICAL', label: 'MEDICAL', icon: Heart, color: 'text-pink-500', bg: 'bg-pink-500/10', border: 'border-pink-500/30' },
-    { id: 'TRAPPED', label: 'TRAPPED', icon: Activity, color: 'text-orange-500', bg: 'bg-orange-500/10', border: 'border-orange-500/30' },
-    { id: 'FIRE', label: 'FIRE', icon: Flame, color: 'text-red-500', bg: 'bg-red-500/10', border: 'border-red-500/30' },
-    { id: 'GENERAL', label: 'GENERAL', icon: AlertOctagon, color: 'text-slate-400', bg: 'bg-slate-400/10', border: 'border-slate-400/30' },
+    { id: 'MEDICAL', label: 'MEDICAL', icon: Heart, color: 'text-pink-500', bg: 'bg-pink-500/10', border: 'border-pink-500/50' },
+    { id: 'TRAPPED', label: 'TRAPPED', icon: Activity, color: 'text-orange-500', bg: 'bg-orange-500/10', border: 'border-orange-500/50' },
+    { id: 'FIRE', label: 'FIRE', icon: Flame, color: 'text-red-500', bg: 'bg-red-500/10', border: 'border-red-500/50' },
+    { id: 'GENERAL', label: 'GENERAL', icon: AlertOctagon, color: 'text-white', bg: 'bg-slate-400/10', border: 'border-slate-400/50' },
   ];
 
   return (
@@ -255,7 +255,7 @@ const SOS = () => {
           >
             <div className="bg-[#0b101e] border border-neon-blue/30 shadow-[0_0_100px_rgba(0,212,255,0.15)] rounded-[40px] w-full max-w-sm p-8 flex flex-col items-center relative overflow-hidden">
               {/* background pulse */}
-              {callState === 'connected' && <div className="absolute inset-0 bg-neon-blue/5 animate-[pulse_1s_ease-in-out_infinite] rounded-[40px]" />}
+              {callState === 'connected' && <div className="absolute inset-0 bg-neon-blue/5 animate-[pulse_1s_ease-in-out_infinite] rounded-[40px] pointer-events-none" />}
               
               <div className="w-24 h-24 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6 relative">
                  {callState === 'ringing' ? <Loader2 className="w-10 h-10 text-slate-400 animate-spin" /> : <Radio className="w-10 h-10 text-neon-blue animate-ping opacity-80" />}
@@ -275,7 +275,7 @@ const SOS = () => {
               
               <button 
                 onClick={endVoiceCall} 
-                className="w-full h-16 rounded-full bg-red-500/20 border border-red-500/50 hover:bg-red-500/40 text-red-500 font-black uppercase tracking-widest transition-all mt-auto flex items-center justify-center gap-3"
+                className="w-full h-16 rounded-full bg-red-500/20 border border-red-500/50 hover:bg-red-500/40 text-red-500 font-black uppercase tracking-widest transition-all mt-auto flex items-center justify-center gap-3 relative z-50 cursor-pointer"
               >
                 <Phone className="w-5 h-5 rotate-[135deg]" /> 
                 DISCONNECT
@@ -297,7 +297,7 @@ const SOS = () => {
             {/* Header & Silent Mode */}
             <div className="w-full flex items-start justify-between">
               <div className="flex-1 text-center pl-12">
-                <h2 className={`text-6xl font-black mb-2 uppercase tracking-tighter ${silentMode ? 'text-red-900/80' : 'text-neon-red animate-pulse'}`}>
+                <h2 className={`text-6xl font-black mb-2 uppercase tracking-tighter ${silentMode ? 'text-red-900/80' : 'text-neon-red shadow-[0_0_20px_rgba(255,61,104,0.3)]'}`}>
                   Emergency Channel
                 </h2>
                 <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Direct connection to response headquarters</p>
@@ -319,10 +319,10 @@ const SOS = () => {
                 <button
                   key={t.id}
                   onClick={() => setSelectedTriage(t.id)}
-                  className={`flex-1 min-w-[120px] flex flex-col items-center gap-3 p-4 rounded-3xl border transition-all ${selectedTriage === t.id ? `${t.bg} ${t.border} ${t.color} scale-105` : 'bg-white/5 border-white/5 text-slate-500 hover:bg-white/10'}`}
+                  className={`flex-1 min-w-[120px] flex flex-col items-center gap-3 p-4 rounded-3xl border-[3px] transition-all ${selectedTriage === t.id ? `${t.bg} ${t.border} ${t.color} scale-105 shadow-lg shadow-white/10` : 'bg-white/5 border-white/40 text-white hover:bg-white/10 hover:border-white/60'}`}
                 >
-                  <t.icon className="w-8 h-8" />
-                  <span className="text-[10px] font-black uppercase tracking-widest">{t.label}</span>
+                  <t.icon className={`w-10 h-10 ${selectedTriage === t.id ? '' : 'text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]'}`} />
+                  <span className="text-xs font-black uppercase tracking-[0.2em] text-white drop-shadow-md">{t.label}</span>
                 </button>
               ))}
             </div>
@@ -385,7 +385,7 @@ const SOS = () => {
 
             {/* Info Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
-               <div className="glass-dark p-8 rounded-[32px] border border-white/20 shadow-2xl space-y-6">
+               <div className="glass-dark p-8 rounded-[32px] border-2 border-white/30 shadow-2xl space-y-6">
                   <div className="flex items-center gap-4 text-neon-blue">
                      <div className={`p-4 rounded-2xl ${location.lat ? 'bg-neon-blue/20' : 'bg-white/5'} border border-white/10`}>
                         <MapPin className={`w-8 h-8 ${!location.lat && 'animate-pulse text-slate-600'}`} />
@@ -404,7 +404,7 @@ const SOS = () => {
                   </div>
                </div>
 
-               <div className="glass-dark p-8 rounded-[32px] border border-white/20 shadow-2xl flex flex-col justify-center gap-4 relative overflow-hidden">
+               <div className="glass-dark p-8 rounded-[32px] border-2 border-white/30 shadow-2xl flex flex-col justify-center gap-4 relative overflow-hidden">
                   {/* Hidden file input for native camera */}
                   <input 
                      type="file" 
@@ -437,19 +437,6 @@ const SOS = () => {
                </div>
             </div>
 
-            {/* Message Box */}
-            <div className="w-full max-w-4xl glass-dark p-8 rounded-[32px] border border-white/20 shadow-2xl">
-               <div className="flex items-center justify-between mb-5">
-                  <span className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Situational Briefing (Optional)</span>
-                  <span className="text-xs font-black uppercase tracking-[0.2em] text-neon-red">Secure Line</span>
-               </div>
-               <textarea 
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Describe your situation... (e.g. medical emergency, trapped)" 
-                  className="w-full h-32 bg-white/5 border border-white/10 rounded-2xl p-6 text-base font-medium focus:outline-none focus:border-neon-red/50 focus:ring-1 focus:ring-neon-red/30 transition-all resize-none placeholder:text-slate-600 text-white"
-               />
-            </div>
           </motion.div>
         ) : (
           <motion.div 
@@ -490,35 +477,6 @@ const SOS = () => {
         )}
       </AnimatePresence>
 
-      <div className="mt-20 w-full max-w-4xl">
-         <div className="flex items-center justify-between mb-6 px-2 text-left">
-            <h3 className="text-sm font-black uppercase tracking-[0.3em] text-neon-blue flex items-center gap-3">
-               <span className="relative flex h-3 w-3 text-left">
-                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${silentMode ? 'bg-red-500' : 'bg-neon-blue'}`}></span>
-                  <span className={`relative inline-flex rounded-full h-3 w-3 ${silentMode ? 'bg-red-500' : 'bg-neon-blue'}`}></span>
-               </span>
-               Live Emergency Log
-            </h3>
-            <span className="text-xs text-slate-600 font-bold uppercase tracking-[0.2em]">Protocol 9.4 Active</span>
-         </div>
-         
-         <div className="glass-dark border border-white/5 rounded-[32px] p-8 space-y-5 overflow-hidden relative">
-            {[
-               { time: new Date().toLocaleTimeString(), event: 'Satellite link secured (GSAT-29)', status: 'online' },
-               { time: status === 'idle' && !location.lat ? '-- : --' : new Date().toLocaleTimeString(), event: location.lat ? 'Positioning data verified' : 'Scanning for GPS signal...', status: location.lat ? 'verified' : 'waiting' },
-               { time: location.lat ? new Date().toLocaleTimeString() : '-- : --', event: 'Local emergency services on standby', status: 'ready' }
-            ].map((log, i) => (
-               <div key={i} className="flex items-center gap-6 text-xs font-mono text-left">
-                  <span className="text-slate-600">[{log.time}]</span>
-                  <span className="text-slate-300 uppercase tracking-widest flex-1 truncate">{log.event}</span>
-                  <span className={`px-3 py-1 rounded bg-${log.status === 'online' || log.status === 'verified' ? 'neon-blue' : (log.status === 'ready' ? 'neon-green' : 'white/10')} text-${log.status === 'online' || log.status === 'verified' ? 'neon-blue' : (log.status === 'ready' ? 'neon-green' : 'slate-500')} font-bold uppercase tracking-widest`}>
-                     {log.status}
-                  </span>
-               </div>
-            ))}
-            <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0C0B1B] pointer-events-none" />
-         </div>
-      </div>
     </motion.div>
   );
 };

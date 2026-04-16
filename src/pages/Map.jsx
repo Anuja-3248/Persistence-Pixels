@@ -404,12 +404,12 @@ const LiveMap = () => {
             eventHandlers={{ click: () => { setSelected(inc); setFlyTo(inc.pos); } }}
           >
             <Popup className="dark-popup">
-              <div className="p-3 w-56 bg-[#0d0d18] border border-white/20 rounded-xl text-white">
-                <p className="text-[9px] font-black uppercase tracking-widest mb-1" style={{ color: inc.color }}>
+              <div className="p-4 w-64 bg-[#0d0d18] border border-white/20 rounded-xl text-white">
+                <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: inc.color }}>
                   {inc.type}
                 </p>
-                <p className="text-sm font-bold leading-snug mb-2">{inc.title}</p>
-                <p className="text-[9px] text-slate-400 font-medium">{inc.time}</p>
+                <p className="text-base font-bold leading-snug mb-3">{inc.title}</p>
+                <p className="text-xs text-slate-400 font-medium">{inc.time}</p>
               </div>
             </Popup>
           </Marker>

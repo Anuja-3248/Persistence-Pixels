@@ -145,8 +145,14 @@ const Dashboard = () => {
               transition={{ delay: idx * 0.1, duration: 0.6, ease: "easeOut" }}
               className="relative"
             >
-              <Link
+                <Link
                 to={box.path}
+                onClick={(e) => {
+                  if (box.id === 'chatbot') {
+                    e.preventDefault();
+                    window.dispatchEvent(new Event('open-kavach'));
+                  }
+                }}
                 className="block h-full bg-[#0d0d12] border-2 rounded-[40px] p-10 flex flex-col items-start transition-all hover:translate-y-[-10px] group relative overflow-hidden"
                 style={{ 
                    borderColor: `${box.color}AA`,
