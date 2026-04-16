@@ -152,8 +152,10 @@ const Home = () => {
         >
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight mb-6 drop-shadow-2xl">
             Welcome to <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/70">Disaster Management</span> <br />
-            <span className="text-neon-blue font-extrabold tracking-widest text-3xl md:text-5xl lg:text-6xl uppercase mt-2 block">System</span>
+            <span className="uppercase tracking-widest block mt-4 text-5xl md:text-7xl lg:text-8xl">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/70">Disaster</span>
+              <span className="text-neon-blue font-black">X</span>
+            </span>
           </h1>
 
           <motion.div
