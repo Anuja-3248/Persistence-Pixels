@@ -47,86 +47,56 @@ const ReportDisaster = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-
-      {/* ── PAGE HERO ── */}
-      <div className="relative bg-slate-900 overflow-hidden">
-        {/* Animated background glow */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-500 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-orange-500 rounded-full blur-3xl" />
-        </div>
-
-        <div className="relative max-w-[1700px] mx-auto px-6 md:px-12 py-12 md:py-16">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-            
-            {/* Left: Title */}
-            <div className="flex items-center gap-5">
-              <div className="relative">
-                <div className="p-4 bg-gradient-to-br from-red-500 to-orange-500 rounded-3xl shadow-xl shadow-red-900/40">
-                  <Radio className="w-7 h-7 text-white" />
-                </div>
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-400 border-2 border-slate-900 animate-pulse" />
+    <div className="min-h-screen bg-surface font-body text-on-surface">
+      <div className="flex flex-col min-h-screen">
+        {/* Main Content Area */}
+        <main className="flex-1 p-6 md:p-10 lg:p-14 max-w-[1450px] mx-auto w-full">
+          {/* Header Section */}
+          <header className="mb-14 text-left relative">
+            <div className="flex items-center gap-3 mb-6">
+              <span className="px-4 py-1.5 bg-blue-600/10 text-blue-700 rounded-full text-[11px] font-black uppercase tracking-[0.2em] border border-blue-600/20">Protocol 4-Alpha</span>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600/10 text-red-700 rounded-full border border-red-600/20">
+                <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                <span className="text-[10px] font-black uppercase tracking-wider">Live Response System</span>
               </div>
-              <div>
-                <div className="flex items-center gap-3 mb-1">
-                  <span className="px-3 py-1 bg-red-500/20 border border-red-500/30 text-red-400 text-[10px] font-black uppercase tracking-widest rounded-full flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-                    Live System
-                  </span>
-                </div>
-                <h1 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight">
-                  Report <span className="text-red-400">Disaster</span>
+            </div>
+            
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+              <div className="max-w-3xl">
+                <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 mb-6 drop-shadow-sm">
+                  Report Emergency <span className="text-blue-700">Incident</span>
                 </h1>
-                <p className="text-slate-400 text-sm font-medium mt-1 max-w-md">
-                  Submit real-time field incident reports. Your report goes directly to emergency response teams.
+                <p className="text-slate-500 max-w-2xl text-xl leading-relaxed font-medium">
+                  Provide critical details to help our dispatch teams coordinate an immediate response. Your information saves lives.
                 </p>
               </div>
+              
+              {/* Optional Hero Stats or Elements could go here */}
             </div>
+          </header>
 
-            {/* Right: Quick stats */}
-            <div className="flex gap-4 flex-wrap">
-              <div className="px-5 py-3 bg-white/5 border border-white/10 rounded-2xl text-center">
-                <p className="text-2xl font-extrabold text-white">{reportCount}</p>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Your Reports</p>
+          {/* ── EMERGENCY NOTICE BANNER ── */}
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-red-50 border-l-4 border-red-600 rounded-2xl mb-12 shadow-sm overflow-hidden"
+          >
+            <div className="px-8 py-5 flex items-center gap-5">
+              <div className="bg-red-600 p-2.5 rounded-xl shadow-lg shadow-red-600/20">
+                <AlertTriangle className="w-5 h-5 text-white" />
               </div>
-              <div className="px-5 py-3 bg-white/5 border border-white/10 rounded-2xl text-center">
-                <p className="text-2xl font-extrabold text-emerald-400">Active</p>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">System Status</p>
-              </div>
-              <div className="px-5 py-3 bg-white/5 border border-white/10 rounded-2xl text-center">
-                <p className="text-2xl font-extrabold text-blue-400">&lt;2m</p>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Avg Response</p>
+              <div>
+                <p className="text-sm font-black text-red-900 uppercase tracking-widest mb-0.5">Emergency? Call 112 First</p>
+                <p className="text-red-700 font-bold text-sm">Then submit this report for coordinated professional response.</p>
               </div>
             </div>
+          </motion.div>
+
+          {/* ── FORM CONTENT ── */}
+          <div className="w-full">
+            <LiveDisasterReport onReportSubmit={handleReportSubmit} />
           </div>
-
-          {/* Stats row */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10">
-            {[
-              { icon: AlertTriangle, label: 'Critical Alerts Active', value: '3', color: 'text-red-500', bg: 'bg-red-50' },
-              { icon: Users,         label: 'Response Teams On Duty', value: '24', color: 'text-blue-500', bg: 'bg-blue-50' },
-              { icon: Clock,         label: 'Reports Last 24 Hours',  value: '47', color: 'text-orange-500', bg: 'bg-orange-50' },
-            ].map(s => (
-              <StatCard key={s.label} {...s} />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── EMERGENCY NOTICE BANNER ── */}
-      <div className="bg-amber-50 border-b border-amber-200">
-        <div className="max-w-[1700px] mx-auto px-6 md:px-12 py-3 flex items-center gap-3">
-          <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
-          <p className="text-xs font-bold text-amber-800 uppercase tracking-wide">
-            Emergency? <span className="text-amber-900">Call 112 first</span> — then submit this report for coordinated response.
-          </p>
-        </div>
-      </div>
-
-      {/* ── FORM CONTENT ── */}
-      <div className="max-w-[1700px] mx-auto px-6 md:px-12 py-10">
-        <LiveDisasterReport onReportSubmit={handleReportSubmit} />
+        </main>
       </div>
     </div>
   );

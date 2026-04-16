@@ -90,11 +90,66 @@
   }
 }
 
-@keyframes pulse-soft {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+/* Material Symbols Fix */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined', sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+@keyframes radar-pulse {
+  0% { transform: scale(0.5); opacity: 0.8; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+@keyframes radar-intercept {
+  0% { transform: scale(0.2); opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+.radar-ring {
+  position: absolute;
+  @apply border-2 border-primary-600 rounded-full animate-[radar-pulse_3s_infinite];
+  pointer-events: none;
+}
+
+.radar-secondary {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  @apply border-2 border-red-600 rounded-full animate-[radar-intercept_2s_infinite];
+  pointer-events: none;
+}
+
+.radar-ring:nth-child(2) { animation-delay: 0.7s; }
+.radar-ring:nth-child(3) { animation-delay: 1.4s; }
+
+.tonal-shift { 
+  background-color: rgba(246, 243, 242, 0.5); 
 }
 
 .animate-pulse-soft {
   animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }

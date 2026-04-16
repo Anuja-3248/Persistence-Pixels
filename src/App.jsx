@@ -15,12 +15,35 @@ import Onboarding from './pages/Onboarding';
 import Donation from './pages/Donation';
 import Profile from './pages/Profile';
 import ReportDisaster from './pages/ReportDisaster';
+import Settings from './pages/Settings';
+import Tracking from './pages/Tracking';
 import { AnimatePresence, motion } from 'framer-motion';
 
 function App() {
   const [showSplash, setShowSplash] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [theme, setTheme] = useState(localStorage.getItem('disasterx_theme') || 'light');
   const location = useLocation();
+
+  React.useEffect(() => {
+    const applyTheme = (currentTheme) => {
+      if (currentTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    };
+
+    applyTheme(theme);
+
+    const handleThemeChange = (e) => {
+      setTheme(e.detail);
+      applyTheme(e.detail);
+    };
+
+    window.addEventListener('disasterx-theme-change', handleThemeChange);
+    return () => window.removeEventListener('disasterx-theme-change', handleThemeChange);
+  }, [theme]);
 
   const isAuthPage = location.pathname === '/auth';
   const isOnboardingPage = location.pathname === '/onboarding';
@@ -32,6 +55,7 @@ function App() {
   const isAdminPage = location.pathname === '/admin';
   const isDonationPage = location.pathname === '/donation';
   const isProfilePage = location.pathname === '/profile';
+  const isSettingsPage = location.pathname === '/settings';
   const isHomePage = location.pathname === '/';
 
   const hideLayout = isHomePage || isDashboardPage || isMapPage || isSOSPage || isReportPage || isResourcesPage || isAdminPage || isDonationPage;
@@ -43,19 +67,20 @@ function App() {
           <motion.div key="splash" exit={{ opacity: 0, scale: 1.05 }} transition={{ duration: 0.6 }}>
             <SplashScreen onComplete={() => setShowSplash(false)} />
           </motion.div>
-        ) : isAuthPage || isOnboardingPage || isDonationPage || isProfilePage ? (
+        ) : isAuthPage || isOnboardingPage || isDonationPage || isProfilePage || isSettingsPage ? (
           <motion.div 
             key="auth" 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             transition={{ duration: 0.8 }}
-            className="min-h-screen bg-[#0C0B1B] text-slate-100 font-body"
+            className="min-h-screen bg-white text-slate-900 font-body light"
           >
             <Routes location={location} key={location.pathname}>
               <Route path="/auth" element={<Auth />} />
               <Route path="/onboarding" element={<Onboarding />} />
               <Route path="/donation" element={<Donation />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/settings" element={<Settings />} />
             </Routes>
           </motion.div>
         ) : (
@@ -64,7 +89,7 @@ function App() {
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             transition={{ duration: 0.8 }}
-            className="min-h-screen bg-background-50 text-neutral-900 flex overflow-hidden font-body"
+            className={`min-h-screen bg-background-50 dark:bg-dark-bg text-neutral-900 dark:text-slate-100 flex overflow-hidden font-body transition-colors duration-500 ${theme === 'dark' ? 'dark' : ''}`}
           >
             {!hideLayout && <Sidebar isOpen={sidebarOpen} />}
             
@@ -83,6 +108,7 @@ function App() {
                     <Route path="/resources" element={<Resources />} />
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/report" element={<ReportDisaster />} />
+                    <Route path="/tracking" element={<Tracking />} />
                   </Routes>
                 </AnimatePresence>
               </main>

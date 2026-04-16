@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   AlertTriangle, MapPin, Camera, Send, CheckCircle, 
@@ -9,10 +10,11 @@ import { db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const SOS = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [isSending, setIsSending] = useState(false);
   const [status, setStatus] = useState('idle'); // idle, locating, sending, error
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(() => localStorage.getItem('disasterx_sos_message') || '');
   const [location, setLocation] = useState({ lat: null, lng: null, address: 'Detecting position...' });
   const [eta, setEta] = useState(null);
   const [error, setError] = useState(null);
@@ -130,7 +132,16 @@ const SOS = () => {
 
       setIsSending(false);
       setStatus('idle');
-      setStep(2);
+      navigate('/tracking', { 
+        state: { 
+          id: alertData.id, 
+          type: 'SOS SIGNAL',
+          severity: 'CRITICAL',
+          message: alertData.message || 'No additional details.',
+          coords: [lat, lng],
+          location: 'Detected Position'
+        } 
+      });
     } catch (err) {
       console.error("Transmission Error: ", err);
       setStatus('error');
