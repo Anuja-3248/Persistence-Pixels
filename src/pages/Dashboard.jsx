@@ -53,7 +53,7 @@ const Dashboard = () => {
       description: 'Manage tactical preferences, responder credentials, and system configuration.',
       icon: Settings,
       color: '#A855F7', // Purple
-      path: '/admin',
+      path: '/settings',
       gradient: 'from-[#A855F7] to-[#7E22CE]'
     },
     {

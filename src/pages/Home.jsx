@@ -66,12 +66,16 @@ const Home = () => {
       className="relative min-h-screen w-full flex flex-col font-sans overflow-hidden"
     >
       {/* Immersive Persistent Background */}
-      <div
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat animate-ken-burns"
-        style={{ backgroundImage: `url(${heroBg})` }}
-      >
+      <div className="fixed inset-0 z-0 overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-walk-forward transform-origin-bottom"
+          style={{ backgroundImage: `url(${heroBg})` }}
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/90 via-[#0f172a]/20 to-[#0f172a]/95" />
-        <div className="absolute inset-0 bg-blue-900/5 mix-blend-overlay" />
+        <div className="absolute inset-0 bg-blue-900/10 mix-blend-overlay" />
+        
+        {/* Thunderstorm Effects */}
+        <div className="absolute inset-0 bg-white opacity-0 animate-lightning mix-blend-overlay pointer-events-none" />
       </div>
 
       {/* Top Navigation Overlay */}
@@ -349,10 +353,23 @@ const Home = () => {
       </footer>
 
       <style>{`
-        @keyframes ken-burns { from { transform: scale(1); } to { transform: scale(1.1); } }
+        @keyframes walk-forward { 
+          0% { transform: scale(1) translateY(0); } 
+          50% { transform: scale(1.15) translateY(-1%); } 
+          100% { transform: scale(1.3) translateY(1%); } 
+        }
+        .animate-walk-forward { animation: walk-forward 30s ease-in-out infinite alternate; transform-origin: center 70%; }
+        
         @keyframes gradient-xy { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-        .animate-ken-burns { animation: ken-burns 20s ease-in-out infinite alternate; }
         .animate-gradient-xy { animation: gradient-xy 10s ease infinite; }
+
+        /* Thunderstorm Lightning */
+        @keyframes lightning {
+          0%, 91%, 93%, 95%, 100% { opacity: 0; }
+          92% { opacity: 0.6; }
+          94% { opacity: 0.3; }
+        }
+        .animate-lightning { animation: lightning 7s infinite; }
       `}</style>
     </motion.div>
   );
