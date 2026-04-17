@@ -13,8 +13,6 @@ const Sidebar = ({ isOpen }) => {
     { name: 'Dashboard', path: '/dashboard', icon: ShieldAlert },
     { name: 'Live Map', path: '/map', icon: Map },
     { name: 'SOS Alerts', path: '/sos', icon: AlertTriangle, badge: 12 },
-    { name: 'Live Tracking', path: '/tracking', icon: Crosshair },
-    { name: 'Report Incident', path: '/report', icon: Radio },
     { name: 'Resources', path: '/resources', icon: Package },
     { name: 'Rescue Teams', path: '/admin', icon: Users },
     { name: 'Settings', path: '/settings', icon: Settings },

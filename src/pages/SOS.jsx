@@ -132,16 +132,7 @@ const SOS = () => {
 
       setIsSending(false);
       setStatus('idle');
-      navigate('/tracking', { 
-        state: { 
-          id: alertData.id, 
-          type: 'SOS SIGNAL',
-          severity: 'CRITICAL',
-          message: alertData.message || 'No additional details.',
-          coords: [lat, lng],
-          location: 'Detected Position'
-        } 
-      });
+      setStep(2); // Show the "Signal Locked" success screen locally instead of navigating away
     } catch (err) {
       console.error("Transmission Error: ", err);
       setStatus('error');

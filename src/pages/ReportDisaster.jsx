@@ -54,19 +54,19 @@ const ReportDisaster = () => {
           {/* Header Section */}
           <header className="mb-14 text-left relative">
             <div className="flex items-center gap-3 mb-6">
-              <span className="px-4 py-1.5 bg-blue-600/10 text-blue-700 rounded-full text-[11px] font-black uppercase tracking-[0.2em] border border-blue-600/20">Protocol 4-Alpha</span>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600/10 text-red-700 rounded-full border border-red-600/20">
-                <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+              <span className="px-4 py-1.5 bg-blue-500/20 text-blue-400 rounded-full text-[11px] font-black uppercase tracking-[0.2em] border border-blue-500/30">Protocol 4-Alpha</span>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/20 text-red-400 rounded-full border border-red-500/30">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
                 <span className="text-[10px] font-black uppercase tracking-wider">Live Response System</span>
               </div>
             </div>
             
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
               <div className="max-w-3xl">
-                <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 mb-6 drop-shadow-sm">
-                  Report Emergency <span className="text-blue-700">Incident</span>
+                <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6 drop-shadow-sm">
+                  Report Emergency <span className="text-blue-500">Incident</span>
                 </h1>
-                <p className="text-slate-500 max-w-2xl text-xl leading-relaxed font-medium">
+                <p className="text-slate-400 max-w-2xl text-xl leading-relaxed font-medium">
                   Provide critical details to help our dispatch teams coordinate an immediate response. Your information saves lives.
                 </p>
               </div>

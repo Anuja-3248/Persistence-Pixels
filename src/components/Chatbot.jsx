@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, X, Send, User, Bot, HelpCircle, MapPin, Loader2 } from 'lucide-react';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Chatbot = () => {
@@ -35,28 +34,48 @@ const Chatbot = () => {
     const loadingId = Date.now() + Math.random();
     setMessages(prev => [...prev, { id: loadingId, text: "Decrypting data...", sender: 'bot', isLoading: true }]);
 
-    // 3. Connect to Real Gemini AI
+    // 3. Connect to Sarvam AI (Indic optimized)
     try {
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      const apiKey = import.meta.env.VITE_SARVAM_API_KEY;
       
-      if (!apiKey || apiKey.includes('paste_your')) {
-        throw new Error("API Key missing. Please paste your key in the .env file.");
+      if (!apiKey || apiKey.includes('your_sarvam')) {
+        throw new Error("Sarvam API Key missing. Please paste it in the .env file.");
       }
 
-      // Initialize the SDK
-      const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      const response = await fetch('https://api.sarvam.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey.trim()}`,
+          'api-subscription-key': apiKey.trim()
+        },
+        body: JSON.stringify({
+          model: "sarvam-30b", 
+          messages: [
+            {
+              role: "system",
+              content: "You are Kavach, an emergency AI. Give short, tactical disaster advice. No markdown."
+            },
+            {
+              role: "user",
+              content: text
+            }
+          ]
+        })
+      });
 
-      const systemPrompt = "INSTRUCTION: You are Kavach, an elite tactical AI emergency rescue assistant built for the 'Persistence-Pixels' disaster management platform. Respond with extreme brevity, tactical precision, and high situational awareness. Prioritize immediate survival steps, safe locations, and medical advice if needed. DO NOT use markdown formatting. \n\nUSER REQUEST: ";
-      
-      const result = await model.generateContent(systemPrompt + text);
-      const reply = result.response.text();
+      if (!response.ok) {
+        throw new Error(`Sarvam API Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const reply = data.choices[0].message.content;
 
       // Replace loading state with the actual response
       setMessages(prev => prev.map(msg => msg.id === loadingId ? { ...msg, text: reply, isLoading: false } : msg));
 
     } catch (error) {
-      console.error("Gemini API Blocked/Invalid Key:", error);
+      console.error("Sarvam AI Connection Failed:", error);
       
       // ULTRA-SMART LOCAL FALLBACK FOR DEMOS
       let fallbackReply = "I am operating in offline tactical mode. Please stay calm and await rescue forces.";
