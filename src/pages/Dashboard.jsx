@@ -7,8 +7,12 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { auth, db } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 const Dashboard = () => {
+  const [userProfile, setUserProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
   const featureBoxes = [
     {
       id: 'live-map',
@@ -73,7 +77,24 @@ const Dashboard = () => {
   useEffect(() => {
     const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    
+    // Auth Listener
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        // Try to get more info from Firestore if needed
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        setUserProfile({
+          name: userDoc.exists() ? userDoc.data().name : (user.displayName || user.email.split('@')[0]),
+          initial: userDoc.exists() ? userDoc.data().name.charAt(0) : (user.displayName ? user.displayName.charAt(0) : user.email.charAt(0)).toUpperCase()
+        });
+      }
+      setLoading(false);
+    });
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      unsubscribe();
+    };
   }, []);
 
   return (
@@ -92,15 +113,19 @@ const Dashboard = () => {
       
       {/* PROFILE TAB (Top Right) */}
       <div className="absolute top-8 right-8 z-[50]">
-        <Link to="/profile" className="flex items-center gap-4 bg-[#11111a]/80 border border-white/10 pl-5 pr-3 py-2.5 rounded-3xl hover:bg-white/10 transition-all cursor-pointer group backdrop-blur-md hover:scale-105 active:scale-95 shadow-xl">
-          <div className="text-right">
-            <p className="text-sm font-bold text-gray-400 uppercase leading-none mb-1.5 group-hover:text-white transition-colors">Anuja Pawar</p>
-            <p className="text-[11px] font-black text-neon-green uppercase tracking-widest leading-none">Status: Online</p>
-          </div>
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 border border-blue-400/50 flex items-center justify-center font-black text-2xl shadow-lg shadow-blue-500/30 text-white">
-            A
-          </div>
-        </Link>
+        {!loading && (
+          <Link to="/profile" className="flex items-center gap-4 bg-[#11111a]/80 border border-white/10 pl-5 pr-3 py-2.5 rounded-3xl hover:bg-white/10 transition-all cursor-pointer group backdrop-blur-md hover:scale-105 active:scale-95 shadow-xl">
+            <div className="text-right">
+              <p className="text-sm font-bold text-gray-400 uppercase leading-none mb-1.5 group-hover:text-white transition-colors">
+                {userProfile?.name || 'Guest User'}
+              </p>
+              <p className="text-[11px] font-black text-neon-green uppercase tracking-widest leading-none">Status: Online</p>
+            </div>
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 border border-blue-400/50 flex items-center justify-center font-black text-2xl shadow-lg shadow-blue-500/30 text-white">
+              {userProfile?.initial || '?'}
+            </div>
+          </Link>
+        )}
       </div>
 
       <main className="max-w-7xl mx-auto px-8 py-20 relative">
