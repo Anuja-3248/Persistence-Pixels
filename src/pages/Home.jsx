@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { Shield, ChevronRight, Activity, Map, Globe, Heart, User, LogOut } from 'lucide-react';
+import { Shield, ChevronRight, Activity, Map, Globe, Heart, User, LogOut, Mail, Phone, MapPin, Send } from 'lucide-react';
 import heroBg from '../assets/hero-bg.png';
 import donationBg from '../assets/donation-bg.png';
 import EmergencyProtocols from '../components/EmergencyProtocols';
@@ -276,7 +276,6 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
-
       <footer className="relative z-10 py-20 px-12 bg-white text-dark-900 border-t border-slate-200">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">

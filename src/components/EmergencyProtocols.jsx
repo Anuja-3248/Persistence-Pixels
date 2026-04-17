@@ -67,8 +67,8 @@ const EmergencyProtocols = () => {
           <h2 className="text-[32px] md:text-[42px] font-bold text-[#0f2e6e] tracking-tight">
             Emergency Protocols: Do's & Don'ts
           </h2>
-          <p className="text-[17px] text-slate-500 max-w-3xl mx-auto font-serif" style={{ color: '#6b7280' }}>
-            Essential survival guidelines and protective actions for critical weather events and natural <br className="hidden md:block" /> disasters.
+          <p className="text-[17px] text-slate-500 mx-auto font-serif" style={{ color: '#6b7280' }}>
+            Essential survival guidelines and protective actions for critical weather events and natural disasters.
           </p>
         </div>
 
