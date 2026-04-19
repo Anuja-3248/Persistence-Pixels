@@ -73,7 +73,7 @@ const Home = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/90 via-[#0f172a]/20 to-[#0f172a]/95" />
         <div className="absolute inset-0 bg-blue-900/10 mix-blend-overlay" />
-        
+
         {/* Thunderstorm Effects */}
         <div className="absolute inset-0 bg-white opacity-0 animate-lightning mix-blend-overlay pointer-events-none" />
       </div>

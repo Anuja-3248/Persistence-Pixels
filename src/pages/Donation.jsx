@@ -13,6 +13,7 @@ import donationBg from '../assets/donation-bg.png';
 import { Link } from 'react-router-dom';
 
 const Donation = () => {
+  const donationRef = React.useRef(null);
   const [selectedAmount, setSelectedAmount] = useState(25);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [raisedAmount, setRaisedAmount] = useState(750000);
@@ -29,6 +30,10 @@ const Donation = () => {
     setIsSubmitted(true);
     setRaisedAmount(prev => Math.min(prev + selectedAmount, targetAmount));
     setTimeout(() => setIsSubmitted(false), 5000);
+  };
+
+  const scrollToDonation = () => {
+    donationRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   // Simulate Real-time incoming donations
@@ -48,11 +53,7 @@ const Donation = () => {
       
       {/* Header Overlay */}
       <header className="px-12 py-8 flex items-center justify-between border-b border-white/5 bg-[#0A0C10]/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="flex items-center gap-2">
-          <span className="text-xl font-black tracking-tighter text-white uppercase group cursor-pointer">
-            THE URGENT <span className="text-[#10b981]">ADVOCATE</span>
-          </span>
-        </div>
+
         
         <nav className="hidden lg:flex items-center gap-10">
           <Link to="/" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-white transition-colors ml-4 flex items-center gap-2">
@@ -60,7 +61,10 @@ const Donation = () => {
           </Link>
         </nav>
 
-        <button className="bg-[#10b981] text-black px-6 py-2 rounded-sm text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[#0d9466] transition-colors shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+        <button 
+          onClick={scrollToDonation}
+          className="bg-[#10b981] text-black px-6 py-2 rounded-sm text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[#0d9466] transition-colors shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+        >
           Donate Now
         </button>
       </header>
@@ -71,7 +75,7 @@ const Donation = () => {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-[#0A0C10]" />
           <div 
-            className="absolute inset-0 bg-contain bg-center bg-no-repeat opacity-60 transition-opacity duration-1000" 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-60 transition-opacity duration-1000" 
             style={{ backgroundImage: `url(${donationHeroBg})` }}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0A0C10] via-[#0A0C10]/40 to-transparent z-10" />
@@ -113,13 +117,7 @@ const Donation = () => {
           </motion.button>
         </div>
 
-        {/* Floating Stat element from image */}
-        <div className="absolute top-1/2 right-20 -translate-y-1/2 hidden xl:block">
-           <div className="w-96 h-96 border border-white/5 rounded-full flex items-center justify-center relative">
-              <div className="w-80 h-80 border border-white/10 rounded-full animate-spin-slow" />
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#10b981]/10 to-transparent rounded-full blur-3xl" />
-           </div>
-        </div>
+
       </section>
 
       {/* Stats Grid */}
@@ -176,7 +174,7 @@ const Donation = () => {
               </div>
               <div>
                 <h4 className="font-bold text-lg mb-2 uppercase tracking-tight">Tax Deductible Recognition</h4>
-                <p className="text-slate-400 text-sm leading-relaxed">The Urgent Advocate is a registered 501(c)(3) entity. All contributions are fully deductible.</p>
+                <p className="text-slate-400 text-sm leading-relaxed">DisasterX is a registered 501(c)(3) entity. All contributions are fully deductible.</p>
               </div>
             </div>
           </div>
@@ -213,7 +211,7 @@ const Donation = () => {
         </div>
 
         {/* Donation Form Card */}
-        <div className="bg-[#14171F] p-12 border border-white/5 shadow-2xl relative">
+        <div ref={donationRef} className="bg-[#14171F] p-12 border border-white/5 shadow-2xl relative">
           <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#10b981]/10 to-transparent" />
           
           <h3 className="text-xl font-black text-white uppercase tracking-[0.2em] mb-8">Select Amount</h3>
@@ -323,8 +321,8 @@ const Donation = () => {
       {/* Actual Footer */}
       <footer className="px-12 py-12 flex flex-col md:flex-row items-center justify-between border-t border-white/5 bg-[#080A0F]">
          <div className="flex flex-col gap-2 mb-8 md:mb-0">
-            <span className="text-sm font-black text-white uppercase tracking-tighter">THE URGENT ADVOCATE</span>
-            <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">© 2024 THE URGENT ADVOCATE. HUMANITARIAN TRANSPARENCY SECURED.</p>
+            <span className="text-sm font-black text-white uppercase tracking-tighter">DISASTER X</span>
+            <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">© 2024 DISASTER X. HUMANITARIAN TRANSPARENCY SECURED.</p>
          </div>
          
          <div className="flex gap-8 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">

@@ -11,7 +11,16 @@ import { auth, db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
 const Dashboard = () => {
-  const [userProfile, setUserProfile] = useState(null);
+  const [userProfile, setUserProfile] = useState(() => {
+    const localUser = JSON.parse(localStorage.getItem('disasterx_user') || '{}');
+    if (localUser.name) {
+      return {
+        name: localUser.name,
+        initial: localUser.name.charAt(0).toUpperCase()
+      };
+    }
+    return null;
+  });
   const [loading, setLoading] = useState(true);
   const featureBoxes = [
     {
@@ -81,11 +90,15 @@ const Dashboard = () => {
     // Auth Listener
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
+        // Try localStorage first for immediate high-fidelity result
+        const localUser = JSON.parse(localStorage.getItem('disasterx_user') || '{}');
+        
         // Try to get more info from Firestore if needed
         const userDoc = await getDoc(doc(db, 'users', user.uid));
+        
         setUserProfile({
-          name: userDoc.exists() ? userDoc.data().name : (user.displayName || user.email.split('@')[0]),
-          initial: userDoc.exists() ? userDoc.data().name.charAt(0) : (user.displayName ? user.displayName.charAt(0) : user.email.charAt(0)).toUpperCase()
+          name: localUser.name || (userDoc.exists() ? userDoc.data().name : (user.displayName || user.email.split('@')[0])),
+          initial: (localUser.name ? localUser.name.charAt(0) : (userDoc.exists() ? userDoc.data().name.charAt(0) : (user.displayName ? user.displayName.charAt(0) : user.email.charAt(0)))).toUpperCase()
         });
       }
       setLoading(false);
@@ -136,10 +149,10 @@ const Dashboard = () => {
         {/* --- HEADER --- */}
         <header className="mb-10 relative z-10">
           <div className="flex items-center gap-4 mb-3">
-            <div className="p-2 bg-white/5 rounded-xl border border-white/10">
-               <LayoutDashboard className="w-8 h-8 text-white" />
-            </div>
-            <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Dashboard Overview</h1>
+            <Link to="/" className="p-2 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all cursor-pointer group">
+               <Shield className="w-8 h-8 text-blue-400 group-hover:scale-110 transition-transform" />
+            </Link>
+            <h1 className="text-5xl font-black tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent uppercase">Dashboard Overview</h1>
           </div>
           <p className="text-gray-500 text-lg max-w-2xl font-medium">Select a tool below to coordinate disaster response and manage mission-critical intelligence.</p>
         </header>

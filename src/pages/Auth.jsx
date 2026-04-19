@@ -6,6 +6,7 @@ import { auth, db } from '../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import globeImage from '../assets/command-center-globe.png';
+import logo from '../assets/logo.png';
 
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -86,7 +87,7 @@ const Auth = () => {
       }
 
       localStorage.setItem('isLoggedIn', 'true');
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     } catch (error) {
       console.error("Auth Error:", error.message);
       alert(error.message); // Simple alert for demo debugging

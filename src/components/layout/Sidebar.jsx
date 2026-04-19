@@ -5,6 +5,7 @@ import {
   Activity, Info, LifeBuoy, ZapOff, Crosshair
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import logo from '../../assets/logo.png';
 
 const Sidebar = ({ isOpen }) => {
   const location = useLocation();
@@ -33,7 +34,7 @@ const Sidebar = ({ isOpen }) => {
             animate={{ opacity: 1, x: 0 }}
             className="ml-3 flex flex-col"
           >
-            <span className="font-black text-sm tracking-tight text-neutral-900 dark:text-white leading-none uppercase">Aegis Response</span>
+            <span className="font-black text-sm tracking-tight text-neutral-900 dark:text-white leading-none uppercase">DisasterX</span>
             <span className="text-[8px] font-black text-neutral-400 dark:text-strat-text-sub uppercase tracking-[0.2em] mt-1 opacity-60">Strategic Node</span>
           </motion.div>
         )}
