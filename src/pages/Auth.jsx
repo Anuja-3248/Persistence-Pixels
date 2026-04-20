@@ -32,6 +32,7 @@ const Auth = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (location.state?.isLogin !== undefined) {
@@ -89,8 +90,18 @@ const Auth = () => {
       localStorage.setItem('isLoggedIn', 'true');
       navigate('/dashboard', { replace: true });
     } catch (error) {
-      console.error("Auth Error:", error.message);
-      alert(error.message); // Simple alert for demo debugging
+      console.error("Auth Error:", error.code);
+      if (error.code?.includes('auth/invalid-credential') || error.code?.includes('auth/wrong-password')) {
+        setError("Invalid Credentials. Please check your inputs.");
+      } else if (error.code?.includes('auth/user-not-found')) {
+        setError("No account found with this email.");
+      } else if (error.code?.includes('auth/email-already-in-use')) {
+        setError("Email already registered. Please sign in.");
+      } else if (error.code?.includes('auth/too-many-requests')) {
+        setError("Too many attempts. Account locked temporarily.");
+      } else {
+        setError("Operational Error. Please retry.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -188,6 +199,15 @@ const Auth = () => {
 
           {/* Form */}
           <form onSubmit={handleAuth} className="space-y-4">
+            {error && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-xs font-bold text-red-400 text-center uppercase tracking-widest"
+              >
+                {error}
+              </motion.div>
+            )}
             <AnimatePresence mode="wait">
               {!isLogin && (
                 <motion.div
