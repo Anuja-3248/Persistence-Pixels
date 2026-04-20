@@ -6,7 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import { db } from '../firebase';
 import { addDoc, collection } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import { Shield, MapPin, Search, ShieldAlert, Badge, Phone, Siren, CloudUpload, MapPinned, ShieldCheck } from 'lucide-react';
+import { MapPin, LocateFixed, Lock, Shield, Search, ShieldAlert, Badge, Phone, Siren, CloudUpload, MapPinned, ShieldCheck } from 'lucide-react';
 
 // Fix Leaflet icons
 delete L.Icon.Default.prototype._getIconUrl;
