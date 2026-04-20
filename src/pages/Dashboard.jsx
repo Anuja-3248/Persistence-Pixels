@@ -7,8 +7,21 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { auth, db } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 const Dashboard = () => {
+  const [userProfile, setUserProfile] = useState(() => {
+    const localUser = JSON.parse(localStorage.getItem('disasterx_user') || '{}');
+    if (localUser.name) {
+      return {
+        name: localUser.name,
+        initial: localUser.name.charAt(0).toUpperCase()
+      };
+    }
+    return null;
+  });
+  const [loading, setLoading] = useState(true);
   const featureBoxes = [
     {
       id: 'live-map',
@@ -53,7 +66,7 @@ const Dashboard = () => {
       description: 'Manage tactical preferences, responder credentials, and system configuration.',
       icon: Settings,
       color: '#A855F7', // Purple
-      path: '/admin',
+      path: '/settings',
       gradient: 'from-[#A855F7] to-[#7E22CE]'
     },
     {
@@ -73,7 +86,28 @@ const Dashboard = () => {
   useEffect(() => {
     const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    
+    // Auth Listener
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        // Try localStorage first for immediate high-fidelity result
+        const localUser = JSON.parse(localStorage.getItem('disasterx_user') || '{}');
+        
+        // Try to get more info from Firestore if needed
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        
+        setUserProfile({
+          name: localUser.name || (userDoc.exists() ? userDoc.data().name : (user.displayName || user.email.split('@')[0])),
+          initial: (localUser.name ? localUser.name.charAt(0) : (userDoc.exists() ? userDoc.data().name.charAt(0) : (user.displayName ? user.displayName.charAt(0) : user.email.charAt(0)))).toUpperCase()
+        });
+      }
+      setLoading(false);
+    });
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      unsubscribe();
+    };
   }, []);
 
   return (
@@ -92,15 +126,19 @@ const Dashboard = () => {
       
       {/* PROFILE TAB (Top Right) */}
       <div className="absolute top-8 right-8 z-[50]">
-        <Link to="/profile" className="flex items-center gap-4 bg-[#11111a]/80 border border-white/10 pl-5 pr-3 py-2.5 rounded-3xl hover:bg-white/10 transition-all cursor-pointer group backdrop-blur-md hover:scale-105 active:scale-95 shadow-xl">
-          <div className="text-right">
-            <p className="text-sm font-bold text-gray-400 uppercase leading-none mb-1.5 group-hover:text-white transition-colors">Anuja Pawar</p>
-            <p className="text-[11px] font-black text-neon-green uppercase tracking-widest leading-none">Status: Online</p>
-          </div>
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 border border-blue-400/50 flex items-center justify-center font-black text-2xl shadow-lg shadow-blue-500/30 text-white">
-            A
-          </div>
-        </Link>
+        {!loading && (
+          <Link to="/profile" className="flex items-center gap-4 bg-[#11111a]/80 border border-white/10 pl-5 pr-3 py-2.5 rounded-3xl hover:bg-white/10 transition-all cursor-pointer group backdrop-blur-md hover:scale-105 active:scale-95 shadow-xl">
+            <div className="text-right">
+              <p className="text-sm font-bold text-gray-400 uppercase leading-none mb-1.5 group-hover:text-white transition-colors">
+                {userProfile?.name || 'Guest User'}
+              </p>
+              <p className="text-[11px] font-black text-neon-green uppercase tracking-widest leading-none">Status: Online</p>
+            </div>
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 border border-blue-400/50 flex items-center justify-center font-black text-2xl shadow-lg shadow-blue-500/30 text-white">
+              {userProfile?.initial || '?'}
+            </div>
+          </Link>
+        )}
       </div>
 
       <main className="max-w-7xl mx-auto px-8 py-20 relative">
@@ -111,10 +149,10 @@ const Dashboard = () => {
         {/* --- HEADER --- */}
         <header className="mb-10 relative z-10">
           <div className="flex items-center gap-4 mb-3">
-            <div className="p-2 bg-white/5 rounded-xl border border-white/10">
-               <LayoutDashboard className="w-8 h-8 text-white" />
-            </div>
-            <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Dashboard Overview</h1>
+            <Link to="/" className="p-2 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all cursor-pointer group">
+               <Shield className="w-8 h-8 text-blue-400 group-hover:scale-110 transition-transform" />
+            </Link>
+            <h1 className="text-5xl font-black tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent uppercase">Dashboard Overview</h1>
           </div>
           <p className="text-gray-500 text-lg max-w-2xl font-medium">Select a tool below to coordinate disaster response and manage mission-critical intelligence.</p>
         </header>
@@ -145,8 +183,14 @@ const Dashboard = () => {
               transition={{ delay: idx * 0.1, duration: 0.6, ease: "easeOut" }}
               className="relative"
             >
-              <Link
+                <Link
                 to={box.path}
+                onClick={(e) => {
+                  if (box.id === 'chatbot') {
+                    e.preventDefault();
+                    window.dispatchEvent(new Event('open-kavach'));
+                  }
+                }}
                 className="block h-full bg-[#0d0d12] border-2 rounded-[40px] p-10 flex flex-col items-start transition-all hover:translate-y-[-10px] group relative overflow-hidden"
                 style={{ 
                    borderColor: `${box.color}AA`,

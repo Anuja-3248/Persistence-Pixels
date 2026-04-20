@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Mail, Lock, Eye, EyeOff, ChevronRight, Check } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { auth, db } from '../firebase';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import globeImage from '../assets/command-center-globe.png';
+import logo from '../assets/logo.png';
 
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -38,28 +42,58 @@ const Auth = () => {
   const handleAuth = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1800));
 
     const formData = new FormData(e.target);
-    const emailStr = formData.get('email') || '';
-    let parsedName = formData.get('name') || '';
-    if (!parsedName && emailStr) {
-      const prefix = emailStr.split('@')[0];
-      parsedName = prefix.charAt(0).toUpperCase() + prefix.slice(1);
+    const emailStr = formData.get('email');
+    const passwordStr = password; // from state
+    const nameStr = formData.get('name');
+
+    try {
+      if (isLogin) {
+        // --- REAL LOGIN ---
+        const userCredential = await signInWithEmailAndPassword(auth, emailStr, passwordStr);
+        const user = userCredential.user;
+        
+        // Save to local storage for legacy compatibility with other pages
+        const userData = {
+          name: user.displayName || user.email.split('@')[0],
+          email: user.email,
+          uid: user.uid,
+          isLoggedIn: true
+        };
+        localStorage.setItem('disasterx_user', JSON.stringify(userData));
+      } else {
+        // --- REAL REGISTRATION ---
+        const userCredential = await createUserWithEmailAndPassword(auth, emailStr, passwordStr);
+        const user = userCredential.user;
+
+        // Update profile with name
+        await updateProfile(user, { displayName: nameStr });
+
+        // Save entry to Firestore for extra data
+        await setDoc(doc(db, 'users', user.uid), {
+          name: nameStr,
+          email: emailStr,
+          role: 'FIELD_OFFICER_01',
+          joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+        });
+
+        localStorage.setItem('disasterx_user', JSON.stringify({
+          name: nameStr,
+          email: emailStr,
+          uid: user.uid,
+          isLoggedIn: true
+        }));
+      }
+
+      localStorage.setItem('isLoggedIn', 'true');
+      navigate('/dashboard', { replace: true });
+    } catch (error) {
+      console.error("Auth Error:", error.message);
+      alert(error.message); // Simple alert for demo debugging
+    } finally {
+      setIsLoading(false);
     }
-
-    const userData = {
-      name: parsedName || 'Responder',
-      email: emailStr,
-      isLoggedIn: true,
-      role: 'FIELD_OFFICER_01',
-      joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-    };
-
-    localStorage.setItem('disasterx_user', JSON.stringify(userData));
-    localStorage.setItem('isLoggedIn', 'true');
-    navigate('/');
-    setIsLoading(false);
   };
 
   return (
@@ -167,7 +201,7 @@ const Auth = () => {
                       type="text"
                       placeholder="Full Name"
                       required={!isLogin}
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/60 focus:bg-blue-500/5 transition-all"
+                      className="w-full bg-white/10 border-2 border-white/20 rounded-lg px-4 py-3.5 text-sm text-white placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white/15 transition-all outline-none"
                     />
                   </div>
                 </motion.div>
@@ -184,7 +218,7 @@ const Auth = () => {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-lg pl-11 pr-4 py-3.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/60 focus:bg-blue-500/5 transition-all"
+                className="w-full bg-white/10 border-2 border-white/20 rounded-lg pl-11 pr-4 py-3.5 text-sm text-white placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white/15 transition-all outline-none"
               />
             </div>
 
@@ -197,7 +231,7 @@ const Auth = () => {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-lg pl-11 pr-12 py-3.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/60 focus:bg-blue-500/5 transition-all"
+                className="w-full bg-white/10 border-2 border-white/20 rounded-lg pl-11 pr-12 py-3.5 text-sm text-white placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white/15 transition-all outline-none"
               />
               <button type="button" onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-300 transition-colors">

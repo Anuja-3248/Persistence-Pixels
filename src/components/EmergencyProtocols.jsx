@@ -1,11 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Check, X } from 'lucide-react';
+import landslideImg from '../assets/landslide.png';
+import tsunamiImg from '../assets/tsunami.png';
+import cycloneImg from '../assets/cyclone.png';
+import forestFireImg from '../assets/forest-fire.png';
 
 const protocols = [
   {
     title: 'Landslide',
-    image: 'https://images.pexels.com/photos/12093847/pexels-photo-12093847.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: landslideImg,
     dos: [
       'Prepare tour to hilly region according to information given by weather department or news channel.',
       'Move away from landslide path or downstream valleys quickly without wasting time.'
@@ -17,7 +21,7 @@ const protocols = [
   },
   {
     title: 'Tsunami',
-    image: 'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: tsunamiImg,
     dos: [
       'Know the height of your street above sea level and the distance of your street from the coast.',
       'Plan evacuation routes from your home, school, workplace or any other place you could be.',
@@ -29,7 +33,7 @@ const protocols = [
   },
   {
     title: 'Cyclone',
-    image: 'https://images.pexels.com/photos/2850287/pexels-photo-2850287.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: cycloneImg,
     dos: [
       'Check the house; secure loose tiles and carry out repairs of doors and windows.',
       'Keep some wooden boards ready so that glass windows can be boarded if needed.',
@@ -41,7 +45,7 @@ const protocols = [
   },
   {
     title: 'Forest Fire',
-    image: 'https://images.pexels.com/photos/35544/fire-flames-heat-burn.jpg?auto=compress&cs=tinysrgb&w=800',
+    image: forestFireImg,
     dos: [
       'Keep emergency contact numbers of district fire service department and local forest authorities handy.',
       'Immediately inform them in case of an unattended or out-of-control fire.'
@@ -63,8 +67,8 @@ const EmergencyProtocols = () => {
           <h2 className="text-[32px] md:text-[42px] font-bold text-[#0f2e6e] tracking-tight">
             Emergency Protocols: Do's & Don'ts
           </h2>
-          <p className="text-[17px] text-slate-500 max-w-3xl mx-auto font-serif" style={{ color: '#6b7280' }}>
-            Essential survival guidelines and protective actions for critical weather events and natural <br className="hidden md:block" /> disasters.
+          <p className="text-[17px] text-slate-500 mx-auto font-serif" style={{ color: '#6b7280' }}>
+            Essential survival guidelines and protective actions for critical weather events and natural disasters.
           </p>
         </div>
 

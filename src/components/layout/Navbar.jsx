@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Bell, Menu, Search, Globe, Moon, Sun, 
-  Radio, ShieldAlert, User, LogOut, Command 
+  Radio, ShieldAlert, User, LogOut, Command, Heart
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
@@ -111,6 +111,15 @@ const Navbar = ({ toggleSidebar }) => {
               </button>
             </div>
           </div>
+
+          {/* Donate Button */}
+          <Link
+            to="/donation"
+            className="hidden sm:flex bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all items-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95"
+          >
+            <Heart className="w-3.5 h-3.5" />
+            <span>Donate Now</span>
+          </Link>
 
           {/* Report Button */}
           <Link

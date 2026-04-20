@@ -21,7 +21,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 function App() {
   const [showSplash, setShowSplash] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [theme, setTheme] = useState(localStorage.getItem('disasterx_theme') || 'light');
   const location = useLocation();
 
@@ -57,8 +56,9 @@ function App() {
   const isProfilePage = location.pathname === '/profile';
   const isSettingsPage = location.pathname === '/settings';
   const isHomePage = location.pathname === '/';
+  const isTrackingPage = location.pathname === '/tracking';
 
-  const hideLayout = isHomePage || isDashboardPage || isMapPage || isSOSPage || isReportPage || isResourcesPage || isAdminPage || isDonationPage;
+  const hideLayout = isHomePage || isDashboardPage || isMapPage || isSOSPage || isReportPage || isResourcesPage || isAdminPage || isDonationPage || isTrackingPage;
 
   return (
     <>
@@ -68,12 +68,12 @@ function App() {
             <SplashScreen onComplete={() => setShowSplash(false)} />
           </motion.div>
         ) : isAuthPage || isOnboardingPage || isDonationPage || isProfilePage || isSettingsPage ? (
-          <motion.div 
-            key="auth" 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
+          <motion.div
+            key="auth"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
-            className="min-h-screen bg-white text-slate-900 font-body light"
+            className={`min-h-screen font-body ${isDonationPage ? 'bg-[#0A0C10]' : 'bg-white text-slate-900 light'}`}
           >
             <Routes location={location} key={location.pathname}>
               <Route path="/auth" element={<Auth />} />
@@ -91,11 +91,9 @@ function App() {
             transition={{ duration: 0.8 }}
             className={`min-h-screen bg-background-50 dark:bg-dark-bg text-neutral-900 dark:text-slate-100 flex overflow-hidden font-body transition-colors duration-500 ${theme === 'dark' ? 'dark' : ''}`}
           >
-            {!hideLayout && <Sidebar isOpen={sidebarOpen} />}
-            
-            <div className={`flex-1 flex flex-col transition-all duration-300 ${hideLayout ? 'ml-0' : (sidebarOpen ? 'ml-64' : 'ml-20')}`}>
+            <div className="flex-1 flex flex-col transition-all duration-300">
               {!hideLayout && (
-                <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+                <Navbar />
               )}
               
               <main className={`flex-1 overflow-y-auto ${isHomePage ? 'mt-0' : 'mt-0'} scroll-smooth`}>

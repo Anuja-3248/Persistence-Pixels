@@ -6,7 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import { db } from '../firebase';
 import { addDoc, collection } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, LocateFixed, Lock } from 'lucide-react';
+import { MapPin, LocateFixed, Lock, Shield, Search, ShieldAlert, Badge, Phone, Siren, CloudUpload, MapPinned, ShieldCheck } from 'lucide-react';
 
 // Fix Leaflet icons
 delete L.Icon.Default.prototype._getIconUrl;
@@ -323,7 +323,7 @@ const LiveDisasterReport = ({ onReportSubmit }) => {
             
             <div className="p-4 pt-6">
               <button type="button" className="w-full py-4 text-blue-600 font-black uppercase tracking-widest text-[10px] hover:bg-blue-50 rounded-2xl transition-all flex items-center justify-center gap-3 border border-dashed border-blue-200">
-                <LocateFixed className="w-4 h-4" />
+                <MapPinned className="w-4 h-4" />
                 Refine Location Profile
               </button>
             </div>
@@ -352,7 +352,7 @@ const LiveDisasterReport = ({ onReportSubmit }) => {
               )}
             </motion.button>
             <div className="flex items-center justify-center gap-3 text-slate-400 bg-slate-50 py-3 rounded-2xl border border-slate-100">
-              <Lock className="w-4 h-4" />
+              <ShieldCheck className="w-4 h-4" />
               <span className="text-[10px] font-black uppercase tracking-widest">Quantum-Secure AES-256 Protocol</span>
             </div>
           </div>
