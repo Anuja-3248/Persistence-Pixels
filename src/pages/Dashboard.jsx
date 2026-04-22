@@ -10,6 +10,8 @@ import { motion } from 'framer-motion';
 import { auth, db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
+import logoImg from '../assets/website-logo.png';
+
 const Dashboard = () => {
   const [userProfile, setUserProfile] = useState(() => {
     const localUser = JSON.parse(localStorage.getItem('disasterx_user') || '{}');
@@ -149,8 +151,8 @@ const Dashboard = () => {
         {/* --- HEADER --- */}
         <header className="mb-10 relative z-10">
           <div className="flex items-center gap-4 mb-3">
-            <Link to="/" className="p-2 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all cursor-pointer group">
-               <Shield className="w-8 h-8 text-blue-400 group-hover:scale-110 transition-transform" />
+            <Link to="/" className="w-12 h-12 rounded-xl overflow-hidden hover:scale-110 transition-all cursor-pointer group">
+               <img src={logoImg} alt="DisasterX" className="w-full h-full object-contain" />
             </Link>
             <h1 className="text-5xl font-black tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent uppercase">Dashboard Overview</h1>
           </div>
@@ -250,6 +252,8 @@ const Dashboard = () => {
             </motion.div>
           ))}
         </div>
+
+
       </main>
 
       <style>{`

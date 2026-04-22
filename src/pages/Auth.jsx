@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Mail, Lock, Eye, EyeOff, ChevronRight, Check } from 'lucide-react';
+import { Shield, Mail, Lock, Eye, EyeOff, ChevronRight, Check, AlertTriangle } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
@@ -32,6 +32,7 @@ const Auth = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (location.state?.isLogin !== undefined) {
@@ -39,22 +40,33 @@ const Auth = () => {
     }
   }, [location.state]);
 
+  const handleDemoLogin = () => {
+    const demoUser = {
+      name: "Commander Alpha",
+      email: "demo@disasterx.gov",
+      uid: "demo-12345",
+      isLoggedIn: true
+    };
+    localStorage.setItem('disasterx_user', JSON.stringify(demoUser));
+    localStorage.setItem('isLoggedIn', 'true');
+    navigate('/dashboard', { replace: true });
+  };
+
   const handleAuth = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null);
 
     const formData = new FormData(e.target);
     const emailStr = formData.get('email');
-    const passwordStr = password; // from state
+    const passwordStr = password; 
     const nameStr = formData.get('name');
 
     try {
       if (isLogin) {
-        // --- REAL LOGIN ---
         const userCredential = await signInWithEmailAndPassword(auth, emailStr, passwordStr);
         const user = userCredential.user;
         
-        // Save to local storage for legacy compatibility with other pages
         const userData = {
           name: user.displayName || user.email.split('@')[0],
           email: user.email,
@@ -63,14 +75,11 @@ const Auth = () => {
         };
         localStorage.setItem('disasterx_user', JSON.stringify(userData));
       } else {
-        // --- REAL REGISTRATION ---
         const userCredential = await createUserWithEmailAndPassword(auth, emailStr, passwordStr);
         const user = userCredential.user;
 
-        // Update profile with name
         await updateProfile(user, { displayName: nameStr });
 
-        // Save entry to Firestore for extra data
         await setDoc(doc(db, 'users', user.uid), {
           name: nameStr,
           email: emailStr,
@@ -88,9 +97,16 @@ const Auth = () => {
 
       localStorage.setItem('isLoggedIn', 'true');
       navigate('/dashboard', { replace: true });
-    } catch (error) {
-      console.error("Auth Error:", error.message);
-      alert(error.message); // Simple alert for demo debugging
+    } catch (err) {
+      console.error("Auth Error:", err.code, err.message);
+      
+      let friendlyMessage = "Authentication failed. Please check your credentials.";
+      if (err.code === 'auth/invalid-credential') friendlyMessage = "Invalid email or password.";
+      if (err.code === 'auth/email-already-in-use') friendlyMessage = "Email already registered. Try logging in.";
+      if (err.code === 'auth/weak-password') friendlyMessage = "Password must be at least 6 characters.";
+      if (err.code === 'auth/user-not-found') friendlyMessage = "No account found with this email.";
+      
+      setError(friendlyMessage);
     } finally {
       setIsLoading(false);
     }
@@ -168,6 +184,21 @@ const Auth = () => {
             <h2 className="text-2xl font-black text-white uppercase tracking-widest">Secure Access</h2>
             <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-bold">DisasterX Command Portal</p>
           </div>
+
+          {/* Error Message */}
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center gap-3"
+              >
+                <AlertTriangle className="w-5 h-5 text-red-500 shrink-0" />
+                <p className="text-xs font-bold text-red-200">{error}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Social Login */}
           <div className="grid grid-cols-2 gap-3">
@@ -282,6 +313,17 @@ const Auth = () => {
               {isLogin ? 'Create an account' : 'Sign in'}
             </button>
           </p>
+
+          {/* Demo Access */}
+          <div className="pt-4">
+            <button
+              onClick={handleDemoLogin}
+              className="w-full py-3 rounded-lg border border-white/10 hover:bg-white/5 transition-all flex items-center justify-center gap-2 group"
+            >
+              <div className="w-2 h-2 rounded-full bg-neon-blue animate-pulse" />
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] group-hover:text-white transition-colors">Tactical Bypass (Demo Access)</span>
+            </button>
+          </div>
 
           {/* Footer */}
           <p className="text-center text-[10px] text-slate-700 uppercase tracking-widest">
