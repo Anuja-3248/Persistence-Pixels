@@ -159,21 +159,6 @@ const Dashboard = () => {
           <p className="text-gray-500 text-lg max-w-2xl font-medium">Select a tool below to coordinate disaster response and manage mission-critical intelligence.</p>
         </header>
 
-        {/* --- LIVE TICKER TAPE --- */}
-        <div className="w-full bg-red-900/10 border-y border-red-500/20 py-3 mb-16 overflow-hidden flex relative z-10 backdrop-blur-sm rounded-xl">
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#050505] to-transparent z-10 pointer-events-none" />
-          
-          <div className="whitespace-nowrap flex animate-[ticker_20s_linear_infinite] px-4 gap-12">
-            <span className="text-red-500 font-black text-xs tracking-[0.2em] uppercase flex items-center"><AlertCircle className="w-4 h-4 mr-2"/> TROPICAL STORM DANGER IN PACIFIC SECTOR</span>
-            <span className="text-orange-500 font-black text-xs tracking-[0.2em] uppercase flex items-center"><Activity className="w-4 h-4 mr-2"/> SEISMIC ACTIVITY 4.2 MAGNITUDE DETECTED REGION 7</span>
-            <span className="text-neon-blue font-black text-xs tracking-[0.2em] uppercase flex items-center"><Shield className="w-4 h-4 mr-2"/> ALL SYSTEMS SECURE - AWAITING PROTOCOL TRIGGER</span>
-            {/* Duplicates for infinite scrolling seamless loop */}
-            <span className="text-red-500 font-black text-xs tracking-[0.2em] uppercase flex items-center"><AlertCircle className="w-4 h-4 mr-2"/> TROPICAL STORM DANGER IN PACIFIC SECTOR</span>
-            <span className="text-orange-500 font-black text-xs tracking-[0.2em] uppercase flex items-center"><Activity className="w-4 h-4 mr-2"/> SEISMIC ACTIVITY 4.2 MAGNITUDE DETECTED REGION 7</span>
-          </div>
-
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#050505] to-transparent z-10 pointer-events-none" />
-        </div>
 
         {/* --- FEATURE BOXES GRID --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
