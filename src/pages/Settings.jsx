@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   User, Bell, Shield, Palette, Save, CheckCircle,
-  ChevronRight, Lock, Globe, Smartphone, AlertTriangle, Trash2
+  ChevronRight, Lock, Globe, Smartphone, AlertTriangle, Trash2, Mail, Eye, EyeOff, Key, XCircle
 } from 'lucide-react';
+import { auth } from '../firebase';
+import { sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 
 const tabs = [
   { id: 'profile', label: 'Profile', icon: User },
@@ -13,14 +15,19 @@ const tabs = [
 ];
 
 const inputClass =
-  'w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/20 transition-all';
+  'w-full bg-white border border-white/20 rounded-xl px-4 py-3 text-sm font-bold text-gray-900 placeholder:text-slate-400 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/20 transition-all shadow-sm';
 
 const labelClass =
-  'block text-[9px] font-black uppercase tracking-[0.25em] text-slate-500 mb-2';
+  'block text-xs font-black uppercase tracking-[0.15em] text-slate-300 mb-3 ml-1';
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const [saved, setSaved] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+  const [isPassModalOpen, setIsPassModalOpen] = useState(false);
+  const [passData, setPassData] = useState({ current: '', new: '', confirm: '' });
+  const [error, setError] = useState('');
+  const [isChanging, setIsChanging] = useState(false);
 
   const [profile, setProfile] = useState({
     name: '',
@@ -60,13 +67,49 @@ const Settings = () => {
     if (a) setAppearance(JSON.parse(a));
   }, []);
 
-  const handleSave = () => {
+   const handleSave = () => {
     localStorage.setItem('dx_profile', JSON.stringify(profile));
     localStorage.setItem('dx_notifications', JSON.stringify(notifications));
     localStorage.setItem('dx_emergency', JSON.stringify(emergency));
     localStorage.setItem('dx_appearance', JSON.stringify(appearance));
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
+  };
+
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+    if (passData.new !== passData.confirm) return setError("Passwords do not match");
+    if (passData.new.length < 6) return setError("Password must be at least 6 characters");
+
+    setIsChanging(true);
+    setError('');
+
+    try {
+      const user = auth.currentUser;
+      const credential = EmailAuthProvider.credential(user.email, passData.current);
+      
+      // Re-auth
+      await reauthenticateWithCredential(user, credential);
+      
+      // Update
+      await updatePassword(user, passData.new);
+      
+      setIsPassModalOpen(false);
+      setSaved(true); // Re-use saved toast
+      setPassData({ current: '', new: '', confirm: '' });
+    } catch (err) {
+      if (err.message.includes('wrong-password') || err.code?.includes('auth/invalid-credential')) {
+        setError("Invalid Current Credentials");
+      } else if (err.code?.includes('auth/too-many-requests')) {
+        setError("Too many attempts. Try later.");
+      } else if (err.message.includes('network-request-failed')) {
+        setError("Network connection unstable.");
+      } else {
+        setError("Verification Failed. Retrying...");
+      }
+    } finally {
+      setIsChanging(false);
+    }
   };
 
   const Toggle = ({ checked, onChange }) => (
@@ -99,11 +142,11 @@ const Settings = () => {
             value={profile.role}
             onChange={e => setProfile({ ...profile, role: e.target.value })}
           >
-            <option value="Responder" className="bg-[#0C0B1B]">Responder</option>
-            <option value="Team Leader" className="bg-[#0C0B1B]">Team Leader</option>
-            <option value="Coordinator" className="bg-[#0C0B1B]">Coordinator</option>
-            <option value="Observer" className="bg-[#0C0B1B]">Observer</option>
-            <option value="Admin" className="bg-[#0C0B1B]">Admin</option>
+            <option value="Responder">Responder</option>
+            <option value="Team Leader">Team Leader</option>
+            <option value="Coordinator">Coordinator</option>
+            <option value="Observer">Observer</option>
+            <option value="Admin">Admin</option>
           </select>
         </div>
         <div>
@@ -129,11 +172,14 @@ const Settings = () => {
       </div>
 
       <div className="border-t border-white/5 pt-6">
-        <p className={labelClass}>Security</p>
-        <button className="flex items-center gap-3 px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-sm font-bold text-slate-300 hover:bg-white/10 hover:text-white transition-all">
-          <Lock className="w-4 h-4 text-red-400" />
+        <p className={labelClass}>Security Settings</p>
+        <button 
+          onClick={() => setIsPassModalOpen(true)}
+          className="flex items-center gap-3 px-5 py-4 rounded-xl bg-white border border-white/10 text-xs font-black text-gray-900 hover:bg-gray-100 transition-all shadow-sm group"
+        >
+          <Lock className="w-5 h-5 text-red-500 group-hover:scale-110 transition-transform" />
           Change Password
-          <ChevronRight className="w-4 h-4 ml-auto opacity-50" />
+          <ChevronRight className="w-4 h-4 ml-auto opacity-50 text-gray-400" />
         </button>
       </div>
     </div>
@@ -252,9 +298,9 @@ const Settings = () => {
       <div>
         <label className={labelClass}>Language</label>
         <select className={inputClass}>
-          <option className="bg-[#0C0B1B]">English (Global Standard)</option>
-          <option className="bg-[#0C0B1B]">Hindi</option>
-          <option className="bg-[#0C0B1B]">Marathi</option>
+          <option>English (Global Standard)</option>
+          <option>Hindi</option>
+          <option>Marathi</option>
         </select>
       </div>
     </div>
@@ -303,7 +349,7 @@ const Settings = () => {
               <button
                 key={id}
                 onClick={() => setActiveTab(id)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left w-full text-[10px] font-black uppercase tracking-widest ${
+                className={`flex items-center gap-3 px-4 py-4 rounded-xl transition-all text-left w-full text-xs font-black uppercase tracking-widest ${
                   activeTab === id
                     ? 'bg-red-600/10 text-red-400 border border-red-500/30 shadow-[0_0_15px_rgba(220,38,38,0.08)]'
                     : 'text-slate-500 hover:bg-white/5 hover:text-slate-300 border border-transparent'
@@ -321,7 +367,7 @@ const Settings = () => {
               {activeTabData && (
                 <>
                   <activeTabData.icon className="w-5 h-5 text-red-400" />
-                  <h2 className="text-sm font-black uppercase tracking-[0.2em] text-white">
+                  <h2 className="text-base font-black uppercase tracking-[0.2em] text-white">
                     {activeTabData.label} Configuration
                   </h2>
                 </>
@@ -353,8 +399,105 @@ const Settings = () => {
             className="fixed bottom-10 left-1/2 z-[999] bg-[#0C1A0C] border border-emerald-500/30 text-emerald-400 px-8 py-4 rounded-full shadow-2xl flex items-center gap-3"
           >
             <CheckCircle className="w-5 h-5" />
-            <span className="text-[10px] font-black uppercase tracking-widest">Settings saved successfully</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">Profile Configuration Saved Successfully</span>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Password Reset Toast */}
+      <AnimatePresence>
+        {resetSent && (
+          <motion.div
+            initial={{ opacity: 0, y: 40, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            exit={{ opacity: 0, y: 20, x: '-50%' }}
+            className="fixed bottom-10 left-1/2 z-[999] bg-[#0A1220] border border-blue-500/30 text-blue-400 px-8 py-4 rounded-full shadow-2xl flex items-center gap-3"
+          >
+            <Mail className="w-5 h-5" />
+            <span className="text-[10px] font-black uppercase tracking-widest">Tactical Reset Link Sent to your Email</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Password Change Modal */}
+      <AnimatePresence>
+        {isPassModalOpen && (
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="bg-[#0A0D14] border border-white/10 w-full max-w-md rounded-[32px] overflow-hidden shadow-2xl"
+            >
+              <div className="p-8 border-b border-white/5 bg-white/5 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                   <Key className="w-6 h-6 text-red-500" />
+                   <h3 className="text-xl font-black uppercase tracking-tight text-white">Security Update</h3>
+                </div>
+                <button onClick={() => setIsPassModalOpen(false)} className="text-slate-500 hover:text-white transition-colors">
+                  <XCircle className="w-6 h-6" />
+                </button>
+              </div>
+
+              <form onSubmit={handleUpdatePassword} className="p-8 space-y-5">
+                {error && (
+                  <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-xs font-bold text-red-400 text-center uppercase tracking-widest">
+                    {error}
+                  </div>
+                )}
+                
+                <div>
+                   <label className={labelClass}>Current Password</label>
+                   <input 
+                     type="password" 
+                     required
+                     className={inputClass} 
+                     value={passData.current}
+                     onChange={e => setPassData({...passData, current: e.target.value})}
+                   />
+                </div>
+
+                <div>
+                   <label className={labelClass}>New Password</label>
+                   <input 
+                     type="password" 
+                     required
+                     className={inputClass} 
+                     value={passData.new}
+                     onChange={e => setPassData({...passData, new: e.target.value})}
+                   />
+                </div>
+
+                <div>
+                   <label className={labelClass}>Confirm New Password</label>
+                   <input 
+                     type="password" 
+                     required
+                     className={inputClass} 
+                     value={passData.confirm}
+                     onChange={e => setPassData({...passData, confirm: e.target.value})}
+                   />
+                </div>
+
+                <div className="pt-4 flex gap-4">
+                  <button 
+                    type="button" 
+                    onClick={() => setIsPassModalOpen(false)}
+                    className="flex-1 py-4 bg-white/5 text-slate-400 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all border border-white/10"
+                  >
+                    Abort
+                  </button>
+                  <button 
+                    type="submit"
+                    disabled={isChanging}
+                    className="flex-1 py-4 bg-red-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-red-500 transition-all shadow-lg shadow-red-900/20 disabled:opacity-50"
+                  >
+                    {isChanging ? "Securing..." : "Commit Change"}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </motion.div>

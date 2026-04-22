@@ -5,7 +5,7 @@ import {
   Activity, Info, LifeBuoy, ZapOff, Crosshair
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import logo from '../../assets/logo.png';
+import logoImg from '../../assets/website-logo.png';
 
 const Sidebar = ({ isOpen }) => {
   const location = useLocation();
@@ -25,8 +25,8 @@ const Sidebar = ({ isOpen }) => {
     >
       {/* Brand Header */}
       <div className="h-16 flex items-center px-6 border-b border-neutral-200 dark:border-strat-border shrink-0">
-        <div className="bg-red-600 p-1.5 rounded-lg flex items-center justify-center shadow-lg shadow-red-500/20">
-          <ShieldAlert className="w-5 h-5 text-white" />
+        <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center">
+          <img src={logoImg} alt="DisasterX" className="w-full h-full object-contain" />
         </div>
         {isOpen && (
           <motion.div 

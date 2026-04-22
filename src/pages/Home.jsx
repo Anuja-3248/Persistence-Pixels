@@ -6,6 +6,7 @@ import heroBg from '../assets/hero-bg.png';
 import donationBg from '../assets/donation-bg.png';
 import EmergencyProtocols from '../components/EmergencyProtocols';
 import NotificationBell from '../components/notifications/NotificationBell';
+import logoImg from '../assets/website-logo.png';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -81,9 +82,9 @@ const Home = () => {
 
       {/* Top Navigation Overlay */}
       <nav className="relative z-20 flex items-center justify-between px-12 py-8 w-full max-w-[1600px] mx-auto">
-        <div className="flex items-center gap-3">
-          <div className="bg-neon-blue/20 p-2 rounded-lg border border-neon-blue/40 backdrop-blur-md transition-all hover:scale-110">
-            <Activity className="w-8 h-8 text-neon-blue" />
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl overflow-hidden backdrop-blur-md transition-all hover:scale-110">
+            <img src={logoImg} alt="DisasterX" className="w-full h-full object-contain" />
           </div>
           <span className="text-3xl font-black tracking-tighter text-white drop-shadow-lg uppercase">
             Disaster <span className="text-neon-blue">X</span>

@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import NotificationBell from '../notifications/NotificationBell';
 
+import logoImg from '../../assets/website-logo.png';
+
 const Navbar = ({ toggleSidebar }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
@@ -58,12 +60,12 @@ const Navbar = ({ toggleSidebar }) => {
           </button>
           
           <Link to="/dashboard" className="flex items-center gap-3 group">
-            <div className="bg-red-600 p-1.5 rounded-lg shadow-sm group-hover:scale-110 transition-transform">
-              <ShieldAlert className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-lg overflow-hidden group-hover:scale-110 transition-transform">
+              <img src={logoImg} alt="DisasterX" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col">
-              <span className="font-heading font-black text-lg tracking-tighter text-neutral-900 dark:text-white leading-none uppercase">Aegis Sentinel</span>
-              <span className="text-[8px] font-black text-neutral-400 dark:text-strat-text-sub tracking-[0.2em] uppercase leading-none mt-1">Response Node</span>
+              <span className="font-heading font-black text-lg tracking-tighter text-neutral-900 dark:text-white leading-none uppercase">Disaster <span className="text-red-600">X</span></span>
+              <span className="text-[8px] font-black text-neutral-400 dark:text-strat-text-sub tracking-[0.2em] uppercase leading-none mt-1">Strategic Response Node</span>
             </div>
           </Link>
         </div>
