@@ -58,7 +58,7 @@ function App() {
   const isHomePage = location.pathname === '/';
   const isTrackingPage = location.pathname === '/tracking';
 
-  const hideLayout = isHomePage || isDashboardPage || isMapPage || isSOSPage;
+  const hideLayout = isHomePage || isDashboardPage || isMapPage || isSOSPage || isReportPage;
 
   return (
     <>

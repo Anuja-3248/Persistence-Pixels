@@ -1,0 +1,290 @@
+/* Tactical UI - Military Command Center Style */
+
+.tactical-container {
+  --neon-blue: #00f2ff;
+  --neon-red: #ff003c;
+  --dark-bg: #05070a;
+  --card-bg: rgba(10, 15, 25, 0.8);
+  --border-color: rgba(0, 242, 255, 0.2);
+  
+  background: var(--dark-bg);
+  min-height: 100vh;
+  color: #e0e0e0;
+  font-family: 'Inter', 'Roboto Mono', monospace;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Scanline Effect */
+.tactical-container::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 2;
+  background-size: 100% 4px, 3px 100%;
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+.tactical-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tactical-card:hover {
+  border-color: rgba(0, 242, 255, 0.4);
+  box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
+}
+
+.tactical-card::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid var(--neon-blue);
+  border-left: 2px solid var(--neon-blue);
+}
+
+.tactical-card::before {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 10px;
+  height: 10px;
+  border-bottom: 2px solid var(--neon-blue);
+  border-right: 2px solid var(--neon-blue);
+}
+
+.tactical-card.danger {
+  border-color: rgba(255, 0, 60, 0.2);
+}
+
+.tactical-card.danger::after,
+.tactical-card.danger::before {
+  border-color: var(--neon-red);
+}
+
+/* Neon Text & Buttons */
+.text-neon-blue {
+  color: var(--neon-blue);
+  text-shadow: 0 0 8px rgba(0, 242, 255, 0.5);
+}
+
+.text-neon-red {
+  color: var(--neon-red);
+  text-shadow: 0 0 8px rgba(255, 0, 60, 0.5);
+}
+
+.btn-tactical {
+  background: transparent;
+  border: 1px solid var(--neon-blue);
+  color: var(--neon-blue);
+  padding: 12px 24px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-tactical:hover {
+  background: var(--neon-blue);
+  color: black;
+  box-shadow: 0 0 20px var(--neon-blue);
+}
+
+.btn-tactical-red {
+  border-color: var(--neon-red);
+  color: var(--neon-red);
+  background: rgba(255, 0, 60, 0.1);
+}
+
+.btn-tactical-red:hover {
+  background: var(--neon-red);
+  color: white;
+  box-shadow: 0 0 30px var(--neon-red);
+}
+
+/* Progress Bar */
+.progress-container {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--neon-blue));
+  box-shadow: 0 0 10px var(--neon-blue);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Input Styles */
+.tactical-input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 4px;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.tactical-input:focus {
+  border-color: var(--neon-blue);
+  background: rgba(0, 242, 255, 0.05);
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 242, 255, 0.1);
+}
+
+.tactical-label {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+/* Toggle Switch */
+.tactical-toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 22px;
+}
+
+.tactical-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: .4s;
+  border-radius: 22px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--neon-blue);
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+/* Map Overlay */
+.map-overlay {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: rgba(5, 7, 10, 0.85);
+  padding: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+/* Step Transitions */
+.step-enter {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.step-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms;
+}
+.step-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+.step-exit-active {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Animations */
+@keyframes pulse-red {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.animate-pulse-red {
+  animation: pulse-red 2s infinite;
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.tactical-glitch:hover {
+  animation: glitch 0.3s infinite;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 242, 255, 0.1);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 242, 255, 0.3);
+}
+
+/* Map Style override for dark theme */
+.grey-map .leaflet-container {
+  background: #0a0c10 !important;
+}
+
+.tactical-marker {
+  z-index: 1000;
+}
