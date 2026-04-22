@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { auth, db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import NotificationBell from '../components/notifications/NotificationBell';
 
 const Dashboard = () => {
   const [userProfile, setUserProfile] = useState(() => {
@@ -125,9 +126,11 @@ const Dashboard = () => {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none z-0" />
       
       {/* PROFILE TAB (Top Right) */}
-      <div className="absolute top-8 right-8 z-[50]">
+      <div className="absolute top-8 right-8 z-[50] flex items-center gap-4">
         {!loading && (
-          <Link to="/profile" className="flex items-center gap-4 bg-[#11111a]/80 border border-white/10 pl-5 pr-3 py-2.5 rounded-3xl hover:bg-white/10 transition-all cursor-pointer group backdrop-blur-md hover:scale-105 active:scale-95 shadow-xl">
+          <>
+            <NotificationBell />
+            <Link to="/profile" className="flex items-center gap-4 bg-[#11111a]/80 border border-white/10 pl-5 pr-3 py-2.5 rounded-3xl hover:bg-white/10 transition-all cursor-pointer group backdrop-blur-md hover:scale-105 active:scale-95 shadow-xl">
             <div className="text-right">
               <p className="text-sm font-bold text-gray-400 uppercase leading-none mb-1.5 group-hover:text-white transition-colors">
                 {userProfile?.name || 'Guest User'}
@@ -137,7 +140,8 @@ const Dashboard = () => {
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 border border-blue-400/50 flex items-center justify-center font-black text-2xl shadow-lg shadow-blue-500/30 text-white">
               {userProfile?.initial || '?'}
             </div>
-          </Link>
+            </Link>
+          </>
         )}
       </div>
 

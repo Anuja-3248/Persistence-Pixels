@@ -5,6 +5,7 @@ import { Shield, ChevronRight, Activity, Map, Globe, Heart, User, LogOut, Mail, 
 import heroBg from '../assets/hero-bg.png';
 import donationBg from '../assets/donation-bg.png';
 import EmergencyProtocols from '../components/EmergencyProtocols';
+import NotificationBell from '../components/notifications/NotificationBell';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -127,6 +128,7 @@ const Home = () => {
         <div className="flex items-center gap-6">
           {isLoggedIn ? (
             <>
+              <NotificationBell />
               <Link to="/profile" className="px-8 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-sm hover:bg-white/10 transition-all backdrop-blur-md flex items-center gap-2">
                 <User className="w-4 h-4 text-neon-blue" />
                 <span>PROFILE</span>

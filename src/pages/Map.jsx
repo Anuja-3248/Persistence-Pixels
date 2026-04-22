@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { motion, AnimatePresence } from 'framer-motion';
+import NotificationBell from '../components/notifications/NotificationBell';
 
 // ─── MARKER ICONS ────────────────────────────────────────────────────────────
 const getIcon = (type, color) => {
@@ -436,16 +437,19 @@ const LiveMap = () => {
       </div>
 
       {/* ── TOP-RIGHT STATUS ── */}
-      <div className="absolute top-6 right-6 z-[2000] flex items-center gap-2.5 px-5 py-3 bg-[#0d0d18]/90 border border-white/15 rounded-xl backdrop-blur-md shadow-xl">
-        <div>
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest text-right">
-            {syncing ? 'Syncing...' : 'Live Feed Online'}
-          </p>
-          <p className="text-[9px] font-black text-emerald-400 uppercase tracking-widest text-right mt-0.5">
-            {incidents.length} nodes active
-          </p>
+      <div className="absolute top-6 right-6 z-[2000] flex items-center gap-4">
+        <NotificationBell />
+        <div className="flex items-center gap-2.5 px-5 py-3 bg-[#0d0d18]/90 border border-white/15 rounded-xl backdrop-blur-md shadow-xl">
+          <div>
+            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest text-right">
+              {syncing ? 'Syncing...' : 'Live Feed Online'}
+            </p>
+            <p className="text-[9px] font-black text-emerald-400 uppercase tracking-widest text-right mt-0.5">
+              {incidents.length} nodes active
+            </p>
+          </div>
+          <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${syncing ? 'bg-blue-500 animate-pulse' : 'bg-emerald-400'}`} />
         </div>
-        <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${syncing ? 'bg-blue-500 animate-pulse' : 'bg-emerald-400'}`} />
       </div>
 
       {/* ── BOTTOM DISASTER-TYPE BUTTONS ── */}

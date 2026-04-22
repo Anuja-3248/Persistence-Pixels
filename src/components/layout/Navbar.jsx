@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
+import NotificationBell from '../notifications/NotificationBell';
 
 const Navbar = ({ toggleSidebar }) => {
   const navigate = useNavigate();
@@ -104,12 +105,7 @@ const Navbar = ({ toggleSidebar }) => {
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
             
-            <div className="relative">
-              <button className="p-2.5 text-neutral-500 dark:text-strat-text-sub hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/5 rounded-xl transition-all">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-2 right-2 w-2 h-2 bg-red-600 rounded-full border-2 border-white dark:border-strat-panel"></span>
-              </button>
-            </div>
+            <NotificationBell />
           </div>
 
           {/* Donate Button */}
