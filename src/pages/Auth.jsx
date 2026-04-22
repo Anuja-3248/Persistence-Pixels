@@ -101,10 +101,11 @@ const Auth = () => {
       console.error("Auth Error:", err.code, err.message);
       
       let friendlyMessage = "Authentication failed. Please check your credentials.";
-      if (err.code === 'auth/invalid-credential') friendlyMessage = "Invalid email or password.";
+      if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') friendlyMessage = "Invalid email or password.";
       if (err.code === 'auth/email-already-in-use') friendlyMessage = "Email already registered. Try logging in.";
       if (err.code === 'auth/weak-password') friendlyMessage = "Password must be at least 6 characters.";
       if (err.code === 'auth/user-not-found') friendlyMessage = "No account found with this email.";
+      if (err.code === 'auth/too-many-requests') friendlyMessage = "Too many attempts. Account locked temporarily.";
       
       setError(friendlyMessage);
     } finally {
@@ -219,6 +220,15 @@ const Auth = () => {
 
           {/* Form */}
           <form onSubmit={handleAuth} className="space-y-4">
+            {error && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-xs font-bold text-red-400 text-center uppercase tracking-widest"
+              >
+                {error}
+              </motion.div>
+            )}
             <AnimatePresence mode="wait">
               {!isLogin && (
                 <motion.div

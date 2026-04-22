@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, User, Bot, HelpCircle, MapPin, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -8,6 +8,17 @@ const Chatbot = () => {
     { id: 1, text: "Hello! I am Kavach. How can I assist you during this emergency?", sender: 'bot' }
   ]);
   const [inputValue, setInputValue] = useState('');
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      scrollToBottom();
+    }
+  }, [messages, isOpen]);
 
   useEffect(() => {
     const handleOpen = () => setIsOpen(true);
@@ -32,7 +43,7 @@ const Chatbot = () => {
 
     // 2. Add Bot Loading State
     const loadingId = Date.now() + Math.random();
-    setMessages(prev => [...prev, { id: loadingId, text: "Decrypting data...", sender: 'bot', isLoading: true }]);
+    setMessages(prev => [...prev, { id: loadingId, text: "...", sender: 'bot', isLoading: true }]);
 
     // 3. Connect to Sarvam AI (Indic optimized)
     try {
@@ -54,7 +65,7 @@ const Chatbot = () => {
           messages: [
             {
               role: "system",
-              content: "You are Kavach, an emergency AI. Give short, tactical disaster advice. No markdown."
+              content: "You are Kavach, a high-priority tactical AI. Your goal is to save lives. BE CONCISE. Use plain dashes (-) for lists. DO NOT USE ASTERISKS (*) OR DOUBLE ASTERISKS (**). No markdown. Use short, punchy sentences. Deliver immediate action items first."
             },
             {
               role: "user",
@@ -69,7 +80,10 @@ const Chatbot = () => {
       }
 
       const data = await response.json();
-      const reply = data.choices[0].message.content;
+      let reply = data.choices[0].message.content;
+
+      // Anti-markdown cleaning (Remove asterisks/stars)
+      reply = reply.replace(/\*/g, '');
 
       // Replace loading state with the actual response
       setMessages(prev => prev.map(msg => msg.id === loadingId ? { ...msg, text: reply, isLoading: false } : msg));
@@ -82,17 +96,17 @@ const Chatbot = () => {
       const lwText = text.toLowerCase();
       
       if (lwText.includes('flood') || lwText.includes('water')) {
-         fallbackReply = "FLOOD PROTOCOL: Move to high ground immediately. Avoid walking or driving through flood waters. Turn off utilities at the main switches if instructed.";
+         fallbackReply = "FLOOD PROTOCOLS:\n- Move to high ground immediately.\n- Avoid walking/driving through water.\n- Kill utilities at main switches.\n- Stay away from power lines.";
       } else if (lwText.includes('fire') || lwText.includes('burn')) {
-         fallbackReply = "FIRE PROTOCOL: Stay low to the ground to avoid smoke inhalation. Check doors for heat before opening. Evacuate immediately and call emergency services.";
+         fallbackReply = "FIRE PROTOCOLS:\n- Low-craw to avoid smoke.\n- Check doors for heat before opening.\n- Evacuate immediately.\n- Call 101/911 from safe perimeter.";
       } else if (lwText.includes('earthquake') || lwText.includes('shake')) {
-         fallbackReply = "EARTHQUAKE PROTOCOL: DROP, COVER, and HOLD ON! Stay away from glass, windows, outside doors, and anything that could fall.";
+         fallbackReply = "EARTHQUAKE PROTOCOLS:\n- DROP, COVER, and HOLD ON!\n- Stay away from glass/windows.\n- Stay indoors until shaking stops.\n- Check for gas leaks after.";
       } else if (lwText.includes('cut') || lwText.includes('bleed') || lwText.includes('blood')) {
-         fallbackReply = "MEDICAL PROTOCOL (BLEEDING): Apply firm, direct pressure to the wound with a clean cloth. Elevate the injured area above the heart if possible. Do not remove the cloth if soaked; add another on top.";
+         fallbackReply = "MEDICAL (BLEEDING):\n1. Apply firm, direct pressure.\n2. Use clean cloth.\n3. Elevate above heart level.\n4. Call triage support.";
       } else if (lwText.includes('shelter') || lwText.includes('where')) {
-         fallbackReply = "SHELTER INFO: There are 3 verified shelters operating nearby. The closest is approximately 1.2km away. Tracking deployed.";
+         fallbackReply = "SHELTER STATUS:\n- 3 Operational shelters found.\n- Closest: 1.2km (North-West).\n- Tactical route deployed to map.";
       } else {
-         fallbackReply = "TACTICAL AI (OFFLINE): Your message has been received. Maintain a safe perimeter and preserve your mobile battery. Emergency services are currently prioritizing critical zones.";
+         fallbackReply = "TACTICAL AI (OFFLINE):\n- Message received.\n- Preserve mobile battery.\n- Maintain safe perimeter.\n- Await local deployment.";
       }
 
       setMessages(prev => prev.map(msg => msg.id === loadingId ? { 
@@ -152,14 +166,14 @@ const Chatbot = () => {
             <div className="flex-1 overflow-y-auto p-5 space-y-4 scrollbar-hide">
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[80%] p-3.5 rounded-2xl text-sm ${
+                  <div className={`max-w-[80%] p-3.5 rounded-2xl text-sm whitespace-pre-line ${
                     msg.sender === 'user' 
                       ? 'bg-neon-blue text-dark-900 font-bold rounded-tr-none' 
                       : 'bg-[#1a202c] border border-white/20 text-white font-medium rounded-tl-none'
                   } shadow-lg shadow-black/20`}>
                     {msg.isLoading ? (
-                      <span className="flex items-center gap-2 text-neon-blue font-bold tracking-widest uppercase text-xs">
-                         <Loader2 className="w-4 h-4 animate-spin"/> {msg.text}
+                      <span className="flex items-center gap-1.5 py-1 px-1">
+                         <span className="w-2 h-2 bg-neon-blue rounded-full animate-pulse shadow-[0_0_8px_rgba(80,215,255,0.8)]" />
                       </span>
                     ) : (
                       msg.text
@@ -167,6 +181,7 @@ const Chatbot = () => {
                   </div>
                 </div>
               ))}
+              <div ref={messagesEndRef} />
             </div>
 
             {/* Suggestions */}
