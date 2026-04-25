@@ -1260,18 +1260,7 @@ const Resources = () => {
               </div>
             </div>
 
-            {/* Visual Anchor Element */}
-            <div className="relative overflow-hidden rounded-3xl h-56 bg-slate-200 dark:bg-slate-900 transition-colors duration-500">
-              <img 
-                alt="Atmospheric city" 
-                className="w-full h-full object-cover opacity-60 grayscale" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeYq1x-B06J0svunCO2QsnxGptT1iTx9pwf2LU2Ti2q2T5OcArChn0TBJG5m0Il90cytKK9hi4r7io6fokdXrT-ZgqKPxRwzt-pdvNtzGDfB2T76z-c7Zd1-g2DbcRlugEIPsSSS0NvBznksYUOlajP6GWzMrfFJfzAxSDVU1sWSl-vnbgk8W7hNothjhik1RqJz9dWLw1ROPNPP9l3jQuAkgkRIjAXSM6AV_Oy0bCOH_XU3wfNJw0yUlP7_zD9TxYlRf_aFXMyg"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-200 dark:from-slate-950 to-transparent"></div>
-              <div className="absolute bottom-6 left-8">
-                <p className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">Operational Monitoring: Active</p>
-              </div>
-            </div>
+
           </div>
         </div>
 
