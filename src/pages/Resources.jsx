@@ -5,17 +5,17 @@ import foodWaterImg from '../assets/food-water.png';
 import shelterImg from '../assets/charity-banner.jpg';
 import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Search, 
-  MapPin, 
-  PhoneCall, 
-  Download, 
-  HelpCircle, 
-  Activity, 
-  Droplets, 
-  Home, 
-  Phone, 
-  Package, 
+import {
+  Search,
+  MapPin,
+  PhoneCall,
+  Download,
+  HelpCircle,
+  Activity,
+  Droplets,
+  Home,
+  Phone,
+  Package,
   Users,
   Filter,
   CheckCircle2,
@@ -220,7 +220,7 @@ const NGODashboard = ({ setActiveTab }) => {
                 )}
               </div>
             </div>
-            
+
             <div className="lg:col-span-7">
               <h3 className="text-2xl font-black text-[#1a1a1a] dark:text-white mb-8 flex items-center gap-3"><Award className="w-6 h-6 text-amber-500" /> Top Volunteers in your Sector</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -229,7 +229,7 @@ const NGODashboard = ({ setActiveTab }) => {
                     {prof.verified && <div className="absolute top-4 right-4 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 p-2 rounded-full" title="Verified Volunteer"><ShieldCheck className="w-4 h-4" /></div>}
                     <div className="flex items-center gap-4 mb-6">
                       <div className="w-16 h-16 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                        <img src={`https://i.pravatar.cc/150?img=${idx+10}`} alt={prof.name} className="w-full h-full object-cover grayscale" />
+                        <img src={`https://i.pravatar.cc/150?img=${idx + 10}`} alt={prof.name} className="w-full h-full object-cover grayscale" />
                       </div>
                       <div>
                         <h4 className="text-xl font-bold text-[#1a1a1a] dark:text-white leading-tight">{prof.name}</h4>
@@ -312,15 +312,15 @@ const NGODashboard = ({ setActiveTab }) => {
                 <span className="text-6xl font-black text-[#1a1a1a] dark:text-white">{stats.peopleHelped}</span>
               </div>
             </div>
-            
+
             <div className="bg-[#1a1a1a] dark:bg-slate-900 rounded-3xl p-12 text-white border border-slate-800 text-center relative overflow-hidden">
-               <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-500 via-transparent to-transparent"></div>
-               <BarChart3 className="w-16 h-16 text-blue-500 mx-auto mb-6 relative z-10" />
-               <h2 className="text-4xl font-black mb-4 tracking-tighter relative z-10">Your Community Needs You.</h2>
-               <p className="text-xl text-slate-400 font-light max-w-2xl mx-auto mb-10 relative z-10">Every hour donated, every supply delivered directly saves lives. Join the verified network today.</p>
-               <button onClick={() => setActiveView('volunteer')} className="relative z-10 bg-white text-[#1a1a1a] px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all shadow-2xl active:scale-95 inline-flex items-center gap-3">
-                 Become a Volunteer <ArrowRight className="w-4 h-4" />
-               </button>
+              <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-500 via-transparent to-transparent"></div>
+              <BarChart3 className="w-16 h-16 text-blue-500 mx-auto mb-6 relative z-10" />
+              <h2 className="text-4xl font-black mb-4 tracking-tighter relative z-10">Your Community Needs You.</h2>
+              <p className="text-xl text-slate-400 font-light max-w-2xl mx-auto mb-10 relative z-10">Every hour donated, every supply delivered directly saves lives. Join the verified network today.</p>
+              <button onClick={() => setActiveView('volunteer')} className="relative z-10 bg-white text-[#1a1a1a] px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all shadow-2xl active:scale-95 inline-flex items-center gap-3">
+                Become a Volunteer <ArrowRight className="w-4 h-4" />
+              </button>
             </div>
           </section>
         )}
@@ -336,7 +336,7 @@ const SuppliesDashboard = ({ setActiveTab }) => {
   const [activeChecklist, setActiveChecklist] = useState('emergency');
   const [checkedItems, setCheckedItems] = useState({});
 
-  const toggleCheck = (item) => setCheckedItems(prev => ({...prev, [item]: !prev[item]}));
+  const toggleCheck = (item) => setCheckedItems(prev => ({ ...prev, [item]: !prev[item] }));
 
   const emergencyKit = [
     "Drinking water (at least 3 days)",
@@ -395,7 +395,7 @@ const SuppliesDashboard = ({ setActiveTab }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             <div>
               <label className="block text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">Family Size</label>
-              <select value={kitFamilySize} onChange={(e)=>setKitFamilySize(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-[#1a1a1a] dark:text-white font-bold outline-none">
+              <select value={kitFamilySize} onChange={(e) => setKitFamilySize(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-[#1a1a1a] dark:text-white font-bold outline-none">
                 <option value="1">1 Person</option>
                 <option value="2">2 People</option>
                 <option value="4">3-4 People</option>
@@ -404,7 +404,7 @@ const SuppliesDashboard = ({ setActiveTab }) => {
             </div>
             <div>
               <label className="block text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">Disaster Type</label>
-              <select value={kitDisaster} onChange={(e)=>setKitDisaster(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-[#1a1a1a] dark:text-white font-bold outline-none">
+              <select value={kitDisaster} onChange={(e) => setKitDisaster(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-[#1a1a1a] dark:text-white font-bold outline-none">
                 <option value="flood">Flood</option>
                 <option value="earthquake">Earthquake</option>
                 <option value="fire">Wildfire / Fire</option>
@@ -414,7 +414,7 @@ const SuppliesDashboard = ({ setActiveTab }) => {
           <button onClick={() => setShowCustomKit(true)} className="bg-blue-600 text-white px-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 transition-all shadow-xl active:scale-95">
             Generate Personalized Kit
           </button>
-          
+
           {showCustomKit && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-8 p-8 bg-blue-50 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-800">
               <h3 className="text-xl font-black text-blue-800 dark:text-blue-300 mb-4">Your Custom Kit ({kitFamilySize} Person, {kitDisaster.toUpperCase()})</h3>
@@ -433,8 +433,8 @@ const SuppliesDashboard = ({ setActiveTab }) => {
         <section className="mb-16 grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-4 flex flex-col gap-4">
             {['emergency', 'medical', 'food', 'tools'].map((tab) => (
-              <button 
-                key={tab} 
+              <button
+                key={tab}
                 onClick={() => setActiveChecklist(tab)}
                 className={`p-6 text-left rounded-2xl font-black uppercase tracking-widest transition-all ${activeChecklist === tab ? 'bg-[#1a1a1a] dark:bg-white text-white dark:text-[#1a1a1a] shadow-xl' : 'bg-white dark:bg-slate-900 text-slate-400 border border-slate-100 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-600'}`}
               >
@@ -542,10 +542,10 @@ const Resources = () => {
   const [filterNearest, setFilterNearest] = useState(false);
   const [filterAvailable, setFilterAvailable] = useState(false);
   const [filterFree, setFilterFree] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(() => 
+  const [isDarkMode, setIsDarkMode] = useState(() =>
     document.documentElement.classList.contains('dark') || localStorage.getItem('disasterx_theme') === 'dark'
   );
-  
+
   const [userLocation, setUserLocation] = useState(null);
   const [isLocating, setIsLocating] = useState(false);
   const [shelters, setShelters] = useState(resourcesData.Shelters || []);
@@ -554,10 +554,10 @@ const Resources = () => {
     const R = 6371; // km
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return (R * c).toFixed(1);
   };
 
@@ -568,7 +568,7 @@ const Resources = () => {
         (position) => {
           const { latitude, longitude } = position.coords;
           setUserLocation({ lat: latitude, lng: longitude });
-          
+
           const updatedShelters = [...(resourcesData.Shelters || [])].map(shelter => {
             if (shelter.lat && shelter.lng) {
               const dist = calculateDistance(latitude, longitude, shelter.lat, shelter.lng);
@@ -576,7 +576,7 @@ const Resources = () => {
             }
             return shelter;
           }).sort((a, b) => a.distance - b.distance);
-          
+
           setShelters(updatedShelters);
           setIsLocating(false);
         },
@@ -634,7 +634,7 @@ const Resources = () => {
 
   const processedData = useMemo(() => {
     if (activeTab === 'Directory') return [];
-    
+
     let rawData = [];
     if (activeTab === 'All') {
       Object.keys(resourcesData).forEach(key => {
@@ -646,8 +646,8 @@ const Resources = () => {
 
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      rawData = rawData.filter(item => 
-        item.name.toLowerCase().includes(q) || 
+      rawData = rawData.filter(item =>
+        item.name.toLowerCase().includes(q) ||
         item.details.toLowerCase().includes(q) ||
         (item.type && item.type.toLowerCase().includes(q))
       );
@@ -661,7 +661,7 @@ const Resources = () => {
   }, [activeTab, searchQuery, filterNearest, filterAvailable, filterFree]);
 
   const getStatusBadge = (status) => {
-    switch(status) {
+    switch (status) {
       case 'Available': return <span className="flex items-center gap-1.5 px-3 py-1 bg-green-50 dark:bg-green-950/30 text-green-600 dark:text-green-400 rounded-full text-[10px] font-bold uppercase tracking-wider border border-green-100 dark:border-green-900/30 transition-colors duration-500"><div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div> Available</span>;
       case 'Limited': return <span className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 rounded-full text-[10px] font-bold uppercase tracking-wider border border-amber-100 dark:border-amber-900/30 transition-colors duration-500"><div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></div> Limited</span>;
       case 'Full': return <span className="flex items-center gap-1.5 px-3 py-1 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 rounded-full text-[10px] font-bold uppercase tracking-wider border border-red-100 dark:border-red-900/30 transition-colors duration-500"><div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div> Full Status</span>;
@@ -670,7 +670,7 @@ const Resources = () => {
   };
 
   const getIconForType = (type) => {
-    switch(type) {
+    switch (type) {
       case 'Medical': return <SquarePlus className="w-6 h-6 text-blue-500" />;
       case 'FoodWater': return <Droplets className="w-6 h-6 text-blue-500" />;
       case 'Shelters': return <Home className="w-6 h-6 text-blue-500" />;
@@ -682,7 +682,7 @@ const Resources = () => {
   };
 
   const renderFoodWaterView = () => (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }}
       className="max-w-[1600px] mx-auto bg-white dark:bg-slate-950 min-h-screen font-body pb-32 transition-colors duration-500"
     >
@@ -702,7 +702,7 @@ const Resources = () => {
           <div className="flex flex-col lg:flex-row items-start lg:items-center gap-12">
             <div className="flex-1">
               <h1 className="text-[5.5rem] font-black leading-[0.9] tracking-tighter text-[#1a1a1a] dark:text-white mb-8">
-                Food & Water<br/>Resources.
+                Food & Water<br />Resources.
               </h1>
               <p className="text-slate-500 dark:text-slate-400 text-2xl font-light max-w-xl leading-relaxed">
                 Critical life-support stations currently active within your safety perimeter. Verify status and proximity before departure.
@@ -781,7 +781,7 @@ const Resources = () => {
                             <Activity className="w-6 h-6 text-slate-400 dark:text-slate-500" />
                           </div>
                         </div>
-                        <button 
+                        <button
                           onClick={() => item.mapLink && window.open(item.mapLink, '_blank')}
                           className="bg-[#1a1a1a] dark:bg-white dark:text-[#1a1a1a] text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-black dark:hover:bg-slate-200 transition-all shadow-xl active:scale-95"
                         >
@@ -813,11 +813,10 @@ const Resources = () => {
                 <div className="lg:col-span-12 bg-slate-50 dark:bg-slate-900 rounded-[2.5rem] p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-12 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-500 hover:shadow-xl">
                   <div className="flex-1">
                     <div className="flex items-center gap-4 mb-6">
-                      <div className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border transition-colors duration-500 ${
-                        item.availabilityStatus === 'Available' 
-                        ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900' 
-                        : 'bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 border-red-100 dark:border-red-900'
-                      }`}>
+                      <div className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border transition-colors duration-500 ${item.availabilityStatus === 'Available'
+                          ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900'
+                          : 'bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 border-red-100 dark:border-red-900'
+                        }`}>
                         {item.availabilityStatus === 'Available' ? 'Stable Supply' : 'Limited Supply'}
                       </div>
                       <span className="text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">ID: {item.id.toUpperCase()}</span>
@@ -835,7 +834,7 @@ const Resources = () => {
                     </div>
                   </div>
                   <div className="w-full md:w-auto flex items-center gap-6">
-                    <button 
+                    <button
                       onClick={() => item.mapLink && window.open(item.mapLink, '_blank')}
                       className="flex-1 md:flex-none bg-[#1a1a1a] dark:bg-white dark:text-[#1a1a1a] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-black dark:hover:bg-slate-200 transition-all shadow-xl active:scale-95"
                     >
@@ -891,7 +890,7 @@ const Resources = () => {
 
 
   const renderMedicalView = () => (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }}
       className="max-w-[1600px] mx-auto bg-white dark:bg-slate-950 min-h-screen font-body pb-32 transition-colors duration-500"
     >
@@ -911,7 +910,7 @@ const Resources = () => {
           <div className="flex flex-col lg:flex-row items-start lg:items-center gap-12">
             <div className="flex-1">
               <h1 className="text-[5.5rem] font-black leading-[0.9] tracking-tighter text-[#1a1a1a] dark:text-white mb-8">
-                Medical<br/>Resources.
+                Medical<br />Resources.
               </h1>
               <p className="text-slate-500 dark:text-slate-400 text-2xl font-light max-w-xl leading-relaxed">
                 Real-time capacity and proximity tracking for clinical facilities.
@@ -938,8 +937,8 @@ const Resources = () => {
         {/* Resource List - Tonal Stacking (Dynamic from resourcesData) */}
         <div className="space-y-16">
           {(resourcesData.Medical || []).map((item) => (
-            <section 
-              key={item.id} 
+            <section
+              key={item.id}
               className="group cursor-pointer"
               onClick={() => item.mapLink && window.open(item.mapLink, '_blank')}
             >
@@ -961,30 +960,28 @@ const Resources = () => {
                   </h2>
                   <p className="text-slate-400 dark:text-slate-500 font-medium uppercase tracking-wider text-xs">{item.address}</p>
                 </div>
-                
+
                 <div className="mt-8 md:mt-0 flex flex-wrap items-center gap-4">
-                  <div className={`flex items-center gap-3 px-6 py-3 rounded-2xl border shadow-sm ${
-                    item.availabilityStatus === 'Available' 
-                      ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400' 
+                  <div className={`flex items-center gap-3 px-6 py-3 rounded-2xl border shadow-sm ${item.availabilityStatus === 'Available'
+                      ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400'
                       : item.availabilityStatus === 'Limited'
-                      ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-100 dark:border-amber-800 text-amber-600 dark:text-amber-400'
-                      : 'bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-800 text-red-600 dark:text-red-400'
-                  }`}>
-                    <div className={`w-2.5 h-2.5 rounded-full ${
-                      item.availabilityStatus === 'Available' ? 'bg-emerald-500' : item.availabilityStatus === 'Limited' ? 'bg-amber-500' : 'bg-red-500'
-                    } animate-pulse`}></div>
+                        ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-100 dark:border-amber-800 text-amber-600 dark:text-amber-400'
+                        : 'bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-800 text-red-600 dark:text-red-400'
+                    }`}>
+                    <div className={`w-2.5 h-2.5 rounded-full ${item.availabilityStatus === 'Available' ? 'bg-emerald-500' : item.availabilityStatus === 'Limited' ? 'bg-amber-500' : 'bg-red-500'
+                      } animate-pulse`}></div>
                     <span className="text-[10px] font-black tracking-widest uppercase">{item.availabilityStatus}</span>
                   </div>
-                  
+
                   <div className="flex gap-2">
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); window.open(`tel:${item.contact}`); }}
                       className="p-4 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-600 dark:text-slate-300 hover:bg-blue-500 hover:text-white transition-all shadow-sm"
                       title="Call Facility"
                     >
                       <PhoneCall className="w-5 h-5" />
                     </button>
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); item.mapLink && window.open(item.mapLink, '_blank'); }}
                       className="p-4 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-600 dark:text-slate-300 hover:bg-emerald-500 hover:text-white transition-all shadow-sm"
                       title="Open in Google Maps"
@@ -992,7 +989,7 @@ const Resources = () => {
                       <Navigation className="w-5 h-5" />
                     </button>
                   </div>
-                  
+
                   <ArrowRight className="w-10 h-10 text-slate-200 dark:text-slate-800 group-hover:text-[#1a1a1a] dark:group-hover:text-white group-hover:translate-x-2 transition-all hidden md:block" />
                 </div>
               </div>
@@ -1017,7 +1014,7 @@ const Resources = () => {
   );
 
   const renderSheltersView = () => (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }}
       className="max-w-[1600px] mx-auto bg-white dark:bg-slate-950 min-h-screen font-body pb-32 transition-colors duration-500"
     >
@@ -1037,21 +1034,20 @@ const Resources = () => {
               <span className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 mb-4 block tracking-[0.2em]">SHELTER RECORDS</span>
               <h1 className="text-[5.5rem] font-black text-[#1a1a1a] dark:text-white leading-[0.9] tracking-tighter mb-8">Shelters.</h1>
               <p className="text-2xl font-light text-slate-500 dark:text-slate-400 leading-relaxed mb-8">Verified emergency accommodations and secure relocation centers currently operational.</p>
-              
-              <button 
+
+              <button
                 onClick={handleLocateUser}
                 disabled={isLocating}
-                className={`inline-flex items-center gap-3 px-8 py-5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl active:scale-95 ${
-                  userLocation 
-                  ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20'
-                  : 'bg-[#1a1a1a] hover:bg-black dark:bg-white dark:hover:bg-slate-200 text-white dark:text-[#1a1a1a]'
-                }`}
+                className={`inline-flex items-center gap-3 px-8 py-5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl active:scale-95 ${userLocation
+                    ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20'
+                    : 'bg-[#1a1a1a] hover:bg-black dark:bg-white dark:hover:bg-slate-200 text-white dark:text-[#1a1a1a]'
+                  }`}
               >
                 <Navigation className={`w-5 h-5 ${isLocating ? 'animate-pulse' : ''}`} />
                 {isLocating ? 'Locating...' : userLocation ? 'Location Active' : 'Find Nearby'}
               </button>
             </div>
-            
+
             <div className="lg:w-[480px] shrink-0">
               <motion.div
                 initial={{ opacity: 0, x: 40 }}
@@ -1085,11 +1081,10 @@ const Resources = () => {
                         </div>
                         <h2 className="text-5xl font-black tracking-tighter text-[#1a1a1a] dark:text-white">{item.name}</h2>
                       </div>
-                      <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider border shadow-sm ${
-                        item.availabilityStatus === 'Available' 
-                        ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800' 
-                        : 'bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 border-red-100 dark:border-red-800'
-                      }`}>
+                      <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider border shadow-sm ${item.availabilityStatus === 'Available'
+                          ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800'
+                          : 'bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 border-red-100 dark:border-red-800'
+                        }`}>
                         <div className={`w-2 h-2 rounded-full animate-pulse ${item.availabilityStatus === 'Available' ? 'bg-emerald-500' : 'bg-red-500'}`}></div> {item.availabilityStatus}
                       </div>
                     </div>
@@ -1131,10 +1126,10 @@ const Resources = () => {
 
                     <div className="mt-auto pt-8 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
                       <div className="flex gap-4">
-                         <div className="w-12 h-12 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center"><Home className="w-5 h-5 text-slate-400" /></div>
-                         <div className="w-12 h-12 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center"><Droplets className="w-5 h-5 text-slate-400" /></div>
+                        <div className="w-12 h-12 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center"><Home className="w-5 h-5 text-slate-400" /></div>
+                        <div className="w-12 h-12 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center"><Droplets className="w-5 h-5 text-slate-400" /></div>
                       </div>
-                      <button 
+                      <button
                         onClick={() => item.mapLink && window.open(item.mapLink, '_blank')}
                         className="bg-[#1a1a1a] dark:bg-white dark:text-[#1a1a1a] text-white px-10 py-4 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-black dark:hover:bg-slate-200 transition-all shadow-xl active:scale-95"
                       >
@@ -1153,7 +1148,7 @@ const Resources = () => {
                       <h3 className="text-3xl font-black tracking-tight leading-none mb-4 italic">{item.name}</h3>
                       <p className="text-sm text-slate-400 dark:text-slate-500 font-medium leading-relaxed">{item.details}</p>
                     </div>
-                    <button 
+                    <button
                       onClick={() => item.mapLink && window.open(item.mapLink, '_blank')}
                       className="relative z-10 w-fit text-xs font-black uppercase tracking-widest border-b-2 border-white pb-1 hover:text-blue-400 hover:border-blue-400 transition-all"
                     >
@@ -1189,7 +1184,7 @@ const Resources = () => {
   const renderSuppliesView = () => <SuppliesDashboard setActiveTab={setActiveTab} />;
 
   const renderContactsView = () => (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }}
       className="max-w-[1600px] mx-auto bg-[#f9f9f9] dark:bg-slate-950 min-h-screen font-body transition-colors duration-500"
     >
@@ -1247,7 +1242,7 @@ const Resources = () => {
                 <span className="text-slate-400 dark:text-slate-500 font-bold tracking-widest text-[10px] uppercase block mb-4">Support & Recovery</span>
                 <h2 className="text-2xl font-bold text-[#1a1a1a] dark:text-white leading-tight">Disaster Relief Helpline</h2>
               </div>
-              
+
               <div className="mb-8 inline-flex self-start items-center bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900 px-4 py-2 rounded-full gap-2 transition-colors duration-500">
                 <AlertTriangle className="w-4 h-4 text-red-500" />
                 <span className="text-[11px] font-bold tracking-wider text-red-600 dark:text-red-400 uppercase">Limited Availability</span>
@@ -1287,13 +1282,13 @@ const Resources = () => {
               Verify the safety of your loved ones or register yourself as safe. This encrypted system tracks the last known secure location of registered family members.
             </p>
             <div className="flex justify-between items-end mt-auto">
-              <button onClick={() => window.location.href='/tracking'} className="inline-flex items-center justify-center bg-blue-600 text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-widest active:scale-95 transition-all shadow-xl hover:bg-blue-700 w-full">
+              <button onClick={() => window.location.href = '/tracking'} className="inline-flex items-center justify-center bg-blue-600 text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-widest active:scale-95 transition-all shadow-xl hover:bg-blue-700 w-full">
                 Access Portal
                 <Users className="ml-3 w-5 h-5" />
               </button>
             </div>
           </div>
-          
+
           {/* National Emergency Hotline */}
           <div className="bg-slate-100 dark:bg-slate-900 rounded-3xl p-12 shadow-sm transition-colors duration-500 border border-slate-200 dark:border-slate-800 h-full flex flex-col justify-between">
             <div className="flex justify-between items-start mb-12">
@@ -1310,13 +1305,13 @@ const Resources = () => {
               Direct connection to federal disaster response coordinators for large-scale assistance in any severe disaster.
             </p>
             <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-6 mt-auto">
-               <div>
-                 <p className="text-5xl font-black text-[#1a1a1a] dark:text-white tracking-tighter">112</p>
-               </div>
-               <button onClick={() => window.open('tel:112')} className="inline-flex items-center justify-center bg-[#1a1a1a] dark:bg-white dark:text-[#1a1a1a] text-white px-8 py-5 rounded-2xl font-black text-xs uppercase tracking-widest active:scale-95 transition-all shadow-xl hover:bg-black dark:hover:bg-slate-200">
-                 Call Now
-                 <Phone className="ml-3 w-5 h-5 fill-white dark:fill-[#1a1a1a]" />
-               </button>
+              <div>
+                <p className="text-5xl font-black text-[#1a1a1a] dark:text-white tracking-tighter">112</p>
+              </div>
+              <button onClick={() => window.open('tel:112')} className="inline-flex items-center justify-center bg-[#1a1a1a] dark:bg-white dark:text-[#1a1a1a] text-white px-8 py-5 rounded-2xl font-black text-xs uppercase tracking-widest active:scale-95 transition-all shadow-xl hover:bg-black dark:hover:bg-slate-200">
+                Call Now
+                <Phone className="ml-3 w-5 h-5 fill-white dark:fill-[#1a1a1a]" />
+              </button>
             </div>
           </div>
         </div>
@@ -1407,66 +1402,66 @@ const Resources = () => {
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-500">
-        {activeTab === 'Directory' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="min-h-screen bg-[#f8f9fa] dark:bg-slate-950 pb-24 transition-colors duration-500">
-            <div className="max-w-7xl mx-auto px-6 pt-24 py-20">
-              <div className="max-w-3xl mb-16">
-                <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-6xl font-black text-[#1a1a1a] dark:text-white tracking-tight mb-6">Critical Resource Directory</motion.h1>
-                <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-lg text-slate-500 dark:text-slate-400 leading-relaxed font-medium">Centralized access to verified emergency infrastructure.</motion.p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-                {categories.map((cat, idx) => (
-                  <motion.div key={idx} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.1 }} onClick={() => setActiveTab(cat.id)} className="group bg-white dark:bg-slate-900 p-10 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-slate-200 dark:hover:border-slate-700 transition-all duration-500 flex flex-col h-full cursor-pointer">
-                    <div className="flex justify-between items-start mb-10"><h3 className="text-2xl font-black text-[#1a1a1a] dark:text-white tracking-tight">{cat.name}</h3><div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 transition-colors duration-500"><cat.icon className="w-7 h-7 text-slate-400 dark:text-slate-500 group-hover:text-blue-500 transition-colors duration-500" /></div></div>
-                    <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-10 flex-1">{cat.desc}</p>
-                    <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-500">ACCES RECORDS <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></div>
-                  </motion.div>
-                ))}
-              </div>
-
-
-
+      {activeTab === 'Directory' && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="min-h-screen bg-[#f8f9fa] dark:bg-slate-950 pb-24 transition-colors duration-500">
+          <div className="max-w-7xl mx-auto px-6 pt-24 py-20">
+            <div className="max-w-3xl mb-16">
+              <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-6xl font-black text-[#1a1a1a] dark:text-white tracking-tight mb-6">Critical Resource Directory</motion.h1>
+              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-lg text-slate-500 dark:text-slate-400 leading-relaxed font-medium">Centralized access to verified emergency infrastructure.</motion.p>
             </div>
-          </motion.div>
-        )}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+              {categories.map((cat, idx) => (
+                <motion.div key={idx} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.1 }} onClick={() => setActiveTab(cat.id)} className="group bg-white dark:bg-slate-900 p-10 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-slate-200 dark:hover:border-slate-700 transition-all duration-500 flex flex-col h-full cursor-pointer">
+                  <div className="flex justify-between items-start mb-10"><h3 className="text-2xl font-black text-[#1a1a1a] dark:text-white tracking-tight">{cat.name}</h3><div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 transition-colors duration-500"><cat.icon className="w-7 h-7 text-slate-400 dark:text-slate-500 group-hover:text-blue-500 transition-colors duration-500" /></div></div>
+                  <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-10 flex-1">{cat.desc}</p>
+                  <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-500">ACCES RECORDS <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></div>
+                </motion.div>
+              ))}
+            </div>
 
-        {activeTab === 'Medical' && renderMedicalView()}
-        {activeTab === 'Shelters' && renderSheltersView()}
-        {activeTab === 'Contacts' && renderContactsView()}
-        {activeTab === 'Supplies' && renderSuppliesView()}
-        {activeTab === 'FoodWater' && renderFoodWaterView()}
-        {activeTab === 'NGOs' && renderNGOsView()}
 
-        {activeTab !== 'Directory' && !['Medical', 'FoodWater', 'Shelters', 'Contacts', 'Supplies', 'NGOs'].includes(activeTab) && (
-          <div className="min-h-screen bg-[#060b13] text-white p-8">
-            <div className="max-w-7xl mx-auto space-y-8">
-              <div className="flex items-center gap-4">
-                <button onClick={() => setActiveTab('Directory')} className="p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-all group"><ChevronLeft className="w-6 h-6 text-gray-400 group-hover:text-white" /></button>
-                <div><h2 className="text-4xl font-black uppercase tracking-tighter">{activeTab} <span className="text-blue-500">Directory</span></h2><p className="text-slate-500 font-bold uppercase tracking-widest text-xs mt-1">Verified Relief Infrastructure</p></div>
+
+          </div>
+        </motion.div>
+      )}
+
+      {activeTab === 'Medical' && renderMedicalView()}
+      {activeTab === 'Shelters' && renderSheltersView()}
+      {activeTab === 'Contacts' && renderContactsView()}
+      {activeTab === 'Supplies' && renderSuppliesView()}
+      {activeTab === 'FoodWater' && renderFoodWaterView()}
+      {activeTab === 'NGOs' && renderNGOsView()}
+
+      {activeTab !== 'Directory' && !['Medical', 'FoodWater', 'Shelters', 'Contacts', 'Supplies', 'NGOs'].includes(activeTab) && (
+        <div className="min-h-screen bg-[#060b13] text-white p-8">
+          <div className="max-w-7xl mx-auto space-y-8">
+            <div className="flex items-center gap-4">
+              <button onClick={() => setActiveTab('Directory')} className="p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-all group"><ChevronLeft className="w-6 h-6 text-gray-400 group-hover:text-white" /></button>
+              <div><h2 className="text-4xl font-black uppercase tracking-tighter">{activeTab} <span className="text-blue-500">Directory</span></h2><p className="text-slate-500 font-bold uppercase tracking-widest text-xs mt-1">Verified Relief Infrastructure</p></div>
+            </div>
+            <div className="flex flex-col lg:flex-row gap-4 bg-white/5 p-6 border border-white/10 rounded-3xl backdrop-blur-md">
+              <div className="relative flex-1"><Search className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-500" /><input type="text" placeholder="Search tactical records..." className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-white focus:outline-none focus:border-blue-500 transition-all" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /></div>
+              <div className="flex flex-wrap items-center gap-3">
+                <button onClick={() => setFilterNearest(!filterNearest)} className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest border transition-all ${filterNearest ? 'bg-blue-500/20 border-blue-500/40 text-blue-500' : 'bg-white/5 border-white/10 text-slate-400'}`}>Nearest</button>
+                <button onClick={() => setFilterAvailable(!filterAvailable)} className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest border transition-all ${filterAvailable ? 'bg-green-500/20 border-green-500/40 text-green-500' : 'bg-white/5 border-white/10 text-slate-400'}`}>Available</button>
+                <button onClick={() => setFilterFree(!filterFree)} className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest border transition-all ${filterFree ? 'bg-white/20 border-white/40 text-white' : 'bg-white/5 border-white/10 text-slate-400'}`}>Free</button>
               </div>
-              <div className="flex flex-col lg:flex-row gap-4 bg-white/5 p-6 border border-white/10 rounded-3xl backdrop-blur-md">
-                 <div className="relative flex-1"><Search className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-500" /><input type="text" placeholder="Search tactical records..." className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-white focus:outline-none focus:border-blue-500 transition-all" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /></div>
-                 <div className="flex flex-wrap items-center gap-3">
-                    <button onClick={() => setFilterNearest(!filterNearest)} className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest border transition-all ${filterNearest ? 'bg-blue-500/20 border-blue-500/40 text-blue-500' : 'bg-white/5 border-white/10 text-slate-400'}`}>Nearest</button>
-                    <button onClick={() => setFilterAvailable(!filterAvailable)} className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest border transition-all ${filterAvailable ? 'bg-green-500/20 border-green-500/40 text-green-500' : 'bg-white/5 border-white/10 text-slate-400'}`}>Available</button>
-                    <button onClick={() => setFilterFree(!filterFree)} className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest border transition-all ${filterFree ? 'bg-white/20 border-white/40 text-white' : 'bg-white/5 border-white/10 text-slate-400'}`}>Free</button>
-                 </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                 {processedData.map((item) => (
-                   <motion.div key={item.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/5 p-8 border border-white/10 rounded-[32px] flex flex-col group hover:border-blue-500/30 transition-all bg-gradient-to-b from-white/[0.03] to-transparent">
-                      <div className="flex justify-between items-start mb-6">
-                         <div className="flex gap-4 items-center"><div className="w-12 h-12 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-center">{getIconForType(item.type)}</div><div><h4 className="text-xl font-bold text-white">{item.name}</h4><p className="text-[10px] font-black text-blue-500 uppercase tracking-widest mt-1">{item.distance} KM AWAY</p></div></div>
-                         {getStatusBadge(item.availabilityStatus)}
-                      </div>
-                      <p className="text-sm text-slate-400 leading-relaxed mb-8 flex-1">{item.details}</p>
-                      <div className="grid grid-cols-2 gap-4 mt-auto border-t border-white/10 pt-8"><a target="_blank" rel="noreferrer" href={item.mapLink} className="flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-[10px] font-black tracking-widest text-white transition-all uppercase"><MapPin className="w-4 h-4" /> Map</a><a href={`tel:${item.contact}`} className="flex items-center justify-center gap-2 py-3 bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 border border-blue-500/20 rounded-xl text-[10px] font-black tracking-widest transition-all uppercase"><PhoneCall className="w-4 h-4" /> Contact</a></div>
-                   </motion.div>
-                 ))}
-              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {processedData.map((item) => (
+                <motion.div key={item.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/5 p-8 border border-white/10 rounded-[32px] flex flex-col group hover:border-blue-500/30 transition-all bg-gradient-to-b from-white/[0.03] to-transparent">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="flex gap-4 items-center"><div className="w-12 h-12 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-center">{getIconForType(item.type)}</div><div><h4 className="text-xl font-bold text-white">{item.name}</h4><p className="text-[10px] font-black text-blue-500 uppercase tracking-widest mt-1">{item.distance} KM AWAY</p></div></div>
+                    {getStatusBadge(item.availabilityStatus)}
+                  </div>
+                  <p className="text-sm text-slate-400 leading-relaxed mb-8 flex-1">{item.details}</p>
+                  <div className="grid grid-cols-2 gap-4 mt-auto border-t border-white/10 pt-8"><a target="_blank" rel="noreferrer" href={item.mapLink} className="flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-[10px] font-black tracking-widest text-white transition-all uppercase"><MapPin className="w-4 h-4" /> Map</a><a href={`tel:${item.contact}`} className="flex items-center justify-center gap-2 py-3 bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 border border-blue-500/20 rounded-xl text-[10px] font-black tracking-widest transition-all uppercase"><PhoneCall className="w-4 h-4" /> Contact</a></div>
+                </motion.div>
+              ))}
             </div>
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };
