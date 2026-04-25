@@ -4,18 +4,18 @@
  */
 
 const STORAGE_KEYS = {
-  USER: 'disasterx_user_data',
+  USER: 'disasterx_user_data_v2',
   REPORTS: 'disasterx_reports_data',
 };
 
 const INITIAL_USER = {
-  name: 'Vaishnavi Patil',
-  email: 'vaishnavi@disasterx.ai',
-  phone: '+91 98765 43210',
-  location: 'Mumbai, India',
-  role: 'Field Officer',
-  bio: 'Documenting resilience in the wake of chaos.',
-  primaryOrg: 'Global Resilience Initiative',
+  name: '',
+  email: '',
+  phone: '',
+  location: '',
+  role: 'User',
+  bio: '',
+  primaryOrg: '',
   id: 'ID-01'
 };
 
