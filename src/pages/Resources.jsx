@@ -1316,6 +1316,45 @@ const Resources = () => {
           </div>
         </div>
 
+        {/* Essential Disaster Hotlines */}
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+          {/* FEMA */}
+          <div className="bg-slate-100 dark:bg-slate-900 rounded-3xl p-8 shadow-sm transition-colors duration-500 border border-slate-200 dark:border-slate-800 flex flex-col h-full">
+            <h3 className="text-xl font-bold text-[#1a1a1a] dark:text-white mb-2">FEMA Helpline</h3>
+            <p className="text-slate-500 dark:text-slate-400 text-xs mb-6">Federal disaster assistance and recovery info.</p>
+            <div className="mt-auto">
+              <p className="text-2xl font-black text-[#1a1a1a] dark:text-white mb-4">1-800-621-FEMA</p>
+              <button onClick={() => window.open('https://www.fema.gov', '_blank')} className="w-full bg-white dark:bg-slate-800 text-[#1a1a1a] dark:text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm border border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                Visit Website <ExternalLink className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Poison Control */}
+          <div className="bg-slate-100 dark:bg-slate-900 rounded-3xl p-8 shadow-sm transition-colors duration-500 border border-slate-200 dark:border-slate-800 flex flex-col h-full">
+            <h3 className="text-xl font-bold text-[#1a1a1a] dark:text-white mb-2">Poison Control</h3>
+            <p className="text-slate-500 dark:text-slate-400 text-xs mb-6">Immediate medical advice for poison exposure.</p>
+            <div className="mt-auto">
+              <p className="text-2xl font-black text-[#1a1a1a] dark:text-white mb-4">1-800-222-1222</p>
+              <button onClick={() => window.open('tel:18002221222')} className="w-full bg-blue-600 text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition-colors shadow-sm flex justify-between items-center">
+                Call Now <Phone className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* SAMHSA Disaster Distress */}
+          <div className="bg-slate-100 dark:bg-slate-900 rounded-3xl p-8 shadow-sm transition-colors duration-500 border border-slate-200 dark:border-slate-800 flex flex-col h-full">
+            <h3 className="text-xl font-bold text-[#1a1a1a] dark:text-white mb-2">Disaster Distress</h3>
+            <p className="text-slate-500 dark:text-slate-400 text-xs mb-6">24/7 crisis counseling for disaster survivors.</p>
+            <div className="mt-auto">
+              <p className="text-2xl font-black text-[#1a1a1a] dark:text-white mb-4">1-800-985-5990</p>
+              <button onClick={() => window.open('tel:18009855990')} className="w-full bg-blue-600 text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition-colors shadow-sm flex justify-between items-center">
+                Call Now <Phone className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* Secondary Information Layer */}
         <div className="mt-32 pt-16 border-t border-slate-100 dark:border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-16 transition-colors duration-500">
           <div className="space-y-6">
