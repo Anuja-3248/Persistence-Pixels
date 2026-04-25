@@ -153,16 +153,16 @@ const NGODashboard = ({ setActiveTab }) => {
                 <span className="flex items-center gap-2 text-xs font-bold text-emerald-500 uppercase tracking-widest"><div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div> Live Updates</span>
               </div>
               <div className="h-96 rounded-2xl bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
-                 <img src="https://images.unsplash.com/photo-1524666041070-9d87656c25bb?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover grayscale opacity-60" alt="Map" />
-                 {/* Map Points */}
-                 <div className="absolute top-1/4 left-1/3 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-xl border-2 border-white"><ShieldCheck className="w-3 h-3" /></div>
-                 <div className="absolute top-1/2 right-1/3 w-4 h-4 bg-emerald-500 rounded-full shadow-[0_0_15px_#10b981] animate-pulse"></div>
-                 <div className="absolute bottom-1/3 left-1/2 w-4 h-4 bg-emerald-500 rounded-full shadow-[0_0_15px_#10b981] animate-pulse"></div>
-                 
-                 <div className="absolute bottom-4 left-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-4 rounded-xl border border-white dark:border-slate-700 shadow-lg">
-                   <div className="flex items-center gap-3 mb-2"><div className="w-3 h-3 bg-blue-500 rounded-full"></div><span className="text-xs font-bold text-[#1a1a1a] dark:text-white">Verified NGO</span></div>
-                   <div className="flex items-center gap-3"><div className="w-3 h-3 bg-emerald-500 rounded-full"></div><span className="text-xs font-bold text-[#1a1a1a] dark:text-white">Active Volunteer</span></div>
-                 </div>
+                <iframe
+                  title="NGOs and Volunteering Hubs Map"
+                  src="https://maps.google.com/maps?q=charity+OR+NGO+OR+volunteer+organization&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, position: 'absolute', inset: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                ></iframe>
               </div>
             </div>
           </section>
