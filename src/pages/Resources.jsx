@@ -526,7 +526,7 @@ const SuppliesDashboard = ({ setActiveTab }) => {
                 Are you out of critical supplies? Connect directly with local volunteers and NGOs who are distributing resources in your sector.
               </p>
             </div>
-            <button onClick={() => alert("Supply request form opened.")} className="relative z-10 w-full bg-blue-600 hover:bg-blue-500 text-white px-8 py-5 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-xl active:scale-95 flex items-center justify-center gap-3">
+            <button onClick={() => setActiveTab('NGOs')} className="relative z-10 w-full bg-blue-600 hover:bg-blue-500 text-white px-8 py-5 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-xl active:scale-95 flex items-center justify-center gap-3">
               Request Supplies <ArrowRight className="w-4 h-4" />
             </button>
           </section>
