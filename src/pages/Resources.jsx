@@ -491,12 +491,17 @@ const SuppliesDashboard = ({ setActiveTab }) => {
                 Open Global Map <MapIcon className="w-4 h-4" />
               </button>
             </div>
-            <div className="md:w-1/2 relative min-h-[400px]">
-              <img src="https://images.unsplash.com/photo-1524666041070-9d87656c25bb?q=80&w=2070&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover grayscale opacity-80" alt="Map" />
-              <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay"></div>
-              {/* Map Pings */}
-              <div className="absolute top-1/3 left-1/3 w-4 h-4 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_15px_#10b981]"></div>
-              <div className="absolute top-1/2 right-1/3 w-4 h-4 bg-red-500 rounded-full shadow-[0_0_15px_#ef4444]"></div>
+            <div className="md:w-1/2 relative min-h-[400px] bg-slate-200 dark:bg-slate-800">
+              <iframe
+                title="Nearby Supplies Map"
+                src="https://maps.google.com/maps?q=supermarket+OR+hardware+store&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0, position: 'absolute', inset: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
             </div>
           </div>
         </section>
