@@ -1518,23 +1518,8 @@ const Resources = () => {
                 ))}
               </div>
 
-              <motion.div
-                initial={{ opacity: 0, scale: 0.98 }} whileInView={{ opacity: 1, scale: 1 }}
-                className="relative h-[450px] rounded-[3rem] overflow-hidden group shadow-2xl"
-              >
-                <div className="absolute inset-0 bg-[#0c0c0e]">
-                   <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #333 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
-                   <div className="absolute top-1/2 left-1/2 w-4 h-4 bg-white rounded-full"><span className="absolute inset-0 animate-ping bg-white/50 rounded-full"></span></div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <div className="absolute bottom-12 left-12 bg-white dark:bg-slate-900 p-10 rounded-[2.5rem] shadow-2xl max-w-sm border border-slate-100 dark:border-slate-800 transition-colors duration-500">
-                  <h4 className="text-xl font-black text-[#1a1a1a] dark:text-white mb-2">Live Resource Map</h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">42 active stations reporting in your current sector.</p>
-                  <button onClick={() => window.location.href='/map'} className="mt-6 flex items-center gap-3 py-4 px-8 bg-[#1a1a1a] dark:bg-white dark:text-[#1a1a1a] text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-blue-600 dark:hover:bg-blue-400 transition-all duration-500 group/btn">
-                    <MapIcon className="w-4 h-4" /> Open Tactical Map <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-              </motion.div>
+
+
             </div>
           </motion.div>
         )}
