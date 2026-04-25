@@ -995,145 +995,18 @@ const Resources = () => {
           ))}
         </div>
 
-        {/* Secondary Content / Map Preview */}
-        <section className="mt-32 bg-slate-50 dark:bg-slate-900/50 rounded-[3rem] p-1 overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm transition-colors duration-500">
-          <div className="relative h-[600px] w-full rounded-[2.8rem] overflow-hidden bg-slate-200 dark:bg-slate-800 group">
-            {/* Real-time Map Simulation Overlay */}
-            <div className="absolute inset-0 z-10 pointer-events-none">
-              <div className="absolute inset-0 bg-blue-500/5 dark:bg-blue-500/10 mix-blend-overlay"></div>
-              {/* Pulsing Radar Ring */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <motion.div 
-                  animate={{ scale: [1, 2.5], opacity: [0.5, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeOut" }}
-                  className="w-[500px] h-[500px] border-2 border-blue-500/30 rounded-full"
-                />
-                <motion.div 
-                  animate={{ scale: [1, 2.5], opacity: [0.5, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeOut", delay: 2 }}
-                  className="w-[500px] h-[500px] border-2 border-blue-500/30 rounded-full"
-                />
-              </div>
-              
-              {/* Scanning Line */}
-              <motion.div 
-                animate={{ rotate: 360 }}
-                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                className="absolute top-1/2 left-1/2 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500/40 to-transparent -translate-y-1/2 origin-center"
-              />
+        {/* Find Nearest Hospital Button */}
+        <div className="mt-16 mb-8 flex justify-center">
+          <button
+            onClick={() => window.open('https://www.google.com/maps/search/hospitals+near+me', '_blank')}
+            className="group inline-flex items-center gap-4 bg-[#1a1a1a] dark:bg-white dark:text-[#1a1a1a] text-white px-12 py-6 rounded-[2rem] font-black text-sm uppercase tracking-widest hover:bg-blue-600 dark:hover:bg-blue-500 dark:hover:text-white transition-all duration-300 shadow-2xl active:scale-95"
+          >
+            <MapPin className="w-5 h-5 group-hover:animate-bounce" />
+            View Nearest Hospitals on Google Maps
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
 
-              {/* Data Points on Map */}
-              {(resourcesData.Medical || []).map((item, idx) => (
-                <div 
-                  key={item.id}
-                  className="absolute"
-                  style={{ 
-                    top: `${25 + (idx * 22)}%`, 
-                    left: `${35 + (idx * 18)}%` 
-                  }}
-                >
-                  <div className={`w-4 h-4 rounded-full ${item.availabilityStatus === 'Available' ? 'bg-emerald-500' : 'bg-amber-500'} animate-pulse shadow-[0_0_20px_rgba(16,185,129,0.7)]`} />
-                  <div className="absolute top-6 left-6 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-4 py-2.5 rounded-xl border border-slate-100 dark:border-slate-800 shadow-2xl min-w-[150px]">
-                    <p className="text-[11px] font-black text-[#1a1a1a] dark:text-white uppercase tracking-tighter leading-none mb-1">{item.name}</p>
-                    <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{item.distance} mi • {item.availabilityStatus}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <img 
-              className="w-full h-full object-cover grayscale opacity-30 contrast-125 group-hover:scale-105 transition-transform duration-[3000ms]" 
-              src="https://images.unsplash.com/photo-1524666041070-9d87656c25bb?q=80&w=2070&auto=format&fit=crop"
-              alt="Medical Network Map"
-            />
-            
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-50 dark:from-slate-900 via-transparent to-transparent z-20"></div>
-            
-            <div className="absolute bottom-12 left-12 right-12 flex flex-col xl:flex-row justify-between items-end gap-8 z-30">
-              <div className="flex flex-col md:flex-row gap-6 w-full xl:w-auto">
-                {/* Area Summary Card */}
-                <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-10 rounded-[2.5rem] shadow-2xl border border-white dark:border-slate-800 max-w-md transition-all duration-500 hover:translate-y-[-10px]">
-                  <div className="flex items-center gap-3 mb-6">
-                    <Activity className="w-6 h-6 text-blue-500 animate-pulse" />
-                    <h3 className="font-black text-3xl text-[#1a1a1a] dark:text-white tracking-tighter">Area Summary</h3>
-                  </div>
-                  
-                  <div className="space-y-5">
-                    <div className="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-800">
-                      <span className="text-slate-500 dark:text-slate-400 font-bold text-sm uppercase tracking-wider">Total Facilities</span>
-                      <span className="text-2xl font-black text-[#1a1a1a] dark:text-white">{(resourcesData.Medical || []).length}</span>
-                    </div>
-                    
-                    <div className="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-800">
-                      <span className="text-slate-500 dark:text-slate-400 font-bold text-sm uppercase tracking-wider">Available Now</span>
-                      <span className="text-2xl font-black text-emerald-500">
-                        {(resourcesData.Medical || []).filter(r => r.availabilityStatus === 'Available').length}
-                      </span>
-                    </div>
-                    
-                    <button 
-                      onClick={() => window.open('https://www.google.com/maps/search/hospitals+near+me', '_blank')}
-                      className="w-full mt-4 flex items-center justify-center gap-3 py-4 bg-blue-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 transition-all shadow-lg active:scale-95"
-                    >
-                      <MapPin className="w-4 h-4" />
-                      Find Hospitals in Google Maps
-                    </button>
-                  </div>
-                </div>
-
-                {/* Emergency Dispatch Card */}
-                <div className="bg-red-500/95 backdrop-blur-md p-10 rounded-[2.5rem] shadow-2xl border border-red-400 max-w-sm transition-all duration-500 hover:translate-y-[-10px] text-white">
-                  <div className="flex items-center gap-3 mb-6">
-                    <PhoneCall className="w-6 h-6 text-white animate-bounce" />
-                    <h3 className="font-black text-3xl text-white tracking-tighter">Ambulance</h3>
-                  </div>
-                  <div className="space-y-4">
-                    <div className="p-5 bg-white/10 rounded-2xl border border-white/20">
-                      <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Emergency Line</p>
-                      <p className="text-3xl font-black tracking-tighter">911 / 102</p>
-                    </div>
-                    <button 
-                      onClick={() => window.open('tel:911')}
-                      className="w-full py-4 bg-white text-red-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-50 transition-all shadow-lg active:scale-95"
-                    >
-                      Instant Dispatch
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-4 w-full md:w-auto">
-                <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-6 rounded-3xl border border-white dark:border-slate-800 shadow-xl">
-                  <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Network Health</p>
-                  <div className="flex items-end gap-1.5 h-10">
-                    {[40, 70, 45, 90, 65, 80, 55, 75, 40, 85].map((h, i) => (
-                      <motion.div 
-                        key={i}
-                        initial={{ height: 0 }}
-                        animate={{ height: `${h}%` }}
-                        transition={{ duration: 1, delay: i * 0.1, repeat: Infinity, repeatType: "reverse" }}
-                        className="w-2 bg-blue-500 rounded-full"
-                      />
-                    ))}
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <button onClick={() => window.location.href='/map'} className="flex-1 md:flex-none bg-slate-100 dark:bg-slate-800 text-[#1a1a1a] dark:text-white py-6 px-10 rounded-[2rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-3 shadow-xl active:scale-95 border border-slate-200 dark:border-slate-700">
-                    Sentinel Map
-                    <Activity className="w-4 h-4" />
-                  </button>
-                  <button 
-                    onClick={() => window.open('https://www.google.com/maps/search/medical+facilities+near+me', '_blank')}
-                    className="flex-1 md:flex-none bg-[#1a1a1a] dark:bg-white dark:text-[#1a1a1a] text-white py-6 px-12 rounded-[2rem] font-black text-[10px] uppercase tracking-widest hover:bg-black dark:hover:bg-slate-200 transition-all flex items-center justify-center gap-4 shadow-2xl active:scale-95 group"
-                  >
-                    Google Global Map
-                    <ExternalLink className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
     </motion.div>
   );
