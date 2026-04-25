@@ -545,18 +545,6 @@ const Resources = () => {
   const [isDarkMode, setIsDarkMode] = useState(() => 
     document.documentElement.classList.contains('dark') || localStorage.getItem('disasterx_theme') === 'dark'
   );
-
-  const toggleTheme = () => {
-    const newTheme = isDarkMode ? 'light' : 'dark';
-    if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    localStorage.setItem('disasterx_theme', newTheme);
-    setIsDarkMode(!isDarkMode);
-    window.dispatchEvent(new CustomEvent('disasterx-theme-change', { detail: newTheme }));
-  };
   
   const [userLocation, setUserLocation] = useState(null);
   const [isLocating, setIsLocating] = useState(false);
@@ -1483,7 +1471,7 @@ const Resources = () => {
         {/* Floating Dark Mode Toggle */}
         <button 
           onClick={toggleTheme}
-          className="fixed bottom-8 right-8 z-[100] w-14 h-14 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-2xl border border-slate-200 dark:border-slate-700 hover:scale-110 active:scale-95 transition-all"
+          className="fixed top-8 right-8 z-[100] w-14 h-14 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-2xl border border-slate-200 dark:border-slate-700 hover:scale-110 active:scale-95 transition-all"
         >
           {isDarkMode ? <Sun className="w-6 h-6 text-yellow-500" /> : <Moon className="w-6 h-6 text-slate-700" />}
         </button>
