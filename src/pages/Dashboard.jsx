@@ -7,19 +7,23 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { auth, db } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { auth } from '../firebase';
+
 import NotificationBell from '../components/notifications/NotificationBell';
 
 import logoImg from '../assets/website-logo.png';
 
 const Dashboard = () => {
   const [userProfile, setUserProfile] = useState(() => {
-    const localUser = JSON.parse(localStorage.getItem('disasterx_user') || '{}');
-    if (localUser.name) {
+    // Try auth user key first (set on login), then profile data key
+    const authUser = JSON.parse(localStorage.getItem('disasterx_user') || '{}');
+    const profileData = JSON.parse(localStorage.getItem('disasterx_user_data_v2') || '{}');
+    // Profile page edits take highest priority, then auth name
+    const name = profileData.name || authUser.name || '';
+    if (name) {
       return {
-        name: localUser.name,
-        initial: localUser.name.charAt(0).toUpperCase()
+        name,
+        initial: name.charAt(0).toUpperCase()
       };
     }
     return null;
@@ -93,16 +97,28 @@ const Dashboard = () => {
     // Auth Listener
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
-        // Try localStorage first for immediate high-fidelity result
-        const localUser = JSON.parse(localStorage.getItem('disasterx_user') || '{}');
-        
-        // Try to get more info from Firestore if needed
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        // Profile page edits take highest priority
+        const profileData = JSON.parse(localStorage.getItem('disasterx_user_data_v2') || '{}');
+        const authUser = JSON.parse(localStorage.getItem('disasterx_user') || '{}');
+
+        // Determine the best name: profile edit > firebase displayName > email prefix
+        const name = profileData.name || user.displayName || authUser.name || user.email.split('@')[0];
         
         setUserProfile({
-          name: localUser.name || (userDoc.exists() ? userDoc.data().name : (user.displayName || user.email.split('@')[0])),
-          initial: (localUser.name ? localUser.name.charAt(0) : (userDoc.exists() ? userDoc.data().name.charAt(0) : (user.displayName ? user.displayName.charAt(0) : user.email.charAt(0)))).toUpperCase()
+          name,
+          initial: name.charAt(0).toUpperCase()
         });
+
+        // Also sync the auth user localStorage with Firebase's actual display name
+        if (!authUser.name && user.displayName) {
+          localStorage.setItem('disasterx_user', JSON.stringify({ ...authUser, name: user.displayName }));
+        }
+      } else {
+        // Demo/guest - check localStorage only
+        const authUser = JSON.parse(localStorage.getItem('disasterx_user') || '{}');
+        const profileData = JSON.parse(localStorage.getItem('disasterx_user_data_v2') || '{}');
+        const name = profileData.name || authUser.name || '';
+        if (name) setUserProfile({ name, initial: name.charAt(0).toUpperCase() });
       }
       setLoading(false);
     });
