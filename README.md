@@ -7,7 +7,7 @@
 ## 📝 Abstract
 **Disaster X** (developed by Persistence-Pixels) is a high-fidelity disaster management and situational awareness platform designed to optimize emergency response during high-stakes crises. The system transitions beyond traditional reporting tools by providing a **Tactical HUD (Heads-Up Display)** environment that integrates real-time geospatial intelligence, AI-driven survival protocols, and a resilient SOS communication chain.
 
-The platform leverages **React 18** for a high-performance frontend, **Firebase Firestore** for sub-second data synchronization, and the **Google Gemini/Sarvam AI** engine for generating localized, bulleted rescue intelligence. By centralizing fragmented data into a unified "Strategic Mission Control," Disaster X addresses the critical latency between disaster onset and life-saving intervention, aiming for a zero-casualty response model.
+The platform leverages **React 18** for a high-performance frontend, **Firebase Firestore** for sub-second data synchronization, and the **Google Gemini AI** engine for generating localized, bulleted rescue intelligence. By centralizing fragmented data into a unified "Strategic Mission Control," Disaster X addresses the critical latency between disaster onset and life-saving intervention, aiming for a zero-casualty response model.
 
 ---
 
@@ -40,7 +40,7 @@ Disaster X follows a **Serverless Real-time Architecture**, ensuring maximum upt
 
 - **Frontend:** Single Page Application (SPA) built with React/Vite, optimized for low-latency rendering.
 - **Data Bus:** Firebase Firestore acts as the central reactive hub, pushing updates to all connected clients in <200ms.
-- **AI Layer:** Edge-integrated Gemini/Sarvam API for localized crisis reasoning.
+- **AI Layer:** Edge-integrated Gemini API for localized crisis reasoning.
 - **Geospatial Layer:** Mapbox/Google Maps API for tactical risk matrix visualization.
 
 ---
@@ -56,7 +56,7 @@ The HUD is the operational nerve center of Disaster X. It provides a high-contra
 ---
 
 ## 🤖 Module II — KAVACH AI Sentinel
-KAVACH (meaning "Armor") is an integrated AI assistant powered by **Gemini 1.5 Pro**. Unlike generic chatbots, KAVACH is fine-tuned for "Tactical Brevity."
+KAVACH (meaning "Armor") is an integrated AI assistant powered by **Google Gemini**. Unlike generic chatbots, KAVACH is fine-tuned for "Tactical Brevity."
 
 - **Rescue Assistant:** Processes natural language queries to provide immediate first-aid and evacuation steps.
 - **Bulleted Intel:** Automatically formats complex disaster manuals into 3-5 high-priority action items.
@@ -98,7 +98,6 @@ Knowledge is the first line of defense. The Survival Academy gamifies disaster p
 | **Firebase Auth** | Secure Identity Management |
 | **Firestore** | Real-time NoSQL Data Bus |
 | **Gemini AI** | Strategic Crisis Reasoning |
-| **Sarvam API** | Regional Language Processing |
 
 ### 🗺️ Geospatial
 | Technology | Purpose |
@@ -132,7 +131,11 @@ Knowledge is the first line of defense. The Survival Academy gamifies disaster p
    VITE_FIREBASE_API_KEY=your_key
    VITE_FIREBASE_AUTH_DOMAIN=your_domain
    VITE_FIREBASE_PROJECT_ID=your_id
-   VITE_SARVAM_API_KEY=your_key
+   VITE_FIREBASE_STORAGE_BUCKET=your_bucket
+   VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   VITE_FIREBASE_APP_ID=your_app_id
+   VITE_FIREBASE_MEASUREMENT_ID=your_id
+   VITE_GEMINI_API_KEY=your_gemini_key
    ```
 
 4. **Initialize Uplink**
