@@ -94,34 +94,35 @@ const Dashboard = () => {
     const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
     window.addEventListener('mousemove', handleMouseMove);
     
-    // Auth Listener
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        // Profile page edits take highest priority
-        const profileData = JSON.parse(localStorage.getItem('disasterx_user_data_v2') || '{}');
-        const authUser = JSON.parse(localStorage.getItem('disasterx_user') || '{}');
+    // Auth Listener — guard against null auth (Firebase not configured)
+    let unsubscribe = () => {};
+    if (auth) {
+      unsubscribe = auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          const profileData = JSON.parse(localStorage.getItem('disasterx_user_data_v2') || '{}');
+          const authUser = JSON.parse(localStorage.getItem('disasterx_user') || '{}');
+          const name = profileData.name || user.displayName || authUser.name || user.email.split('@')[0];
+          
+          setUserProfile({
+            name,
+            initial: name.charAt(0).toUpperCase()
+          });
 
-        // Determine the best name: profile edit > firebase displayName > email prefix
-        const name = profileData.name || user.displayName || authUser.name || user.email.split('@')[0];
-        
-        setUserProfile({
-          name,
-          initial: name.charAt(0).toUpperCase()
-        });
-
-        // Also sync the auth user localStorage with Firebase's actual display name
-        if (!authUser.name && user.displayName) {
-          localStorage.setItem('disasterx_user', JSON.stringify({ ...authUser, name: user.displayName }));
+          if (!authUser.name && user.displayName) {
+            localStorage.setItem('disasterx_user', JSON.stringify({ ...authUser, name: user.displayName }));
+          }
+        } else {
+          const authUser = JSON.parse(localStorage.getItem('disasterx_user') || '{}');
+          const profileData = JSON.parse(localStorage.getItem('disasterx_user_data_v2') || '{}');
+          const name = profileData.name || authUser.name || '';
+          if (name) setUserProfile({ name, initial: name.charAt(0).toUpperCase() });
         }
-      } else {
-        // Demo/guest - check localStorage only
-        const authUser = JSON.parse(localStorage.getItem('disasterx_user') || '{}');
-        const profileData = JSON.parse(localStorage.getItem('disasterx_user_data_v2') || '{}');
-        const name = profileData.name || authUser.name || '';
-        if (name) setUserProfile({ name, initial: name.charAt(0).toUpperCase() });
-      }
+        setLoading(false);
+      });
+    } else {
+      // Firebase not configured — use localStorage only
       setLoading(false);
-    });
+    }
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);

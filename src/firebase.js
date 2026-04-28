@@ -12,10 +12,21 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-if (!firebaseConfig.apiKey) {
-  console.error("Firebase API Key is missing! Check your .env file.");
+// Check if real Firebase credentials are configured
+const hasValidConfig = firebaseConfig.apiKey && !firebaseConfig.apiKey.includes('your_');
+
+if (!hasValidConfig) {
+  console.warn("Firebase: Using placeholder credentials. Firebase features are disabled. Update your .env file with real keys.");
 }
 
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const auth = getAuth(app);
+let app = null;
+let db = null;
+let auth = null;
+
+if (hasValidConfig) {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  auth = getAuth(app);
+}
+
+export { db, auth };

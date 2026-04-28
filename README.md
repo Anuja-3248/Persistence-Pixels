@@ -86,7 +86,7 @@ In the heat of a disaster, information fragmentation costs lives. Scattered repo
 ### Installation
 1. **Clone the Command**
    ```bash
-   git clone https://github.com/ppranaypatil14-ops/Persistence-Pixels
+    git clone https://github.com/ppranaypatil3434/Persistence-Pixels
    cd Persistence-Pixels
    ```
 

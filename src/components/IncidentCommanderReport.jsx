@@ -17,7 +17,8 @@ import {
   Gavel, 
   Send, 
   Lock as Encrypted,
-  Siren as Emergency
+  Siren as Emergency,
+  Mic
 } from 'lucide-react';
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -60,6 +61,8 @@ const IncidentCommanderReport = ({ onReportSubmit }) => {
   const [isTracking, setIsTracking] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [recognition, setRecognition] = useState(null);
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
@@ -117,6 +120,42 @@ const IncidentCommanderReport = ({ onReportSubmit }) => {
   useEffect(() => {
     trackLocation();
   }, []);
+
+  const startListening = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert('Speech recognition not supported in this browser.');
+      return;
+    }
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const rec = new SpeechRecognition();
+    rec.lang = 'en-IN'; // English (India) as default, can be changed to Hindi via 'hi-IN'
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+
+    rec.onstart = () => {
+      setIsListening(true);
+    };
+    rec.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setFormData((prev) => ({ ...prev, description: prev.description ? prev.description + ' ' + transcript : transcript }));
+    };
+    rec.onend = () => {
+      setIsListening(false);
+    };
+    rec.onerror = (e) => {
+      console.error('Speech recognition error', e);
+      setIsListening(false);
+    };
+    rec.start();
+    setRecognition(rec);
+  };
+
+  const stopListening = () => {
+    if (recognition) {
+      recognition.stop();
+    }
+    setIsListening(false);
+  };
 
   const handleSeverityChange = (level) => {
     setFormData({ ...formData, severity: level });
@@ -274,12 +313,25 @@ const IncidentCommanderReport = ({ onReportSubmit }) => {
 
                 <div className="space-y-4">
                   <label className="text-base font-bold text-[#5b403d]">Description of Scene</label>
-                  <textarea 
-                    className="w-full bg-[#e5e2e1] border-none border-b-2 border-[#8f6f6c] focus:border-[#af101a] focus:ring-0 rounded-t-2xl py-5 px-6 text-lg transition-all resize-none min-h-[160px]" 
-                    placeholder="Describe what you see, any casualties, or immediate threats..." 
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  />
+                  <div className="relative">
+                    <textarea 
+                      className="w-full bg-[#e5e2e1] border-none border-b-2 border-[#8f6f6c] focus:border-[#af101a] focus:ring-0 rounded-t-2xl py-5 px-6 text-lg transition-all resize-none min-h-[160px]" 
+                      placeholder="Describe what you see, any casualties, or immediate threats..." 
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    />
+                    <button
+                      type="button"
+                      onClick={isListening ? stopListening : startListening}
+                      className="absolute right-4 top-4 p-2 rounded-full bg-white/80 hover:bg-white shadow-md transition-colors"
+                      disabled={!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)}
+                    >
+                      <Mic className={`w-5 h-5 ${isListening ? 'text-red-600 animate-pulse' : 'text-gray-600'}`} />
+                    </button>
+                    {isListening && (
+                      <span className="absolute left-4 bottom-2 text-sm text-red-600 font-medium">Listening...</span>
+                    )}
+                  </div>
                 </div>
               </div>
             </section>
