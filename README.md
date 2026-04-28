@@ -1,92 +1,124 @@
-# 🛡️ DISASTER X | Persistence-Pixels
-
-<div align="center">
-
-![Project Status](https://img.shields.io/badge/PROJECT-DISASTER_X-8B0000?style=for-the-badge&logo=target)
-![AI STATUS](https://img.shields.io/badge/AI-KAVACH_SENTINEL-blue?style=for-the-badge&logo=google-cloud)
-![STATUS](https://img.shields.io/badge/STATUS-OPERATIONAL-success?style=for-the-badge)
-
-[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
-[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white)](https://firebase.google.com/)
-[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=700&size=24&pause=1000&color=50D7FF&width=435&lines=RESPOND.+RESCUE.+RECOVER.;TACTICAL+STRAT-COM+PORTAL;AI-POWERED+DISASTER+SENTINEL)](https://git.io/typing-svg)
-
-**The Future of Emergency Response Coordination**
-*Interactive. Resilient. Tactical.*
-
-</div>
+# 🛡️ DISASTER X – Persistence-Pixels
+### Tactical Mission Command & AI-Powered Disaster Response Ecosystem
+**Made with React** | **Firebase Powered** | **Gemini AI Integrated** | **Tactical HUD Design** | **MIT License**
 
 ---
 
-## 🚨 Problem Statement
-In the heat of a disaster, information fragmentation costs lives. Scattered reports, slow communication, and a lack of real-time situational awareness leave response teams and civilians in the dark. Traditional relief methods lack the **visual intelligence** and **instant coordination** needed to beat the clock.
+## 📝 Abstract
+**Disaster X** (developed by Persistence-Pixels) is a high-fidelity disaster management and situational awareness platform designed to optimize emergency response during high-stakes crises. The system transitions beyond traditional reporting tools by providing a **Tactical HUD (Heads-Up Display)** environment that integrates real-time geospatial intelligence, AI-driven survival protocols, and a resilient SOS communication chain.
 
-## 🧠 Solution Overview
-**Disaster X** is an innovative, tactical mission command platform designed for high-stakes emergency response. By merging real-time data visualization with AI-driven rescue protocols, Disaster X provides a "Strategic HUD" experience for responders and survivors alike.
-
-*   **See**: Live tactical maps visualize active disaster zones and risk levels.
-*   **Analyze**: KAVACH AI evaluates threats and provides instant survival protocols.
-*   **Coordinate**: Secure SOS beacons and response tracking ensure no one is left behind.
+The platform leverages **React 18** for a high-performance frontend, **Firebase Firestore** for sub-second data synchronization, and the **Google Gemini/Sarvam AI** engine for generating localized, bulleted rescue intelligence. By centralizing fragmented data into a unified "Strategic Mission Control," Disaster X addresses the critical latency between disaster onset and life-saving intervention, aiming for a zero-casualty response model.
 
 ---
 
-## ✨ Key Features
-
-### 🖥️ Tactical Command HUD
-- **Real-Time Risk Matrix**: Visualizes active threats (Wildfires, Floods, Seismic activity) using high-contrast tactical overlays.
-- **Mission Dashboard**: Centralized view for managing field operations and victim statistics.
-- **Live Tracking**: Synchronized map view for locating emergency shelters and extraction points.
-
-### 🤖 KAVACH AI Sentinel
-- **Rescue Assistant**: An integrated AI tutor (powered by Sarvam/Gemini) providing punchy, tactical disaster advice.
-- **Bulleted Intel**: No long paragraphs—just immediate, bulleted action items for saving lives.
-- **Offline Protocol Cache**: Pre-cached fallback procedures for when the uplink is unstable.
-
-### 🛰️ Secure SOS & Beacon
-- **Emergency Beacon**: One-click SOS activation with custom distress messaging.
-- **Triage Priority**: Flags alerts based on severity for responder teams.
-- **Security Check-Ins**: Interactive "Are you safe?" drills to track population health.
-
-### 📚 Survival Academy
-- **Gamified Drills**: Learn "Do's & Don'ts" through interactive scenario-based video training.
-- **Strategic Manuals**: High-fidelity resources for everything from flash floods to seismic recovery.
+## 📋 Table of Contents
+- [Introduction](#-introduction)
+- [System Architecture](#-system-architecture)
+- [Module I — Tactical Command HUD](#module-i--tactical-command-hud)
+- [Module II — KAVACH AI Sentinel](#module-ii--kavach-ai-sentinel)
+- [Module III — Secure SOS & Beacon System](#module-iii--secure-sos--beacon-system)
+- [Module IV — Survival Academy](#module-iv--survival-academy)
+- [Technology Stack](#-technology-stack)
+- [Installation & Setup](#-installation--setup)
+- [Operational Ethos](#-operational-ethos)
+- [Authors & Team](#-authors--team)
 
 ---
 
-## 🧰 Tech Stack
+## 📖 Introduction
+Natural disasters displaced over 30 million people globally in 2023. The primary bottleneck in response is not a lack of resources, but **information fragmentation**. Responders often work with stale data, while survivors struggle to find actionable advice amidst the chaos.
 
-### 🌐 Frontend
-- **React 18/19** (Latest standard)
-- **Vite** (Next-gen build tool)
-- **Tailwind CSS** (Utility-first tactical styling)
-- **Framer Motion** (Immersive animations & transitions)
-- **Lucide React** (Tactical iconography)
-
-### ⚙️ Integration & Logic
-- **Firebase**: Secure Authentication, Firestore (Real-time Database).
-- **Sarvam AI / Gemini**: Strategic reasoning and disaster intel processing.
-- **Mapbox / Leaflet**: Geospatial data visualization for tactical mapping.
+**Disaster X** was engineered to eliminate this fog of war through three core pillars:
+1.  **Visual Intelligence:** Converting raw coordinates into tactical heatmaps.
+2.  **Instant AI Guidance:** Providing immediate, non-paragraphic rescue steps via KAVACH AI.
+3.  **Resilient Coordination:** A centralized dashboard that synchronizes victims, responders, and relief assets in real-time.
 
 ---
 
 ## 🏗️ System Architecture
-*Mission-critical architecture designed for edge deployment and high uptime.*
+Disaster X follows a **Serverless Real-time Architecture**, ensuring maximum uptime and horizontal scalability during peak disaster events.
+
+- **Frontend:** Single Page Application (SPA) built with React/Vite, optimized for low-latency rendering.
+- **Data Bus:** Firebase Firestore acts as the central reactive hub, pushing updates to all connected clients in <200ms.
+- **AI Layer:** Edge-integrated Gemini/Sarvam API for localized crisis reasoning.
+- **Geospatial Layer:** Mapbox/Google Maps API for tactical risk matrix visualization.
 
 ---
 
-## 🚀 Getting Started
+## 📱 Module I — Tactical Command HUD
+The HUD is the operational nerve center of Disaster X. It provides a high-contrast, "Dark Mode" interface designed for high-stress environments, reducing eye strain and highlighting critical data.
+
+### 🗺️ Real-Time Risk Matrix
+- **Tactical Overlays:** Visualizes active threats (Wildfires, Floods, Seismic activity) using dynamic SVG layers.
+- **Mission Dashboard:** Displays live victim statistics, responder locations, and extraction point availability.
+- **Live Sync:** Every marker on the map is a reactive component that updates instantly as field data arrives in Firebase.
+
+---
+
+## 🤖 Module II — KAVACH AI Sentinel
+KAVACH (meaning "Armor") is an integrated AI assistant powered by **Gemini 1.5 Pro**. Unlike generic chatbots, KAVACH is fine-tuned for "Tactical Brevity."
+
+- **Rescue Assistant:** Processes natural language queries to provide immediate first-aid and evacuation steps.
+- **Bulleted Intel:** Automatically formats complex disaster manuals into 3-5 high-priority action items.
+- **Multilingual Crisis Support:** Communicates in regional dialects to ensure accessibility in diverse disaster zones.
+
+---
+
+## 🛰️ Module III — Secure SOS & Beacon System
+The SOS module provides a one-click distress mechanism that bypasses complex navigation during emergencies.
+
+- **Emergency Beacon:** Captures live GPS, device health, and timestamp data.
+- **Triage Priority:** Algorithms rank incoming SOS signals based on proximity to high-risk zones and reported severity.
+- **Interactive Check-Ins:** Sends automated "Safety Pings" to users in affected areas to track population health status.
+
+---
+
+## 📚 Module IV — Survival Academy
+Knowledge is the first line of defense. The Survival Academy gamifies disaster preparedness to ensure users are "Mission Ready" before a crisis hits.
+
+- **Strategic Manuals:** High-fidelity, illustrated guides for various disaster scenarios.
+- **Interactive Drills:** Scenario-based decision testing that rewards correct survival choices.
+- **Offline Cache:** Essential survival documents are cached locally using Service Workers for zero-connectivity access.
+
+---
+
+## 🧰 Technology Stack
+
+### 🖥️ Frontend & UI
+| Technology | Purpose |
+| :--- | :--- |
+| **React 18** | Core Application Framework |
+| **Vite** | Next-gen Build Tooling |
+| **Tailwind CSS** | Tactical Utility-First Styling |
+| **Framer Motion** | Immersive Animations & Transitions |
+
+### ⚙️ Backend & AI
+| Technology | Purpose |
+| :--- | :--- |
+| **Firebase Auth** | Secure Identity Management |
+| **Firestore** | Real-time NoSQL Data Bus |
+| **Gemini AI** | Strategic Crisis Reasoning |
+| **Sarvam API** | Regional Language Processing |
+
+### 🗺️ Geospatial
+| Technology | Purpose |
+| :--- | :--- |
+| **Mapbox/Google Maps** | Tactical Mapping & Geo-visualization |
+| **OpenStreetMap** | Reverse Geocoding Services |
+
+---
+
+## 🚀 Installation & Setup
 
 ### Prerequisites
 - Node.js 18+
-- Firebase Project Credentials
-- Sarvam AI API Key (Optional for full Chatbot functionality)
+- Firebase Project
+- Google AI (Gemini) API Key
 
-### Installation
+### Deployment Steps
 1. **Clone the Command**
    ```bash
-    git clone https://github.com/ppranaypatil3434/Persistence-Pixels
+   git clone https://github.com/ppranaypatil14-ops/Persistence-Pixels
    cd Persistence-Pixels
    ```
 
@@ -95,16 +127,12 @@ In the heat of a disaster, information fragmentation costs lives. Scattered repo
    npm install
    ```
 
-3. **Configure Tactical Link**
-   Create a `.env` file in the root directory:
+3. **Configure Tactical Link (.env)**
    ```env
    VITE_FIREBASE_API_KEY=your_key
    VITE_FIREBASE_AUTH_DOMAIN=your_domain
    VITE_FIREBASE_PROJECT_ID=your_id
-   VITE_FIREBASE_STORAGE_BUCKET=your_bucket
-   VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-   VITE_FIREBASE_APP_ID=your_app_id
-   VITE_SARVAM_API_KEY=your_sarvam_key
+   VITE_SARVAM_API_KEY=your_key
    ```
 
 4. **Initialize Uplink**
@@ -114,20 +142,21 @@ In the heat of a disaster, information fragmentation costs lives. Scattered repo
 
 ---
 
-## 🤝 Tactical Development Team
-Developed by **Persistence Pixel** for the 2026 GSC Solution Challenge.
-
-*   **Anuja Pawar** - *The Architect & Technical Visionary*
-*   **Pranay Patil** - *Full Stack Contributor*
-*   **Bhavika Patil** - *UI/UX Designer*
-*   **Harshita Jadhav** - *Research & Documentation*
+## 📜 Operational Ethos
+*Disaster X is built on the foundation of resilience, transparency, and the pursuit of zero-casualty disaster response.*
 
 ---
 
-## 📜 Operational Ethos
-*Built on the foundation of resilience, transparency, and the pursuit of zero-casualty disaster response.*
+## 🤝 Authors & Team
+Developed with dedication for the **2026 Google Solution Challenge**.
+
+*   **Anuja Pawar** - *The Architect & Technical Visionary*
+*   **Pranay Patil** - *Full Stack Lead*
+*   **Bhavika Patil** - *UI/UX Strategy*
+*   **Harshita Jadhav** - *Research & Intelligence*
 
 ---
 <div align="center">
-  <h3>🌍 Built for Google Solution Challenge 2026 🌍</h3>
+  <h3>🌍 Responding. Rescuing. Recovering. 🌍</h3>
+  <p>Built by <b>Persistence Pixels</b></p>
 </div>
