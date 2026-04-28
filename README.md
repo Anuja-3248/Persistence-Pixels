@@ -1,6 +1,11 @@
-# 🛡️ DISASTER X – Persistence-Pixels
-### Tactical Mission Command & AI-Powered Disaster Response Ecosystem
-**Made with React** | **Firebase Powered** | **Gemini AI Integrated** | **Tactical HUD Design** | **MIT License**
+# 🌍 DISASTER X – Strategic Response & AI Sentinel
+
+![Made with React](https://img.shields.io/badge/Made_with-React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![AI Powered Gemini](https://img.shields.io/badge/AI_Powered-Gemini-4285F4?style=for-the-badge&logo=google-gemini&logoColor=white)
+![Backend Firebase](https://img.shields.io/badge/Backend-Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![Built for Web](https://img.shields.io/badge/Built_for-Web-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![GSC 2026](https://img.shields.io/badge/Solution-GSC_2026-F4B400?style=for-the-badge&logo=google&logoColor=white)
+![License MIT](https://img.shields.io/badge/License-MIT-32CD32?style=for-the-badge)
 
 ---
 
