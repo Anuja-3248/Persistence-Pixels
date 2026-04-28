@@ -169,21 +169,24 @@ Please ensure your code follows the existing project conventions and includes re
 *   Verified integration with official emergency communication infrastructure.
 *   Security audits and penetration testing for all public-facing modules.
 
-👨‍💻 Authors & Contributors
+## 👨‍💻 Authors & Contributors
+
 **Anuja Pawar**  
-GitHub: [anujap2222](https://github.com/anujap2222)
+GitHub: [Anuja-3248](https://github.com/Anuja-3248)
 
 **Pranay Patil**  
 GitHub: [ppranaypatil14-ops](https://github.com/ppranaypatil14-ops)
 
 **Bhavika Patil**  
-GitHub: [bhavika-patil](https://github.com/bhavika-patil)
+GitHub: [Bhavika-0308](https://github.com/Bhavika-0308)
 
 **Harshita Jadhav**  
-GitHub: [harshita-jadhav](https://github.com/harshita-jadhav)
+GitHub: [harshita10](https://github.com/harshita10)
 
-📬 Contact
-Email: anujap2222@gmail.com  
-Project Repository: [https://github.com/ppranaypatil14-ops/Persistence-Pixels](https://github.com/ppranaypatil14-ops/Persistence-Pixels)
+---
+
+## 📬 Contact
+**Email:** anujap2222@gmail.com  
+**Project Repository:** [https://github.com/ppranaypatil14-ops/Persistence-Pixels](https://github.com/ppranaypatil14-ops/Persistence-Pixels)
 
 ❤️🔥 Made with dedication and Collaboration for Google Solution Challenge 2026 :)
