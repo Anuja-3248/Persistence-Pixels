@@ -150,16 +150,40 @@ Knowledge is the first line of defense. The Survival Academy gamifies disaster p
 
 ---
 
-## 🤝 Authors & Team
-Developed with dedication for the **2026 Google Solution Challenge**.
+🤝 Contributing
+We welcome contributions from the open-source community. To contribute:
 
-*   **Anuja Pawar** - *The Architect & Technical Visionary*
-*   **Pranay Patil** - *Full Stack Lead*
-*   **Bhavika Patil** - *UI/UX Strategy*
-*   **Harshita Jadhav** - *Research & Intelligence*
+1. **Fork the repository**
+2. **Create a feature branch** (`git checkout -b feature/your-feature-name`)
+3. **Commit your changes** with descriptive messages (`git commit -m 'Add feature: description'`)
+4. **Push to your branch** (`git push origin feature/your-feature-name`)
+5. **Open a Pull Request** with a detailed description of your changes
 
----
-<div align="center">
-  <h3>🌍 Responding. Rescuing. Recovering. 🌍</h3>
-  <p>Built by <b>Persistence Pixels</b></p>
-</div>
+Please ensure your code follows the existing project conventions and includes relevant documentation.
+
+⚠️ Disclaimer
+**Disaster X** is a research prototype developed for academic demonstration, hackathon presentation, and proof-of-concept validation. For real-world deployment in active disaster scenarios, the following are prerequisite:
+
+*   Official partnerships with government disaster management agencies (NDMA, NDRF, State SDMAs).
+*   Legal compliance with data protection regulations (IT Act 2000, DPDP Act 2023).
+*   Verified integration with official emergency communication infrastructure.
+*   Security audits and penetration testing for all public-facing modules.
+
+👨‍💻 Authors & Contributors
+**Anuja Pawar**  
+GitHub: [anujap2222](https://github.com/anujap2222)
+
+**Pranay Patil**  
+GitHub: [ppranaypatil14-ops](https://github.com/ppranaypatil14-ops)
+
+**Bhavika Patil**  
+GitHub: [bhavika-patil](https://github.com/bhavika-patil)
+
+**Harshita Jadhav**  
+GitHub: [harshita-jadhav](https://github.com/harshita-jadhav)
+
+📬 Contact
+Email: anujap2222@gmail.com  
+Project Repository: [https://github.com/ppranaypatil14-ops/Persistence-Pixels](https://github.com/ppranaypatil14-ops/Persistence-Pixels)
+
+❤️🔥 Made with dedication and Collaboration for Google Solution Challenge 2026 :)
