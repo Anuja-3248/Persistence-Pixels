@@ -70,18 +70,18 @@ const NotificationBell = () => {
           console.log('Bell clicked - isOpen:', !isOpen);
           setIsOpen(!isOpen);
         }}
-        className={`p-2.5 rounded-xl transition-all relative group ${
+        className={`p-3 rounded-2xl transition-all relative group ${
           isOpen 
-            ? 'bg-strat-accent text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]' 
-            : 'text-neutral-500 dark:text-strat-text-sub hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/5'
-        }`}
+            ? 'bg-neon-blue text-dark-900 shadow-[0_0_25px_rgba(80,215,255,0.6)]' 
+            : 'text-neutral-500 dark:text-white hover:text-neon-blue hover:bg-white/10'
+        } border border-white/5`}
       >
-        <Bell className={`w-5 h-5 transition-transform duration-300 ${isOpen ? 'scale-110' : 'group-hover:rotate-12'}`} />
+        <Bell className={`w-7 h-7 transition-all duration-300 ${isOpen ? 'scale-110' : 'group-hover:rotate-12 group-hover:scale-110'}`} />
         
         {unreadCount > 0 && (
-          <span className="absolute top-2 right-2 flex h-4 w-4">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-red-600 border-2 border-white dark:border-strat-panel flex items-center justify-center text-[7px] font-black text-white">
+          <span className="absolute top-1.5 right-1.5 flex h-5 w-5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-red opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-5 w-5 bg-neon-red border-2 border-dark-900 flex items-center justify-center text-[9px] font-black text-white">
               {unreadCount > 9 ? '9+' : unreadCount}
             </span>
           </span>

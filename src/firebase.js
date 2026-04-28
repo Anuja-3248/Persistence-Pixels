@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
@@ -12,21 +12,23 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-// Check if real Firebase credentials are configured
-const hasValidConfig = firebaseConfig.apiKey && !firebaseConfig.apiKey.includes('your_');
+// Check for missing config
+const missingKeys = Object.entries(firebaseConfig)
+  .filter(([key, value]) => !value && key !== 'measurementId')
+  .map(([key]) => key);
 
-if (!hasValidConfig) {
-  console.warn("Firebase: Using placeholder credentials. Firebase features are disabled. Update your .env file with real keys.");
+if (missingKeys.length > 0) {
+  console.error("Firebase configuration is incomplete. Missing keys:", missingKeys);
+  console.error("Check your .env file and ensure it contains all VITE_FIREBASE_* variables.");
 }
 
-let app = null;
-let db = null;
-let auth = null;
-
-if (hasValidConfig) {
-  app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
-  auth = getAuth(app);
+// Initialize Firebase
+let app;
+try {
+  app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+} catch (error) {
+  console.error("Error initializing Firebase app:", error);
 }
 
-export { db, auth };
+export const db = getFirestore(app);
+export const auth = getAuth(app);
